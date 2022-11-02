@@ -1,5 +1,5 @@
 # 10/31/2022 - 11/04/2022
-**Weekly goals:**
+**Weekly goals:**  
   Write project proposal  
   Write team contract  
   Create GitHub repository  
