@@ -7,6 +7,7 @@
 **Tasks completed:**
   
   Created GitHub repo - Joe T
+  
   Created and filled out team contract, project proposal, and log documents - Everyone
 
 **Problems encountered:**
