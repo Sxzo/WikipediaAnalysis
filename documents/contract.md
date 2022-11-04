@@ -7,7 +7,7 @@ We will meet at least once a week in person to check in on each other's progress
     
 2. **Assistance** 
 
-Our line of communication is through an iMessage group chat that we’ve created. Our expected response time is within 6h (at an upper bound), assuming the message was sent at a reasonable hour of day. 
+Our line of communication is through an iMessage group chat that we’ve created. Our expected response time is within 6h (at an upper bound), assuming the message was sent at a reasonable hour of day (9AM-12AM). 
 
 3. **Respect** 
 
