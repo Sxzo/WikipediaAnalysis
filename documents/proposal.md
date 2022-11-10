@@ -1,6 +1,6 @@
 ## Leading Question 
 
-The purpose of our project is to examine the interconnection between Wikipedia articles via hyperlinks. We can use Dijkstra’s algorithm to find the path with the least links between the two articles, Stoer-Wagner algorithm to find which hyperlinks we would have to remove in order for two articles to not be connected, and a BFS to create a visualization of the hyperlink network.
+The purpose of our project is to examine the interconnection between Wikipedia articles via hyperlinks. We can use Dijkstra’s algorithm to find the path that traverses through articles with the smallest amount of links, Stoer-Wagner algorithm to find which hyperlinks we would have to remove in order for two articles to not be connected, and a BFS to create a visualization of the hyperlink network.
 
 ## Dataset Acquisition
 
