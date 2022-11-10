@@ -4,20 +4,6 @@ using namespace cs225;
 
 
 // Graph g = Graph("articles.tsv", "links.tsv"); Might work???
-Expand
-tests.cpp
-5 KB
-Am i good to go?
-@joe69 @joe69 @joe69
-joe69 — Today at 11:31 PM
-yes
-﻿
-#include "graph.h"
-
-using namespace cs225;
-
-
-// Graph g = Graph("articles.tsv", "links.tsv"); Might work???
 
 //Test cases for graph constructor:
 TEST_CASE("Graph is not empty", "[empty]") {
@@ -139,35 +125,87 @@ TEST_CASE("areAdjacent test : three", "[adj3]") {
     REQUIRE(areAdjacent(Node("Soviet_Union"), Node("AK-47")) == true);
 }
 
-TEST_CASE("Test Related: ")
+TEST_CASE("Test Related: 1896_Summer_Olympics", "[related]") {
+    Graph g = Graph("articles.tsv", "links.tsv");
+    std::set<Node> expected;
 
-// 	Athens
-// 	Athletics_%28track_and_field%29
-// 	Australia
-// 	Austria
-// 	British_Empire
-// 	Christianity
-// 	Cricket
-// 	Cyprus
-// 	Eastern_Orthodox_Church
-// 	Egypt
-// 	Europe
-// 	Football_%28soccer%29
-// 	France
-// 	Germany
-// 	Greece
-// 	Greek_War_of_Independence
-// 	Hungary
-// 	London
-// 	Olympic_Games
-// 	Paris
-// 	Roman_Catholic_Church
-// 	Roman_Empire
-// 	Serbia
-// 	Slovakia
-// 	Sport
-// 	Switzerland
-// 	United_States
+    //adds all the expected nodes to expected:
+    expected.insert(Node("Athens"));
+	expected.insert(Node("Athletics_%28track_and_field%29")); //Athletics_%28track_and_field%29
+	expected.insert(Node("Australia"));
+	expected.insert(Node("Austria"));
+	expected.insert(Node("British_Empire"));
+	expected.insert(Node("Christianity"));
+	expected.insert(Node("Cricket"));
+	expected.insert(Node("Cyprus"));
+	expected.insert(Node("Eastern_Orthodox_Church_War"));
+	expected.insert(Node("Egypt"));
+	expected.insert(Node("Europe"));
+	expected.insert(Node("Football_%28soccer%29")); //Football_%28soccer%29
+	expected.insert(Node("France"));
+	expected.insert(Node("Germany"));
+	expected.insert(Node("Greece"));
+	expected.insert(Node("Greek_War_of_Independence"));
+	expected.insert(Node("Hungary"));
+	expected.insert(Node("London"));
+	expected.insert(Node("Olympic_Games"));
+	expected.insert(Node("Market"));
+	expected.insert(Node("Paris"));
+	expected.insert(Node("Roman_Catholic_Church"));
+	expected.insert(Node("Roman_Empire"));
+	expected.insert(Node("Serbia"));
+	expected.insert(Node("Slovakia"));
+	expected.insert(Node("Sport"));
+	expected.insert(Node("Switzerland"));
+	expected.insert(Node("United_States"));
+
+    std::vector<pair<int, Node>> actual = incidentEdges(Node("1973_oil_crisis"));
+    std::set<Node> actualSet;
+    
+    for (size_t i = 0; i < actual.size(); i++) {
+       actualSet.insert(actual.second);
+    }
+    for (Node node : expected) {
+        REQUIRE(actualSet.contains(node)); 
+    }
+    REQUIRE(expected.size() == actualSet.size());
+}
+
+TEST_CASE("Test Related: 1997_Pacific_hurricane_season", "[related]") {
+    Graph g = Graph("articles.tsv", "links.tsv");
+    std::set<Node> expected;
+
+    //adds all the expected nodes to expected:
+    expected.insert(Node("California"));
+	expected.insert(Node("Caribbean_Sea")); 
+	expected.insert(Node("El_Ni%C3%B1o-Southern_Oscillation")); //El_Ni%C3%B1o-Southern_Oscillation
+	expected.insert(Node("El_Salvador"));
+	expected.insert(Node("Guam"));
+	expected.insert(Node("Japan"));
+	expected.insert(Node("Johnston_Atoll"));
+	expected.insert(Node("Meteorology"));
+	expected.insert(Node("Mexico"));
+	expected.insert(Node("Nicaragua"));
+	expected.insert(Node("Pacific_Ocean"));
+	expected.insert(Node("Palmyra_Atoll")); 
+	expected.insert(Node("Tropical_cyclone"));
+	expected.insert(Node("U.S._state"));
+	expected.insert(Node("United_States"));
+	expected.insert(Node("Wake_Island"));
+
+    std::vector<pair<int, Node>> actual = incidentEdges(Node("1973_oil_crisis"));
+    std::set<Node> actualSet;
+    
+    for (size_t i = 0; i < actual.size(); i++) {
+       actualSet.insert(actual.second);
+    }
+    for (Node node : expected) {
+        REQUIRE(actualSet.contains(node)); 
+    }
+    REQUIRE(expected.size() == actualSet.size());
+}
+
+
 
 
 // Test cases for BFS
