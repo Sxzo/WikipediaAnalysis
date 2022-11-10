@@ -17,3 +17,21 @@
 ### **Plans for next week:**
 
   Assuming our proposal gets approved, we will create a full outline of our project and begin implementing the actual structure of the graph that we will be using. If our proposal does not get approved, we will work to get one approved and then take the steps previously listed.
+
+# 11/05/2022 - 11/12/2022
+
+## Weekly Goals
+  
+  Resubmit project proposal
+  Create graph representation and data parsing
+
+## Specific Tasks Completed (and by who)
+
+  Redrafting proposal - Everyone
+  CMake setup - Joe T
+
+## Problems Encountered 
+Dijkstra's algorithm shouldn't be used on unweighted graphs, so we had to find a way to add weigths to our grahps.
+  
+
+## Plans for next week
