@@ -28,6 +28,7 @@
 ## Specific Tasks Completed (and by who)
 
   Redrafting proposal - Everyone
+  
   CMake setup - Joe T
 
 ## Problems Encountered 
