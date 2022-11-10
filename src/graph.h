@@ -22,8 +22,5 @@ class Graph {
         };
         void readFromFile();
         vector<Node> nodeList_;    
-<<<<<<< HEAD
+    };
 };
-=======
-};
->>>>>>> 15b23fa7b5cd96d6d197ab12f77a4f6f7c6cb495
