@@ -1,7 +1,8 @@
+#include "graph.h"
 #include <iostream>
 using namespace std;
 
 int main() {
-    std::cout << "abcdefghijklmnopqrstuvwxyz" << std::endl;
+    Graph g;
     return 0;
 }
