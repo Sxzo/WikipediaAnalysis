@@ -18,23 +18,25 @@
 
   Assuming our proposal gets approved, we will create a full outline of our project and begin implementing the actual structure of the graph that we will be using. If our proposal does not get approved, we will work to get one approved and then take the steps previously listed.
 
-# 11/05/2022 - 11/12/2022
+# Development Log (Date: 11/05/2022 -- 11/12/2022)
 
 ## Weekly Goals
-  
-  Resubmit project proposal
-  Create graph representation and data parsing
+-Resubmit project proposal 
+-Create graph implentation / representation
+-Parse data set
 
 ## Specific Tasks Completed (and by who)
-
-  Redrafting proposal - Everyone
-  
-  CMake setup - Joe T
-  Wrote tests - Joe M and Lev
-  Wrote graph functions and data parsing - Joe T
+Redraft of the proposal - All group members
+CMake setup - Joe T
+Graph implementation setup - Joe M and Lev S
+Graph functions and data parsing - Joe T
+Graph constructor test cases - Lev S and Joe M
 
 ## Problems Encountered 
-Dijkstra's algorithm shouldn't be used on unweighted graphs, so we had to find a way to add weigths to our grahps.
-  
+- We were notified that Dijkstra's algorithm shouldn't be used on unweighted graphs so we had to find a way to add weights. 
+- We initially encountered an issue with our adjacency list implementation which we were able to quickly resolve.
+- We had to deal with being a group member down due to a family issue that Siddhant had. 
 
 ## Plans for next week
+- Complete a full BFS traversal + test its implentation and runtime (without the visualization)
+- Complete Dijkstra's algorithm + test for it
