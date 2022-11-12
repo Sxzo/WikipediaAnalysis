@@ -30,6 +30,8 @@
   Redrafting proposal - Everyone
   
   CMake setup - Joe T
+  Wrote tests - Joe M and Lev
+  Wrote graph functions and data parsing - Joe T
 
 ## Problems Encountered 
 Dijkstra's algorithm shouldn't be used on unweighted graphs, so we had to find a way to add weigths to our grahps.

@@ -62,62 +62,108 @@ string Graph::decodeHTTP(string title) {
             for (auto entry : decoded) {
                 if (threeChar == entry.first) {
                     toReturn += entry.second;
-                    i += 2;
+                    i += 3;
                     break;
                 } else if (sixChar == entry.first) {
                     toReturn += entry.second;
-                    i += 5;
+                    i += 6;
                     break;
                 } else if (nineChar == entry.first) {
                     toReturn += entry.second;
-                    i += 8;
+                    i += 9;
                     break;
                 }
             }
         }
-        toReturn += title.at(i);
+        if (i >= title.length()) {
+            break;
+        }
+        if (title.at(i) != '\n' && title.at(i) != '\t' && title.at(i) != '\r') {
+            toReturn += title.at(i);
+        }
     }
     return toReturn;
 }
 
 void Graph::readFromFile() {
     ifstream ifs("/workspaces/cs225/Final-Project/data/articles.tsv");
-    for (string line; getline(ifs, line); line = "") {
+    for (string line; getline(ifs, line); line = "") { //populate nodeList_ with each article
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
-        nodeList_.push_back(Node(decodeHTTP(line)));
+        nodeList_.push_back(new Node(decodeHTTP(line)));
     }
-    cout << (nodeList_[0].data) << endl;
+    ifstream ifs2("/workspaces/cs225/Final-Project/data/links.tsv");
+    int idx = -1;
+    string first = ""; //variables to avoid looping through nodeList
+    for (string line; getline(ifs2, line); line = "") { // create an unweighted edge between every article that has a link
+        if (line.substr(0, 1) == "#") { // skip heading information
+            continue;
+        }
+        string article = decodeHTTP(line.substr(0, line.find("\t"))); //split tsv line into the article and the link
+        string link = decodeHTTP(line.substr(line.find("\t") + 1, line.length()));
+        while (first != article) { //checks to see if the article has changed yet
+            idx++;
+            first = nodeList_[idx]->data;
+        }
+        Node* v2 = nullptr;
+        for (unsigned i = 0; i < nodeList_.size(); i++) {
+            if (link == nodeList_[i]->data) {
+                v2 = nodeList_[i];
+                break;
+            }
+        }
+        insertEdge(nodeList_[idx], v2);
+        nodeList_[idx]->degree++;
+    }
+    for (unsigned i = 0; i < nodeList_.size(); i++) { //give each edge the proper weight
+        Node node = *nodeList_[i];
+        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
+            nodeList_[i]->adjList[j].first += node.degree;
+            nodeList_[i]->adjList[j].first += getNodeDegree(nodeList_[i]->adjList[j].second);
+        }
+    }
 }
 
-void Graph::insertEdge(Node v1, Node v2, int weight) {
-    
+void Graph::insertEdge(Node* v1, Node* v2) {
+    v1->adjList.push_back(pair(0, v2));
 }
 
+bool Graph::areAdjacent(Node* v1, Node* v2) {
+    for (unsigned i = 0; i < v1->adjList.size(); i++) {
+        if ((v1->adjList[i].second->data) == v2->data) {
+            return true;
+        }
+    }
+    return false;
+}
 
+vector<string> Graph::incidentEdges(Node* v) {
+    vector<string> toReturn;
+    for (unsigned i = 0; i < v->adjList.size(); i++) {
+        toReturn.push_back(v->adjList[i].second->data);
+    }
+    return toReturn;
+}
 
+int Graph::getNodeDegree(Node* v) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i] == v) {
+            return v->degree;
+        }
+    }
+    return 999999999;
+}
 
+int Graph::getNodeListSize() {
+    return nodeList_.size();
+}
 
-// Function from cs 128 to get line:
-
-// std::ifstream ifs{file_name};
-//   for (std::string line; std::getline(ifs, line); line = "") {
-//     dna_database.push_back(utilities::GetSubstrs(line, ','));
-// }
-
-// Function from cs 128 to get substr of a line:
-//     std::vector<std::string> utilities::GetSubstrs(const std::string& str,
-//                                                char delimiter) {
-//   size_t last = 0;
-//   std::vector<std::string> substrs;
-//   for (size_t i = 0; i != str.length(); ++i) {
-//     if (str.at(i) == delimiter) {
-//       std::string substr = str.substr(last, i - last);
-//       last = i + 1;
-//       substrs.push_back(substr);
-//     }
-//   }
-//   std::string substr = str.substr(last, str.length() - last);
-//   substrs.push_back(substr);
-//   return substrs;
+Graph::Node* Graph::getNode(string article) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i]->data == article) {
+            return nodeList_[i];
+        }
+    }
+    return nullptr;
+}
