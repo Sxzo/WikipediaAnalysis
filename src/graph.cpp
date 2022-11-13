@@ -129,6 +129,10 @@ void Graph::insertEdge(Node* v1, Node* v2) {
     v1->adjList.push_back(pair(0, v2));
 }
 
+void Graph::insertEdge(Node* v1, Node* v2, int weight) {
+    v1->adjList.push_back(pair(weight, v2));
+}
+
 bool Graph::areAdjacent(Node* v1, Node* v2) {
     for (unsigned i = 0; i < v1->adjList.size(); i++) {
         if ((v1->adjList[i].second->data) == v2->data) {
@@ -166,4 +170,35 @@ Graph::Node* Graph::getNode(string article) {
         }
     }
     return nullptr;
+}
+
+Graph::~Graph() {
+    clear();
+}
+
+Graph::Graph(const Graph& other) {
+    copy(other);
+}
+
+Graph& Graph::operator=(const Graph& other) {
+    clear();
+    copy(other);
+    return *this;
+}
+
+void Graph::clear() {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        delete nodeList_[i];
+    }
+}
+
+void Graph::copy(const Graph& other) {
+    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
+        nodeList_.push_back(new Node(other.nodeList_[i]->data));
+    }
+    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
+        for (unsigned j = 0; j < other.nodeList_[i]->adjList.size(); j++) {
+            insertEdge(nodeList_[i], getNode(other.nodeList_[i]->adjList[j].second->data), other.nodeList_[i]->adjList[j].first);
+        }
+    }
 }

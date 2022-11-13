@@ -17,10 +17,11 @@ class Graph {
         };
        
         Graph(); 
-        void removeVertex(Node v);
+        void removeVertex(Node* v);
         vector<string> incidentEdges(Node* v); //returns the list of edges adjacent to node v
         bool areAdjacent(Node* v1, Node* v2); 
         void insertEdge(Node* v1, Node* v2);
+        void insertEdge(Node* v1, Node* v2, int weight);
         int getNodeDegree(Node* v);
         
         //functions added so tests will compile
@@ -28,10 +29,17 @@ class Graph {
         Node* getNode(string article);
         
         // Need to add rule of 3 functions because the nodes are dynamically allocated
+        ~Graph();
+        Graph(const Graph& other);
+        Graph& operator=(const Graph& other);
 
     private:
         void readFromFile();
         string decodeHTTP(string title);
         vector<Node*> nodeList_; 
+
+        //helpers for rule of three
+        void clear();
+        void copy(const Graph& other);
 };
 
