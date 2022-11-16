@@ -3,8 +3,26 @@
 #include <catch2/catch_test_macros.hpp>
 #include <set>
 
+
+
 // Graph g = Graph("articles.tsv", "links.tsv"); Might work???
 Graph g;
+
+
+//Helper functions for tests:
+void match_vector(vector<Graph::Node*> & out, vector<Graph::Node*> & ans){
+  REQUIRE(out.size() == ans.size());
+
+  for(size_t i = 0; i < ans.size(); ++i){
+    if(out[i] -> data != ans[i] -> data){ 
+      INFO("At index value " + to_string(i) + " your vector was incorrect.");
+	  INFO(out[i] -> data + "was expected " + "but you had " + ans[i] -> data);
+      REQUIRE(out[i] == ans[i]);
+    }
+  }
+}
+
+
 //Test cases for graph constructor:
 TEST_CASE("Graph is not empty", "[empty]") {
     REQUIRE(g.getNodeListSize() > 0);
@@ -17,7 +35,7 @@ TEST_CASE("Graph contains correct amount of nodes", "[size]") {
 
 TEST_CASE("Test Related: Oil Crisis", "[related]") {
 
-    std::set<Graph::Node*> expected;
+    set<Graph::Node*> expected;
 
     //adds all the expected nodes to expected:
     expected.insert(g.getNode("Algeria"));
@@ -72,8 +90,8 @@ TEST_CASE("Test Related: Oil Crisis", "[related]") {
 	expected.insert(g.getNode("World War II"));
 	expected.insert(g.getNode("Yom Kippur War"));
 
-    std::vector<string> actual = g.incidentEdges(g.getNode("1973 oil crisis"));
-    std::set<Graph::Node*> actualSet;
+    vector<string> actual = g.incidentEdges(g.getNode("1973 oil crisis"));
+    set<Graph::Node*> actualSet;
     
     for (size_t i = 0; i < actual.size(); i++) {
        actualSet.insert(g.getNode(actual[i]));
@@ -86,19 +104,19 @@ TEST_CASE("Test Related: Oil Crisis", "[related]") {
 
 TEST_CASE("Test Degree : small", "[degree1]") {
     // A cappella degrees should be 11
-    std::vector<string> actual = g.incidentEdges(g.getNode("A cappella")); 
+    vector<string> actual = g.incidentEdges(g.getNode("A cappella")); 
     REQUIRE(actual.size() == 11); 
 }
 
 TEST_CASE("Test Degree : medium", "[degree2]") {
     // ACDC Degrees should be 28
-    std::vector<string> actual = g.incidentEdges(g.getNode("AC DC"));
+    vector<string> actual = g.incidentEdges(g.getNode("AC DC"));
     REQUIRE(actual.size() == 28);   
 }
 
 TEST_CASE("Test degree : large", "[degree3]") {
     // 11th century degrees should be 48 
-    std::vector<string> actual = g.incidentEdges(g.getNode("11th century"));
+    vector<string> actual = g.incidentEdges(g.getNode("11th century"));
     REQUIRE(actual.size() == 48);
 }
 
@@ -119,7 +137,7 @@ TEST_CASE("areAdjacent test : three", "[adj3]") {
 
 TEST_CASE("Test Related: 1896 Summer Olympics", "[related]") {
 
-    std::set<Graph::Node*> expected;
+    set<Graph::Node*> expected;
 
     //adds all the expected nodes to expected:
     expected.insert(g.getNode("Athens"));
@@ -150,8 +168,8 @@ TEST_CASE("Test Related: 1896 Summer Olympics", "[related]") {
 	expected.insert(g.getNode("Switzerland"));
 	expected.insert(g.getNode("United States"));
 
-    std::vector<string> actual = g.incidentEdges(g.getNode("1896 Summer Olympics"));
-    std::set<Graph::Node*> actualSet;
+    vector<string> actual = g.incidentEdges(g.getNode("1896 Summer Olympics"));
+    set<Graph::Node*> actualSet;
     
     for (size_t i = 0; i < actual.size(); i++) {
        actualSet.insert(g.getNode(actual[i]));
@@ -164,7 +182,7 @@ TEST_CASE("Test Related: 1896 Summer Olympics", "[related]") {
 
 TEST_CASE("Test Related: 1997 Pacific hurricane season", "[related]") {
 
-    std::set<Graph::Node*> expected;
+    set<Graph::Node*> expected;
 
     //adds all the expected nodes to expected:
     expected.insert(g.getNode("California"));
@@ -184,8 +202,8 @@ TEST_CASE("Test Related: 1997 Pacific hurricane season", "[related]") {
 	expected.insert(g.getNode("United States"));
 	expected.insert(g.getNode("Wake Island"));
 
-    std::vector<string> actual = g.incidentEdges(g.getNode("1997 Pacific hurricane season"));
-    std::set<Graph::Node*> actualSet;
+    vector<string> actual = g.incidentEdges(g.getNode("1997 Pacific hurricane season"));
+    set<Graph::Node*> actualSet;
     
     for (size_t i = 0; i < actual.size(); i++) {
        actualSet.insert(g.getNode(actual[i]));
@@ -196,10 +214,44 @@ TEST_CASE("Test Related: 1997 Pacific hurricane season", "[related]") {
     REQUIRE(expected.size() == actualSet.size());
 }
 
-
-
-
 // Test cases for BFS
+
+
+//Irrelevant test because the graph can have multiple components
+// TEST_CASE("Test BFS: Size", "[BFS]") {
+// 	Graph::Node* start = g.getNode("Zulu");
+// 	vector<Graph::Node*> actual = g.BFS(start);
+// 	int size = actual.size();
+// 	REQUIRE(g.getNodeListSize() == size);
+// }
+
+TEST_CASE("Test BFS: Duplicates", "[BFS]") {
+	Graph::Node* start = g.getNode("Zulu");
+	vector<Graph::Node*> actual = g.BFS(start);
+	std::set<Graph::Node*> seen;
+	for (Graph::Node* node : actual) {
+		REQUIRE(seen.count(node) == 0);
+		seen.insert(node);
+	}
+
+	seen.clear();
+	actual.clear();
+	start = g.getNode("Africa");
+	actual = g.BFS(start);
+	for (Graph::Node* node : actual) {
+		REQUIRE(seen.count(node) == 0);
+		seen.insert(node);
+	}
+
+	seen.clear();
+	actual.clear();
+	start = g.getNode("Gunpowder");
+	actual = g.BFS(start);
+	for (Graph::Node* node : actual) {
+		REQUIRE(seen.count(node) == 0);
+		seen.insert(node);
+	}
+}
 
 // Test cases for Dijkstra
 
