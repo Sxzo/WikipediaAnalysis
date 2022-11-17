@@ -9,18 +9,18 @@ Graph::Graph() {
 
 string Graph::decodeHTTP(string title) {
     static map<string, string> decoded {
+        {"%28", "("},
+        {"%29", ")"},
+        {"%27", "'"},
+        {"%2C", ","},
         {"%C3%81", "Á"},
         {"%C3%A1", "á"}, 
         {"%C3%85", "Å"},
         {"%C3%89", "É"},
         {"%C3%93", "Ó"},
         {"%E2%82%AC", "€"},
-        {"%26", "&"},
-        {"%28", "("},
-        {"%29", ")"},
+        {"%26", "&"},   
         {"%C3%BC", "ü"},
-        {"%27", "'"},
-        {"%2C", ","},
         {"%C3%A9", "é"},
         {"%C3%AD", "í"},
         {"%C5%99", "ř"},
@@ -170,6 +170,23 @@ Graph::Node* Graph::getNode(string article) {
         }
     }
     return nullptr;
+}
+
+void Graph::removeVertex(Node* v) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i]->data == v->data) {
+            nodeList_.erase(nodeList_.begin() + i);
+            i--;
+            continue;
+        }
+        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
+            if (nodeList_[i]->adjList[j].second->data == v->data) {
+                nodeList_[i]->adjList.erase(nodeList_[i]->adjList.begin() + j);
+                break;
+            }
+        }
+    }
+    delete v;
 }
 
 Graph::~Graph() {
