@@ -4,9 +4,11 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-
+#include <queue>
+#include <set>
+#include "cs225/PNG.h"
 using namespace std; 
-
+using namespace cs225;
 class Graph {
     public:
         struct Node {
@@ -23,6 +25,10 @@ class Graph {
         void insertEdge(Node* v1, Node* v2);
         void insertEdge(Node* v1, Node* v2, int weight);
         int getNodeDegree(Node* v);
+        
+        //Graph Algorithms:
+        vector<Graph::Node*> BFS(Node* start);
+        PNG* visualizeBFS(Node* start);
         
         //functions added so tests will compile
         int getNodeListSize();

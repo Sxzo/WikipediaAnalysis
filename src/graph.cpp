@@ -192,6 +192,8 @@ void Graph::clear() {
     }
 }
 
+
+
 void Graph::copy(const Graph& other) {
     for (unsigned i = 0; i < other.nodeList_.size(); i++) {
         nodeList_.push_back(new Node(other.nodeList_[i]->data));
@@ -202,3 +204,30 @@ void Graph::copy(const Graph& other) {
         }
     }
 }
+
+vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
+    queue<Graph::Node*> queue;
+    vector<Graph::Node*> output;
+    set<Graph::Node*> visited;
+    Graph::Node* current;
+    queue.push(start);
+    visited.insert(start);
+    
+    while (!(queue.empty())) {
+        current = queue.front();
+        queue.pop();
+        output.push_back(current);
+
+        //visit all adjacent nodes:
+        for (pair<int, Graph::Node*> adjacent_edge : current -> adjList) {
+            Graph::Node* adjacent_node = adjacent_edge.second;
+            if (visited.count(adjacent_node) == 0) { //if the node hasnt been visited
+                queue.push(adjacent_node);
+                visited.insert(adjacent_node);
+            } 
+        }
+    }
+    return output;
+}
+
+
