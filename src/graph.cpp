@@ -96,7 +96,7 @@ void Graph::readFromFile() {
     ifstream ifs2("/workspaces/cs225/Final-Project/data/links.tsv");
     int idx = -1;
     string first = ""; //variables to avoid looping through nodeList
-    for (string line; getline(ifs2, line); line = "") { // create an unweighted edge between every article that has a link
+    for (string line; getline(ifs2, line); line = "") { // create an unweighted, directed edge between every article that has a link
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
