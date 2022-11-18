@@ -29,6 +29,8 @@ class Graph {
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
         PNG* visualizeBFS(Node* start);
+        int dijkratasAlgorithm(Node* start,Node* end);
+        PNG* visualizeDijkratasAlgorithm(Node* start,Node* end);
         
         //functions added so tests will compile
         int getNodeListSize();
