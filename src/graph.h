@@ -8,6 +8,7 @@
 #include <set>
 #include <unordered_map>
 #include "cs225/PNG.h"
+
 using namespace std; 
 using namespace cs225;
 class Graph {
@@ -30,9 +31,7 @@ class Graph {
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
         PNG* visualizeBFS(Node* start);
-        int dijkratasAlgorithm(Node* start,Node* end);
-        PNG* visualizeDijkratasAlgorithm(Node* start,Node* end);
-        
+        vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
         //functions added so tests will compile
         int getNodeListSize();
         Node* getNode(string article);
@@ -45,8 +44,7 @@ class Graph {
     private:
         void readFromFile();
         string decodeHTTP(string title);
-        vector<Node*> nodeList_;
-        unordered_map<string, string> converted; //map used for memoization, takes constructor time from ~30 seconds to ~10
+        vector<Node*> nodeList_; 
 
         //helpers for rule of three
         void clear();
