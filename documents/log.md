@@ -40,3 +40,24 @@ Graph constructor test cases - Lev S and Joe M
 ## Plans for next week
 - Complete a full BFS traversal + test its implentation and runtime (without the visualization)
 - Complete Dijkstra's algorithm + test for it
+
+# Development Log (Date: 11/13/22 -- 11/20/22)
+
+## Weekly Goals
+
+- Implement Djikstra's Algorithm and BFS on our graph
+
+## Specific Tasks Completed (and by who)
+
+- BFS - Joe M
+- Worked on Djikstra's - Siddhant
+- Optimized constructor runtime - Joe T
+
+## Problems Encountered 
+
+- Couldn't get Djistra's Algorithm fully working before the end of the week/
+
+## Plans for next week
+
+- Finish Djikstra's Algorithm
+- Implement Stoer-Wagner Algorithm
