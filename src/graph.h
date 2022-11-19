@@ -6,6 +6,7 @@
 #include <map>
 #include <queue>
 #include <set>
+#include <unordered_map>
 #include "cs225/PNG.h"
 using namespace std; 
 using namespace cs225;
@@ -44,7 +45,8 @@ class Graph {
     private:
         void readFromFile();
         string decodeHTTP(string title);
-        vector<Node*> nodeList_; 
+        vector<Node*> nodeList_;
+        unordered_map<string, string> converted; //map used for memoization, takes constructor time from ~30 seconds to ~10
 
         //helpers for rule of three
         void clear();

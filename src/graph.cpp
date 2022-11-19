@@ -8,7 +8,7 @@ Graph::Graph() {
 }
 
 string Graph::decodeHTTP(string title) {
-    static map<string, string> decoded {
+    static unordered_map<string, string> decoded {
         {"%28", "("},
         {"%29", ")"},
         {"%27", "'"},
@@ -91,7 +91,14 @@ void Graph::readFromFile() {
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
-        nodeList_.push_back(new Node(decodeHTTP(line)));
+        if (converted.find(line) != converted.end()) {
+            nodeList_.push_back(new Node(converted[line]));
+        } else {
+            string toAdd = decodeHTTP(line);
+            converted[line] = toAdd;
+            nodeList_.push_back(new Node(toAdd));
+        }
+        
     }
     ifstream ifs2("/workspaces/cs225/Final-Project/data/links.tsv");
     int idx = -1;
@@ -100,8 +107,22 @@ void Graph::readFromFile() {
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
-        string article = decodeHTTP(line.substr(0, line.find("\t"))); //split tsv line into the article and the link
-        string link = decodeHTTP(line.substr(line.find("\t") + 1, line.length()));
+        string article;
+        string link;
+        //split tsv line into the article and the link
+        if (converted.find(line.substr(0, line.find("\t"))) != converted.end()) {
+            article = converted[line.substr(0, line.find("\t"))];
+        } else {
+            article = decodeHTTP(line.substr(0, line.find("\t")));
+            converted[line.substr(0, line.find("\t"))] = article;
+        }
+        if (converted.find(line.substr(line.find("\t") + 1, line.length())) != converted.end()) {
+            link = converted[line.substr(line.find("\t") + 1, line.length())];
+        } else {
+            link = decodeHTTP(line.substr(line.find("\t") + 1, line.length()));
+            converted[line.substr(0, line.find("\t"))] = link;
+        }
+        
         while (first != article) { //checks to see if the article has changed yet
             idx++;
             first = nodeList_[idx]->data;
@@ -247,7 +268,7 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     return output;
 }
 
-int Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end) {
+/*int Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end) {
 
    // create a priority queue for storing the minimum index distance
    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
@@ -273,4 +294,4 @@ int Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end) {
    }
    return d[end];
    
-}
+} */
