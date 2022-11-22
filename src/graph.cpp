@@ -268,8 +268,9 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     return output;
 }
 
-vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end) {
-   // create a priority queue for storing the minimum index distance
+vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
+{
+    // create a priority queue for storing the minimum index distance
    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
    // indexed array for calculating distance.
    vector<Graph::Node*> dist(1000000,INT_MAX);
@@ -286,8 +287,9 @@ vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* e
             Graph::Node* adjacent_node = adjacent_edge.second;
             // check if the distance is minimum or not. 
             // if not then update the new distance. 
-            if(dist[adjacent_node] > dist[p] + 1) {
-                dist[adjacent_node]=dist[p]+1;
+            if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
+            {
+                dist[adjacent_node]=dist[p]+adjacent_edge.first;
                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
             }
         }
