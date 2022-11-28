@@ -270,7 +270,7 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
 
 vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
 {
-    /*
+    
     // create a priority queue for storing the minimum index distance
    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
    // indexed array for calculating distance.
@@ -296,6 +296,5 @@ vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* e
         }
    }
    return dist;
-   */
-   return vector<Graph::Node*>();
+
 }
