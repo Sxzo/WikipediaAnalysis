@@ -7,6 +7,7 @@
 #include <queue>
 #include <set>
 #include <unordered_map>
+#include <limits.h>
 #include "cs225/PNG.h"
 
 using namespace std; 
@@ -44,7 +45,8 @@ class Graph {
     private:
         void readFromFile();
         string decodeHTTP(string title);
-        vector<Node*> nodeList_; 
+        vector<Node*> nodeList_;
+        unordered_map<string, string> converted;
 
         //helpers for rule of three
         void clear();
