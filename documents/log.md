@@ -61,3 +61,26 @@ Graph constructor test cases - Lev S and Joe M
 
 - Finish Djikstra's Algorithm
 - Implement Stoer-Wagner Algorithm
+
+# Development Log (Date: 11/28/22 -- 12/03/22)
+
+## Weekly Goals
+
+- Finish Djikstra's / start Stoer-Wagner
+
+## Specific Tasks Completed (and by who)
+
+- Wrote main function - Joe T
+- Worked on Djikstra's - Siddhant
+
+
+## Problems Encountered 
+
+- Weren't able to finish Djikstra's tests or Stoer-Wagner because of busy schedules
+
+## Plans for next week
+
+- Finish Djikstra's Algorithm tests
+- Finish Stoer-Wagner Algorithm
+- Work on BFS visualization
+
