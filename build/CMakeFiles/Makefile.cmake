@@ -59,5 +59,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/test.dir/DependInfo.cmake"
   "CMakeFiles/main.dir/DependInfo.cmake"
+  "lib/CMakeFiles/lodepng.dir/DependInfo.cmake"
+  "lib/CMakeFiles/cs225.dir/DependInfo.cmake"
   "src/CMakeFiles/src.dir/DependInfo.cmake"
   )

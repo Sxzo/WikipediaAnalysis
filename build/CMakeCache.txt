@@ -215,7 +215,10 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 Catch2_DIR:PATH=/usr/lib/cmake/Catch2
 
 //Name of the computer/site where compile is being run
-SITE_NAME:STRING=3a5ec3cee3fc
+SITE_NAME:STRING=64fddb47362a
+
+//Dependencies for the target
+cs225_LIB_DEPENDS:STATIC=general;lodepng;
 
 //Value Computed by CMake
 wikipedia-graph_BINARY_DIR:STATIC=/workspaces/cs225/Final-Project/build

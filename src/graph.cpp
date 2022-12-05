@@ -268,33 +268,102 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     return output;
 }
 
-vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
-{
-    
-    // create a priority queue for storing the minimum index distance
-   priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
-   // indexed array for calculating distance.
-   vector<Graph::Node*> dist(1000000,INT_MAX);
-   dist[start]=0;
-   pq.push(make_pair(0,start));
-   // iterate through the priority queue
-   while(!pq.empty()){
-       // this d is the distance which will be taken from priority queue.
-       int d=pq.top().first;
-       Graph::Node* p=pq.top().second;
-       pq.pop();
-       // visit all adjacent node to p
-       for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
-            Graph::Node* adjacent_node = adjacent_edge.second;
-            // check if the distance is minimum or not. 
-            // if not then update the new distance. 
-            if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
-            {
-                dist[adjacent_node]=dist[p]+adjacent_edge.first;
-                pq.push(make_pair(dist[adjacent_node]),adjacent_node);
-            }
+PNG* Graph::visualizeBFS() {
+     
+    int num_nodes = nodeList_.size(); //Approx 4,500 nodes
+    PNG* image = new PNG(size,size);
+    for (int i = 0; i < num_nodes; i++) {
+        Node* node = nodeList_[i];
+        drawNode(node, image);
+        
+    }
+
+    for (int i = 0; i < num_nodes; i++) {
+        Node* node = nodeList_[i];
+        for (size_t k = 0; k < node -> adjList.size(); k++) {
+            drawEdge(node, node -> adjList[k].second, image);
         }
-   }
-   return dist;
+    }
+    
+    return image;
+}
+
+void Graph::drawEdge(Node* node1, Node* node2, PNG* image) {
+    //y = mx + b
+    int x1 = node1 -> coord.first;
+    int y1 = node1 -> coord.second;
+    int x2 = node2 -> coord.first;
+    int y2 = node2 -> coord.second;
+
+    int x_dist = abs(x2 - x1);
+    int y_dist = abs(y2 - y1);
+
+    int start_x = x1 < x2 ? x1 : x2;
+    int start_y = x1 < x2 ? y1 : y2;
+    if (x_dist == 0) { //draw vertical line
+        for (int i = 0; i < y_dist; i++) {
+            image -> getPixel(start_x,start_y + i) = HSLAPixel(0,1,0.5,1);
+        }
+        return;
+    }
+
+    double slope = (y2 - y1)/(x2 - x1);
+    for (int i = 0; i < x_dist; i++) {
+        int y = floor(slope*i);
+        if (slope == 0) {
+            image -> getPixel(start_x + i, start_y) = HSLAPixel(0,1,0.5,1);
+        } else { //slope > 0
+            image -> getPixel(start_x + i, start_y + y) = HSLAPixel(0,1,0.5,1);
+        }
+        
+    }
 
 }
+
+void Graph::drawNode(Node* node, PNG* image) {
+    int radius = node -> degree;
+    //x^2 + y^2 = r^2
+    int center_x = rand() % (size - 2*radius) + radius;
+    int center_y = rand() % (size - 2*radius) + radius;
+    node -> coord = make_pair(center_x,center_y);
+    //this code draws the circle
+    for (int i = 0; i <= radius; i++) { // i = x
+        int y = sqrt(pow(radius,2) - pow(i,2));
+        image -> getPixel(center_x + i, center_y + y).l = 0;
+        image -> getPixel(center_x + i, center_y - y).l = 0;
+        image -> getPixel(center_x - i, center_y + y).l = 0;
+        image -> getPixel(center_x - i, center_y - y).l = 0;
+    }
+
+}
+
+// vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
+// {
+    
+//     // create a priority queue for storing the minimum index distance
+//    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
+//    // indexed array for calculating distance.
+//    vector<Graph::Node*> dist(1000000,INT_MAX);
+//    dist[start]=0;
+//    pq.push(make_pair(0,start));
+//    // iterate through the priority queue
+//    while(!pq.empty()){
+//        // this d is the distance which will be taken from priority queue.
+//        int d=pq.top().first;
+//        Graph::Node* p=pq.top().second;
+//        pq.pop();
+//        // visit all adjacent node to p
+//        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
+//             Graph::Node* adjacent_node = adjacent_edge.second;
+//             // check if the distance is minimum or not. 
+//             // if not then update the new distance. 
+//             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
+//             {
+//                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
+//                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
+//             }
+//         }
+//    }
+//    return dist;
+
+// }

@@ -2,6 +2,8 @@
 /workspaces/cs225/Final-Project/build/CMakeFiles/main.dir
 /workspaces/cs225/Final-Project/build/CMakeFiles/edit_cache.dir
 /workspaces/cs225/Final-Project/build/CMakeFiles/rebuild_cache.dir
+/workspaces/cs225/Final-Project/build/lib/CMakeFiles/lodepng.dir
+/workspaces/cs225/Final-Project/build/lib/CMakeFiles/cs225.dir
 /workspaces/cs225/Final-Project/build/lib/CMakeFiles/edit_cache.dir
 /workspaces/cs225/Final-Project/build/lib/CMakeFiles/rebuild_cache.dir
 /workspaces/cs225/Final-Project/build/src/CMakeFiles/src.dir

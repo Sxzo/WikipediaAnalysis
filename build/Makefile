@@ -144,6 +144,32 @@ main/fast:
 .PHONY : main/fast
 
 #=============================================================================
+# Target rules for targets named lodepng
+
+# Build rule for target.
+lodepng: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lodepng
+.PHONY : lodepng
+
+# fast build rule for target.
+lodepng/fast:
+	$(MAKE) $(MAKESILENT) -f lib/CMakeFiles/lodepng.dir/build.make lib/CMakeFiles/lodepng.dir/build
+.PHONY : lodepng/fast
+
+#=============================================================================
+# Target rules for targets named cs225
+
+# Build rule for target.
+cs225: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cs225
+.PHONY : cs225
+
+# fast build rule for target.
+cs225/fast:
+	$(MAKE) $(MAKESILENT) -f lib/CMakeFiles/cs225.dir/build.make lib/CMakeFiles/cs225.dir/build
+.PHONY : cs225/fast
+
+#=============================================================================
 # Target rules for targets named src
 
 # Build rule for target.
@@ -212,6 +238,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... cs225"
+	@echo "... lodepng"
 	@echo "... main"
 	@echo "... src"
 	@echo "... test"
