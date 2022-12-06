@@ -89,14 +89,36 @@ TEST_CASE("Test Related: Oil Crisis", "[related]") {
 	expected.insert(g.getNode("Wood fuel"));
 	expected.insert(g.getNode("World War II"));
 	expected.insert(g.getNode("Yom Kippur War"));
+	expected.insert(g.getNode("Belgium"));
+	expected.insert(g.getNode("Capitalism"));
+	expected.insert(g.getNode("Concorde"));
+	expected.insert(g.getNode("Danske Statsbaner"));
+	expected.insert(g.getNode("Detroit,_Michigan"));
+	expected.insert(g.getNode("Edmonton"));
+	expected.insert(g.getNode("Flanders"));
+	expected.insert(g.getNode("History of Poland (1945-1989)"));
+	expected.insert(g.getNode("Houston,_Texas"));
+	expected.insert(g.getNode("Japanese yen"));
+	expected.insert(g.getNode("Kyoto Protocol"));
+	expected.insert(g.getNode("Richard Nixon"));
+	expected.insert(g.getNode("Socialism"));
+	expected.insert(g.getNode("Sweden"));
+	expected.insert(g.getNode("TGV"));
+	expected.insert(g.getNode("Vietnam War"));
 
     vector<string> actual = g.incidentEdges(g.getNode("1973 oil crisis"));
+	for (string s : actual) {
+		cout << s << endl;
+	}
     set<Graph::Node*> actualSet;
     
     for (size_t i = 0; i < actual.size(); i++) {
        actualSet.insert(g.getNode(actual[i]));
     }
     for (Graph::Node* node : expected) {
+		if (actualSet.find(node) == actualSet.end()) {
+			cout << node->data << endl;
+		}
         REQUIRE(actualSet.find(node) != actualSet.end()); 
     }
     REQUIRE(expected.size() == actualSet.size());
@@ -105,7 +127,7 @@ TEST_CASE("Test Related: Oil Crisis", "[related]") {
 TEST_CASE("Test Degree : small", "[degree1]") {
     // A cappella degrees should be 11
     vector<string> actual = g.incidentEdges(g.getNode("A cappella")); 
-    REQUIRE(actual.size() == 11); 
+    REQUIRE(actual.size() == 18); 
 }
 
 TEST_CASE("Test Degree : medium", "[degree2]") {
@@ -117,22 +139,22 @@ TEST_CASE("Test Degree : medium", "[degree2]") {
 TEST_CASE("Test degree : large", "[degree3]") {
     // 11th century degrees should be 48 
     vector<string> actual = g.incidentEdges(g.getNode("11th century"));
-    REQUIRE(actual.size() == 48);
+    REQUIRE(actual.size() == 84);
 }
 
 TEST_CASE("areAdjacent test : one", "[adj1]") {
     REQUIRE(g.areAdjacent(g.getNode("11th century"), g.getNode("Time")) == true); 
-    //REQUIRE(g.areAdjacent(g.getNode("Time"), g.getNode("11th century")) == true); // commented out because the edges are directed
+    REQUIRE(g.areAdjacent(g.getNode("Time"), g.getNode("11th century")) == true); // commented out because the edges are directed
 }
 
 TEST_CASE("areAdjacent test : two", "[adj2]") {
     REQUIRE(g.areAdjacent(g.getNode("13th century"), g.getNode("China")) == true);
-    //REQUIRE(g.areAdjacent(g.getNode("China"), g.getNode("13th century")) == true);
+    REQUIRE(g.areAdjacent(g.getNode("China"), g.getNode("13th century")) == true);
 }
 
 TEST_CASE("areAdjacent test : three", "[adj3]") {
     REQUIRE(g.areAdjacent(g.getNode("AK-47"), g.getNode("Soviet Union")) == true);
-    //REQUIRE(g.areAdjacent(g.getNode("Soviet Union"), g.getNode("AK-47")) == true);
+    REQUIRE(g.areAdjacent(g.getNode("Soviet Union"), g.getNode("AK-47")) == true);
 }
 
 TEST_CASE("Test Related: 1896 Summer Olympics", "[related]") {
@@ -201,6 +223,7 @@ TEST_CASE("Test Related: 1997 Pacific hurricane season", "[related]") {
 	expected.insert(g.getNode("U.S. state"));
 	expected.insert(g.getNode("United States"));
 	expected.insert(g.getNode("Wake Island"));
+	expected.insert(g.getNode("Hurricane John (1994)"));
 
     vector<string> actual = g.incidentEdges(g.getNode("1997 Pacific hurricane season"));
     set<Graph::Node*> actualSet;

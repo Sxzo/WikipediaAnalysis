@@ -142,6 +142,8 @@ void Graph::readFromFile() {
         for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
             nodeList_[i]->adjList[j].first += node.degree;
             nodeList_[i]->adjList[j].first += getNodeDegree(nodeList_[i]->adjList[j].second);
+            Node* otherNode = getNode(nodeList_[i]->adjList[j].second->data);
+            insertEdge(otherNode, nodeList_[i], nodeList_[i]->adjList[j].first);
         }
     }
 }
@@ -151,6 +153,9 @@ void Graph::insertEdge(Node* v1, Node* v2) {
 }
 
 void Graph::insertEdge(Node* v1, Node* v2, int weight) {
+    if (areAdjacent(v1, v2)) {
+        return;
+    }
     v1->adjList.push_back(pair(weight, v2));
 }
 
