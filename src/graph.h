@@ -34,6 +34,8 @@ class Graph {
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
         PNG* visualizeBFS();
+        int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
+        vector<pair<string, string>> stoerWagner(Node* startNode);
 
         //Helper functions for visualizeBFS
         void drawEdge(Node* node1, Node* node2,PNG* image);
