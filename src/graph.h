@@ -10,6 +10,14 @@
 #include <unordered_map>
 #include <limits.h>
 #include "/workspaces/cs225/Final-Project/lib/cs225/PNG.h"
+#include "Animation.h"
+#include "Point.h"
+#include "/workspaces/cs225/Final-Project/src/colorPicker/ColorPicker.h"
+#include "colorPicker/RainbowColorPicker.h"
+#include "colorPicker/GradientColorPicker.h"
+#include "colorPicker/GridColorPicker.h"
+#include "colorPicker/SolidColorPicker.h"
+#include "colorPicker/MyColorPicker.h"
 
 using namespace std; 
 using namespace cs225;
@@ -21,6 +29,9 @@ class Graph {
             string data; // Article name
             int degree; // Number of total edges connected to node (adjList.size())
             pair<int,int> coord; //coordinate of the center for BFS visualization
+            //to avoid duplicate edges:
+            set<Node*> drawn; // set of all the adjacent nodes where an edge has already been drawn
+
         };
        
         Graph(); 
@@ -33,12 +44,13 @@ class Graph {
         
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
-        PNG* visualizeBFS();
-
+        Animation visualizeBFS();
+        PNG* drawBase();
         //Helper functions for visualizeBFS
-        void drawEdge(Node* node1, Node* node2,PNG* image);
+        void drawEdge(Node* node1, Node* node2); //PNG* image
         void drawNode(Node* node, PNG* image);
-
+        Animation Animate(unsigned frameInterval, PNG* image, ColorPicker& color);
+        void populateCoords(Node* node);
         // vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
         //functions added so tests will compile
         int getNodeListSize();
@@ -50,7 +62,8 @@ class Graph {
         Graph& operator=(const Graph& other);
 
     private:
-        int size = 10000; // Just testing for visualizeBFS
+        std::vector<Point> traversal;
+        int size = 1000; // Just testing for visualizeBFS
         void readFromFile();
         string decodeHTTP(string title);
         vector<Node*> nodeList_;

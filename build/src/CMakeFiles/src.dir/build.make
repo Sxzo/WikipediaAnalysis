@@ -69,10 +69,108 @@ include src/CMakeFiles/src.dir/progress.make
 # Include the compile flags for this target's objects.
 include src/CMakeFiles/src.dir/flags.make
 
+src/CMakeFiles/src.dir/Animation.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/Animation.cpp.o: ../src/Animation.cpp
+src/CMakeFiles/src.dir/Animation.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/src.dir/Animation.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/Animation.cpp.o -MF CMakeFiles/src.dir/Animation.cpp.o.d -o CMakeFiles/src.dir/Animation.cpp.o -c /workspaces/cs225/Final-Project/src/Animation.cpp
+
+src/CMakeFiles/src.dir/Animation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/Animation.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/Animation.cpp > CMakeFiles/src.dir/Animation.cpp.i
+
+src/CMakeFiles/src.dir/Animation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/Animation.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/Animation.cpp -o CMakeFiles/src.dir/Animation.cpp.s
+
+src/CMakeFiles/src.dir/Point.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/Point.cpp.o: ../src/Point.cpp
+src/CMakeFiles/src.dir/Point.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/src.dir/Point.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/Point.cpp.o -MF CMakeFiles/src.dir/Point.cpp.o.d -o CMakeFiles/src.dir/Point.cpp.o -c /workspaces/cs225/Final-Project/src/Point.cpp
+
+src/CMakeFiles/src.dir/Point.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/Point.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/Point.cpp > CMakeFiles/src.dir/Point.cpp.i
+
+src/CMakeFiles/src.dir/Point.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/Point.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/Point.cpp -o CMakeFiles/src.dir/Point.cpp.s
+
+src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o: ../src/colorPicker/GradientColorPicker.cpp
+src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o -MF CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o.d -o CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o -c /workspaces/cs225/Final-Project/src/colorPicker/GradientColorPicker.cpp
+
+src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/colorPicker/GradientColorPicker.cpp > CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.i
+
+src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/colorPicker/GradientColorPicker.cpp -o CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.s
+
+src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o: ../src/colorPicker/GridColorPicker.cpp
+src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o -MF CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o.d -o CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o -c /workspaces/cs225/Final-Project/src/colorPicker/GridColorPicker.cpp
+
+src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/colorPicker/GridColorPicker.cpp > CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.i
+
+src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/colorPicker/GridColorPicker.cpp -o CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.s
+
+src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o: ../src/colorPicker/MyColorPicker.cpp
+src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o -MF CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o.d -o CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o -c /workspaces/cs225/Final-Project/src/colorPicker/MyColorPicker.cpp
+
+src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/colorPicker/MyColorPicker.cpp > CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.i
+
+src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/colorPicker/MyColorPicker.cpp -o CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.s
+
+src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o: ../src/colorPicker/RainbowColorPicker.cpp
+src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o -MF CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o.d -o CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o -c /workspaces/cs225/Final-Project/src/colorPicker/RainbowColorPicker.cpp
+
+src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/colorPicker/RainbowColorPicker.cpp > CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.i
+
+src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/colorPicker/RainbowColorPicker.cpp -o CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.s
+
+src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o: src/CMakeFiles/src.dir/flags.make
+src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o: ../src/colorPicker/SolidColorPicker.cpp
+src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o -MF CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o.d -o CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o -c /workspaces/cs225/Final-Project/src/colorPicker/SolidColorPicker.cpp
+
+src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.i"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /workspaces/cs225/Final-Project/src/colorPicker/SolidColorPicker.cpp > CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.i
+
+src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.s"
+	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /workspaces/cs225/Final-Project/src/colorPicker/SolidColorPicker.cpp -o CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.s
+
 src/CMakeFiles/src.dir/graph.cpp.o: src/CMakeFiles/src.dir/flags.make
 src/CMakeFiles/src.dir/graph.cpp.o: ../src/graph.cpp
 src/CMakeFiles/src.dir/graph.cpp.o: src/CMakeFiles/src.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/src.dir/graph.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object src/CMakeFiles/src.dir/graph.cpp.o"
 	cd /workspaces/cs225/Final-Project/build/src && /usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/src.dir/graph.cpp.o -MF CMakeFiles/src.dir/graph.cpp.o.d -o CMakeFiles/src.dir/graph.cpp.o -c /workspaces/cs225/Final-Project/src/graph.cpp
 
 src/CMakeFiles/src.dir/graph.cpp.i: cmake_force
@@ -85,15 +183,29 @@ src/CMakeFiles/src.dir/graph.cpp.s: cmake_force
 
 # Object files for target src
 src_OBJECTS = \
+"CMakeFiles/src.dir/Animation.cpp.o" \
+"CMakeFiles/src.dir/Point.cpp.o" \
+"CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o" \
+"CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o" \
+"CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o" \
+"CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o" \
+"CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o" \
 "CMakeFiles/src.dir/graph.cpp.o"
 
 # External object files for target src
 src_EXTERNAL_OBJECTS =
 
+src/libsrc.a: src/CMakeFiles/src.dir/Animation.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/Point.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o
+src/libsrc.a: src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o
 src/libsrc.a: src/CMakeFiles/src.dir/graph.cpp.o
 src/libsrc.a: src/CMakeFiles/src.dir/build.make
 src/libsrc.a: src/CMakeFiles/src.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX static library libsrc.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/workspaces/cs225/Final-Project/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX static library libsrc.a"
 	cd /workspaces/cs225/Final-Project/build/src && $(CMAKE_COMMAND) -P CMakeFiles/src.dir/cmake_clean_target.cmake
 	cd /workspaces/cs225/Final-Project/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/src.dir/link.txt --verbose=$(VERBOSE)
 

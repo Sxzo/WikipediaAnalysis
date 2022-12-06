@@ -1,13 +1,27 @@
 #include "graph.h"
 #include <iostream>
+#include "colorPicker/RainbowColorPicker.h"
+#include "colorPicker/GradientColorPicker.h"
+#include "colorPicker/GridColorPicker.h"
+#include "colorPicker/SolidColorPicker.h"
+#include "colorPicker/MyColorPicker.h"
+
 using namespace std;
 
 int main() {
 
     
     Graph g;
-    PNG* image = g.visualizeBFS();
-    image->writeToFile("BFS" + string(".png"));
+    // PNG* image = g.drawBase();
+    
+    // image->writeToFile("BFS" + string(".png"));
+
+    // PNG png;  
+    // png.readFromFile("/workspaces/cs225/Final-Project/build/BFS.png");
+    Animation animation = g.visualizeBFS();
+    animation.write("BFS.gif");
+
+
     // string function;
     // int f;
     // cout << "Which function do you want to use?" << "\n" << "1. BFS" << "\n" << "2. Djikstra's Algorithm" << endl;

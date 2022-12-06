@@ -283,6 +283,15 @@ CMakeFiles/test.dir/tests/tests.cpp.o: ../tests/tests.cpp \
   ../lib/cs225/HSLAPixel.h \
   /usr/include/c++/11/sstream \
   /usr/include/c++/11/bits/sstream.tcc \
+  ../src/Animation.h \
+  ../src/Point.h \
+  ../src/colorPicker/ColorPicker.h \
+  ../src/colorPicker/RainbowColorPicker.h \
+  ../src/colorPicker/GradientColorPicker.h \
+  ../src/Point.h \
+  ../src/colorPicker/GridColorPicker.h \
+  ../src/colorPicker/SolidColorPicker.h \
+  ../src/colorPicker/MyColorPicker.h \
   /usr/include/catch2/catch_test_macros.hpp \
   /usr/include/catch2/internal/catch_test_macro_impl.hpp \
   /usr/include/catch2/catch_user_config.hpp \
@@ -398,6 +407,20 @@ CMakeFiles/test.dir/tests/tests.cpp.o: ../tests/tests.cpp \
 /usr/include/catch2/internal/catch_assertion_handler.hpp:
 
 /usr/include/catch2/catch_test_macros.hpp:
+
+../src/colorPicker/MyColorPicker.h:
+
+../src/colorPicker/GridColorPicker.h:
+
+../src/colorPicker/GradientColorPicker.h:
+
+../src/colorPicker/RainbowColorPicker.h:
+
+../src/colorPicker/ColorPicker.h:
+
+../src/Point.h:
+
+../src/Animation.h:
 
 /usr/include/c++/11/sstream:
 
@@ -552,6 +575,8 @@ CMakeFiles/test.dir/tests/tests.cpp.o: ../tests/tests.cpp \
 /usr/include/x86_64-linux-gnu/bits/cpu-set.h:
 
 /usr/include/c++/11/exception:
+
+../src/colorPicker/SolidColorPicker.h:
 
 /usr/include/c++/11/bits/exception_ptr.h:
 

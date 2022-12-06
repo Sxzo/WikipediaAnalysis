@@ -1,2 +1,2 @@
-/usr/bin/ar qc libsrc.a CMakeFiles/src.dir/graph.cpp.o
+/usr/bin/ar qc libsrc.a CMakeFiles/src.dir/Animation.cpp.o CMakeFiles/src.dir/Point.cpp.o CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o CMakeFiles/src.dir/graph.cpp.o
 /usr/bin/ranlib libsrc.a

@@ -282,8 +282,31 @@ CMakeFiles/main.dir/entry/main.cpp.o: ../entry/main.cpp \
   ../lib/cs225/PNG.h \
   ../lib/cs225/HSLAPixel.h \
   /usr/include/c++/11/sstream \
-  /usr/include/c++/11/bits/sstream.tcc
+  /usr/include/c++/11/bits/sstream.tcc \
+  ../src/Animation.h \
+  ../src/Point.h \
+  ../src/colorPicker/ColorPicker.h \
+  ../src/colorPicker/RainbowColorPicker.h \
+  ../src/colorPicker/GradientColorPicker.h \
+  ../src/Point.h \
+  ../src/colorPicker/GridColorPicker.h \
+  ../src/colorPicker/SolidColorPicker.h \
+  ../src/colorPicker/MyColorPicker.h
 
+
+../src/colorPicker/MyColorPicker.h:
+
+../src/colorPicker/GridColorPicker.h:
+
+../src/colorPicker/GradientColorPicker.h:
+
+../src/colorPicker/RainbowColorPicker.h:
+
+../src/colorPicker/ColorPicker.h:
+
+../src/Point.h:
+
+../src/Animation.h:
 
 /usr/include/c++/11/sstream:
 
@@ -428,6 +451,8 @@ CMakeFiles/main.dir/entry/main.cpp.o: ../entry/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/cpu-set.h:
 
 /usr/include/c++/11/exception:
+
+../src/colorPicker/SolidColorPicker.h:
 
 /usr/include/c++/11/bits/exception_ptr.h:
 

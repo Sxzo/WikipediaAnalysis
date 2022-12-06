@@ -228,6 +228,7 @@ void Graph::clear() {
     for (unsigned i = 0; i < nodeList_.size(); i++) {
         delete nodeList_[i];
     }
+    
 }
 
 
@@ -268,74 +269,96 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     return output;
 }
 
-PNG* Graph::visualizeBFS() {
-     
-    int num_nodes = nodeList_.size(); //Approx 4,500 nodes
+Animation Graph::visualizeBFS() {
     PNG* image = new PNG(size,size);
-    for (int i = 0; i < num_nodes; i++) {
-        Node* node = nodeList_[i];
-        drawNode(node, image);
-        
+    std::vector<Node*> bfs = BFS(nodeList_[0]); //size:4056
+    populateCoords(bfs[0]);
+    for (size_t i = 0; i < 100; i++) {
+        populateCoords(bfs[i + 1]);
+        drawEdge(bfs[i], bfs[i+1]);
     }
-
-    for (int i = 0; i < num_nodes; i++) {
-        Node* node = nodeList_[i];
-        for (size_t k = 0; k < node -> adjList.size(); k++) {
-            drawEdge(node, node -> adjList[k].second, image);
-        }
-    }
-    
-    return image;
+    RainbowColorPicker picker(10);
+    Animation animation = Animate(400, image, picker);
+    return animation;
 }
 
-void Graph::drawEdge(Node* node1, Node* node2, PNG* image) {
-    //y = mx + b
+void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
+    //Just to make sure we're not drawing an edge between two nodes that haven't been drawn yet:
+    if (node1 -> coord.first == 0 || node2 -> coord.first == 0) {
+        return;
+    }
     int x1 = node1 -> coord.first;
     int y1 = node1 -> coord.second;
     int x2 = node2 -> coord.first;
     int y2 = node2 -> coord.second;
 
-    int x_dist = abs(x2 - x1);
-    int y_dist = abs(y2 - y1);
+    int dx = x2 - x1;
+    int dy = y2 - y1;
 
-    int start_x = x1 < x2 ? x1 : x2;
-    int start_y = x1 < x2 ? y1 : y2;
-    if (x_dist == 0) { //draw vertical line
-        for (int i = 0; i < y_dist; i++) {
-            image -> getPixel(start_x,start_y + i) = HSLAPixel(0,1,0.5,1);
-        }
-        return;
+    double steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+
+    double Xincrement = dx / steps;
+    double Yincrement = dy / steps;
+
+    double X = x1;
+    double Y = y1;
+
+    int i = 1;
+    while (i  <= steps) {
+        //image->getPixel(floor(X), floor(Y)) = HSLAPixel(0,1,0.5,1);
+        traversal.push_back(Point(floor(X), floor(Y)));
+        X += Xincrement;
+        Y += Yincrement;
+        i++;
     }
-
-    double slope = (y2 - y1)/(x2 - x1);
-    for (int i = 0; i < x_dist; i++) {
-        int y = floor(slope*i);
-        if (slope == 0) {
-            image -> getPixel(start_x + i, start_y) = HSLAPixel(0,1,0.5,1);
-        } else { //slope > 0
-            image -> getPixel(start_x + i, start_y + y) = HSLAPixel(0,1,0.5,1);
-        }
-        
-    }
-
 }
 
-void Graph::drawNode(Node* node, PNG* image) {
+void Graph::populateCoords(Node* node) {
     int radius = node -> degree;
-    //x^2 + y^2 = r^2
     int center_x = rand() % (size - 2*radius) + radius;
     int center_y = rand() % (size - 2*radius) + radius;
     node -> coord = make_pair(center_x,center_y);
-    //this code draws the circle
     for (int i = 0; i <= radius; i++) { // i = x
         int y = sqrt(pow(radius,2) - pow(i,2));
-        image -> getPixel(center_x + i, center_y + y).l = 0;
-        image -> getPixel(center_x + i, center_y - y).l = 0;
-        image -> getPixel(center_x - i, center_y + y).l = 0;
-        image -> getPixel(center_x - i, center_y - y).l = 0;
+        // image -> getPixel(center_x + i, center_y + y).l = 0;
+        traversal.push_back(Point(center_x + i, center_y + y));
+        // image -> getPixel(center_x + i, center_y - y).l = 0;
+        traversal.push_back(Point(center_x + i, center_y - y));
+        // image -> getPixel(center_x - i, center_y + y).l = 0;
+        traversal.push_back(Point(center_x - i, center_y + y));
+        // image -> getPixel(center_x - i, center_y - y).l = 0;
+        traversal.push_back(Point(center_x - i, center_y - y));
     }
-
 }
+
+
+
+Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color) {
+    Animation animation;
+    animation.addFrame(*image);
+
+    unsigned int frame_counter = 0;
+
+    for (const Point & point : traversal) {
+        HSLAPixel& pixel = image->getPixel(point.x,point.y); 
+        pixel = color.getColor(point.x,point.y);  // fill pixel
+        frame_counter++;
+        if (frameInterval == frame_counter) {
+            animation.addFrame(*image);
+            frame_counter = 0;
+        } 
+    }
+    if (*image != animation.getFrame(animation.frameCount() - 1)) {
+        animation.addFrame(*image);
+    }
+    return animation;
+    
+}
+
+
+
+
+
 
 // vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
 // {
@@ -366,4 +389,49 @@ void Graph::drawNode(Node* node, PNG* image) {
 //    }
 //    return dist;
 
+// }
+
+
+//Extra code:
+
+// void Graph::drawNode(Node* node, PNG* image) {
+//     int radius = node -> degree;
+//     //x^2 + y^2 = r^2
+//     int center_x = rand() % (size - 2*radius) + radius;
+//     int center_y = rand() % (size - 2*radius) + radius;
+//     node -> coord = make_pair(center_x,center_y);
+//     //this code draws the circle
+//     for (int i = 0; i <= radius; i++) { // i = x
+//         int y = sqrt(pow(radius,2) - pow(i,2));
+//         image -> getPixel(center_x + i, center_y + y).l = 0;
+//         // traversal.push_back(Point(center_x + i, center_y + y));
+//         image -> getPixel(center_x + i, center_y - y).l = 0;
+//         // traversal.push_back(Point(center_x + i, center_y - y));
+//         image -> getPixel(center_x - i, center_y + y).l = 0;
+//         // traversal.push_back(Point(center_x - i, center_y + y));
+//         image -> getPixel(center_x - i, center_y - y).l = 0;
+//         // traversal.push_back(Point(center_x - i, center_y - y));
+//     }
+    
+// }
+
+// Node* node = bfs[i];
+        // for (size_t k = 0; k < node -> adjList.size(); k++) {
+        //     Node* adjacent = node -> adjList[k].second;
+        //     if (node -> drawn.count(adjacent) == 0) {
+        //         drawEdge(node, node -> adjList[k].second, image);
+        //         node -> drawn.insert(adjacent);
+        //         adjacent -> drawn.insert(node);
+        //     } 
+        // }
+
+// PNG* Graph::drawBase() {
+//     int num_nodes = nodeList_.size(); //Approx 4,500 nodes
+//     PNG* image = new PNG(size,size);
+
+//     for (int i = 0; i < num_nodes; i++) {
+//         Node* node = nodeList_[i];
+//         drawNode(node, image);
+//     }
+//     return image;
 // }

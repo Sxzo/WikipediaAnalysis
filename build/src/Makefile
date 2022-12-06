@@ -131,6 +131,174 @@ src/fast:
 	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/build
 .PHONY : src/fast
 
+Animation.o: Animation.cpp.o
+.PHONY : Animation.o
+
+# target to build an object file
+Animation.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Animation.cpp.o
+.PHONY : Animation.cpp.o
+
+Animation.i: Animation.cpp.i
+.PHONY : Animation.i
+
+# target to preprocess a source file
+Animation.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Animation.cpp.i
+.PHONY : Animation.cpp.i
+
+Animation.s: Animation.cpp.s
+.PHONY : Animation.s
+
+# target to generate assembly for a file
+Animation.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Animation.cpp.s
+.PHONY : Animation.cpp.s
+
+Point.o: Point.cpp.o
+.PHONY : Point.o
+
+# target to build an object file
+Point.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Point.cpp.o
+.PHONY : Point.cpp.o
+
+Point.i: Point.cpp.i
+.PHONY : Point.i
+
+# target to preprocess a source file
+Point.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Point.cpp.i
+.PHONY : Point.cpp.i
+
+Point.s: Point.cpp.s
+.PHONY : Point.s
+
+# target to generate assembly for a file
+Point.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/Point.cpp.s
+.PHONY : Point.cpp.s
+
+colorPicker/GradientColorPicker.o: colorPicker/GradientColorPicker.cpp.o
+.PHONY : colorPicker/GradientColorPicker.o
+
+# target to build an object file
+colorPicker/GradientColorPicker.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.o
+.PHONY : colorPicker/GradientColorPicker.cpp.o
+
+colorPicker/GradientColorPicker.i: colorPicker/GradientColorPicker.cpp.i
+.PHONY : colorPicker/GradientColorPicker.i
+
+# target to preprocess a source file
+colorPicker/GradientColorPicker.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.i
+.PHONY : colorPicker/GradientColorPicker.cpp.i
+
+colorPicker/GradientColorPicker.s: colorPicker/GradientColorPicker.cpp.s
+.PHONY : colorPicker/GradientColorPicker.s
+
+# target to generate assembly for a file
+colorPicker/GradientColorPicker.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GradientColorPicker.cpp.s
+.PHONY : colorPicker/GradientColorPicker.cpp.s
+
+colorPicker/GridColorPicker.o: colorPicker/GridColorPicker.cpp.o
+.PHONY : colorPicker/GridColorPicker.o
+
+# target to build an object file
+colorPicker/GridColorPicker.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.o
+.PHONY : colorPicker/GridColorPicker.cpp.o
+
+colorPicker/GridColorPicker.i: colorPicker/GridColorPicker.cpp.i
+.PHONY : colorPicker/GridColorPicker.i
+
+# target to preprocess a source file
+colorPicker/GridColorPicker.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.i
+.PHONY : colorPicker/GridColorPicker.cpp.i
+
+colorPicker/GridColorPicker.s: colorPicker/GridColorPicker.cpp.s
+.PHONY : colorPicker/GridColorPicker.s
+
+# target to generate assembly for a file
+colorPicker/GridColorPicker.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/GridColorPicker.cpp.s
+.PHONY : colorPicker/GridColorPicker.cpp.s
+
+colorPicker/MyColorPicker.o: colorPicker/MyColorPicker.cpp.o
+.PHONY : colorPicker/MyColorPicker.o
+
+# target to build an object file
+colorPicker/MyColorPicker.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.o
+.PHONY : colorPicker/MyColorPicker.cpp.o
+
+colorPicker/MyColorPicker.i: colorPicker/MyColorPicker.cpp.i
+.PHONY : colorPicker/MyColorPicker.i
+
+# target to preprocess a source file
+colorPicker/MyColorPicker.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.i
+.PHONY : colorPicker/MyColorPicker.cpp.i
+
+colorPicker/MyColorPicker.s: colorPicker/MyColorPicker.cpp.s
+.PHONY : colorPicker/MyColorPicker.s
+
+# target to generate assembly for a file
+colorPicker/MyColorPicker.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/MyColorPicker.cpp.s
+.PHONY : colorPicker/MyColorPicker.cpp.s
+
+colorPicker/RainbowColorPicker.o: colorPicker/RainbowColorPicker.cpp.o
+.PHONY : colorPicker/RainbowColorPicker.o
+
+# target to build an object file
+colorPicker/RainbowColorPicker.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.o
+.PHONY : colorPicker/RainbowColorPicker.cpp.o
+
+colorPicker/RainbowColorPicker.i: colorPicker/RainbowColorPicker.cpp.i
+.PHONY : colorPicker/RainbowColorPicker.i
+
+# target to preprocess a source file
+colorPicker/RainbowColorPicker.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.i
+.PHONY : colorPicker/RainbowColorPicker.cpp.i
+
+colorPicker/RainbowColorPicker.s: colorPicker/RainbowColorPicker.cpp.s
+.PHONY : colorPicker/RainbowColorPicker.s
+
+# target to generate assembly for a file
+colorPicker/RainbowColorPicker.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/RainbowColorPicker.cpp.s
+.PHONY : colorPicker/RainbowColorPicker.cpp.s
+
+colorPicker/SolidColorPicker.o: colorPicker/SolidColorPicker.cpp.o
+.PHONY : colorPicker/SolidColorPicker.o
+
+# target to build an object file
+colorPicker/SolidColorPicker.cpp.o:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.o
+.PHONY : colorPicker/SolidColorPicker.cpp.o
+
+colorPicker/SolidColorPicker.i: colorPicker/SolidColorPicker.cpp.i
+.PHONY : colorPicker/SolidColorPicker.i
+
+# target to preprocess a source file
+colorPicker/SolidColorPicker.cpp.i:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.i
+.PHONY : colorPicker/SolidColorPicker.cpp.i
+
+colorPicker/SolidColorPicker.s: colorPicker/SolidColorPicker.cpp.s
+.PHONY : colorPicker/SolidColorPicker.s
+
+# target to generate assembly for a file
+colorPicker/SolidColorPicker.cpp.s:
+	cd /workspaces/cs225/Final-Project/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/src.dir/build.make src/CMakeFiles/src.dir/colorPicker/SolidColorPicker.cpp.s
+.PHONY : colorPicker/SolidColorPicker.cpp.s
+
 graph.o: graph.cpp.o
 .PHONY : graph.o
 
@@ -164,6 +332,27 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... src"
+	@echo "... Animation.o"
+	@echo "... Animation.i"
+	@echo "... Animation.s"
+	@echo "... Point.o"
+	@echo "... Point.i"
+	@echo "... Point.s"
+	@echo "... colorPicker/GradientColorPicker.o"
+	@echo "... colorPicker/GradientColorPicker.i"
+	@echo "... colorPicker/GradientColorPicker.s"
+	@echo "... colorPicker/GridColorPicker.o"
+	@echo "... colorPicker/GridColorPicker.i"
+	@echo "... colorPicker/GridColorPicker.s"
+	@echo "... colorPicker/MyColorPicker.o"
+	@echo "... colorPicker/MyColorPicker.i"
+	@echo "... colorPicker/MyColorPicker.s"
+	@echo "... colorPicker/RainbowColorPicker.o"
+	@echo "... colorPicker/RainbowColorPicker.i"
+	@echo "... colorPicker/RainbowColorPicker.s"
+	@echo "... colorPicker/SolidColorPicker.o"
+	@echo "... colorPicker/SolidColorPicker.i"
+	@echo "... colorPicker/SolidColorPicker.s"
 	@echo "... graph.o"
 	@echo "... graph.i"
 	@echo "... graph.s"

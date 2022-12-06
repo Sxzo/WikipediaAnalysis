@@ -36,6 +36,13 @@ endif()
 # src_sources at src/CMakeLists.txt:5 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/workspaces/cs225/Final-Project/src/*.cpp")
 set(OLD_GLOB
+  "/workspaces/cs225/Final-Project/src/Animation.cpp"
+  "/workspaces/cs225/Final-Project/src/Point.cpp"
+  "/workspaces/cs225/Final-Project/src/colorPicker/GradientColorPicker.cpp"
+  "/workspaces/cs225/Final-Project/src/colorPicker/GridColorPicker.cpp"
+  "/workspaces/cs225/Final-Project/src/colorPicker/MyColorPicker.cpp"
+  "/workspaces/cs225/Final-Project/src/colorPicker/RainbowColorPicker.cpp"
+  "/workspaces/cs225/Final-Project/src/colorPicker/SolidColorPicker.cpp"
   "/workspaces/cs225/Final-Project/src/graph.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")

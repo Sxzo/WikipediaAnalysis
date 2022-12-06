@@ -284,6 +284,15 @@ CMakeFiles/test.dir/tests/tests.cpp.o
  /workspaces/cs225/Final-Project/lib/cs225/HSLAPixel.h
  /usr/include/c++/11/sstream
  /usr/include/c++/11/bits/sstream.tcc
+ /workspaces/cs225/Final-Project/src/Animation.h
+ /workspaces/cs225/Final-Project/src/Point.h
+ /workspaces/cs225/Final-Project/src/colorPicker/ColorPicker.h
+ /workspaces/cs225/Final-Project/src/colorPicker/RainbowColorPicker.h
+ /workspaces/cs225/Final-Project/src/colorPicker/GradientColorPicker.h
+ /workspaces/cs225/Final-Project/src/Point.h
+ /workspaces/cs225/Final-Project/src/colorPicker/GridColorPicker.h
+ /workspaces/cs225/Final-Project/src/colorPicker/SolidColorPicker.h
+ /workspaces/cs225/Final-Project/src/colorPicker/MyColorPicker.h
  /usr/include/catch2/catch_test_macros.hpp
  /usr/include/catch2/internal/catch_test_macro_impl.hpp
  /usr/include/catch2/catch_user_config.hpp
