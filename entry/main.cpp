@@ -22,6 +22,11 @@ int main() {
     animation.write("BFS.gif");
 
 
+    for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
+        cout << edge << endl;
+    }
+    //PNG* image = g.visualizeBFS();
+    //image->writeToFile("BFS" + string(".png"));
     // string function;
     // int f;
     // cout << "Which function do you want to use?" << "\n" << "1. BFS" << "\n" << "2. Djikstra's Algorithm" << endl;
