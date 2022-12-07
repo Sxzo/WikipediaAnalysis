@@ -396,7 +396,48 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 
 // }
 
-<<<<<<< HEAD
+int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
+    vector<Node*> foundSet;
+    foundSet.push_back(startNode);
+    vector<int> cutWeight;
+   
+    vector<Node*> component = BFS(startNode);
+    set<Node*> candidates(component.begin(), component.end());
+
+    /*loops through every node and adds the one that has the hightest total weight to all of 
+    the nodes already in the vector. Removes the largest node for the set of possible nodes and
+    adds it to the vector of found nodes. The last two nodes found will be the ones with the minimum cut
+    */
+    while (!candidates.empty()) { 
+        Node* maxVertex;
+        int maxWeight = -1;
+        for (Node* node : candidates) {
+            int weight = 0;
+            for (Node* foundNode : foundSet) {
+                if (areAdjacent(node, foundNode)) {
+                    for (auto i : node->adjList) {
+                        if (i.second->data == foundNode->data) {
+                            weight += i.first;
+                        }
+                    }
+                }
+            }
+            if (weight > maxWeight) {
+                maxVertex = node;
+                maxWeight = weight;
+            }
+        }
+        candidates.erase(maxVertex);
+        foundSet.push_back(maxVertex);
+        cutWeight.push_back(maxWeight);
+    }
+
+    s = foundSet[foundSet.size() - 2];
+    t = foundSet[foundSet.size() - 1];
+
+    return cutWeight[cutWeight.size() - 1];
+}
+
 
 //Extra code:
 
@@ -441,46 +482,4 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 //     }
 //     return image;
 // }
-=======
-int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-    vector<Node*> foundSet;
-    foundSet.push_back(startNode);
-    vector<int> cutWeight;
-   
-    vector<Node*> component = BFS(startNode);
-    set<Node*> candidates(component.begin(), component.end());
 
-    /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector. Removes the largest node for the set of possible nodes and
-    adds it to the vector of found nodes. The last two nodes found will be the ones with the minimum cut
-    */
-    while (!candidates.empty()) { 
-        Node* maxVertex;
-        int maxWeight = -1;
-        for (Node* node : candidates) {
-            int weight = 0;
-            for (Node* foundNode : foundSet) {
-                if (areAdjacent(node, foundNode)) {
-                    for (auto i : node->adjList) {
-                        if (i.second->data == foundNode->data) {
-                            weight += i.first;
-                        }
-                    }
-                }
-            }
-            if (weight > maxWeight) {
-                maxVertex = node;
-                maxWeight = weight;
-            }
-        }
-        candidates.erase(maxVertex);
-        foundSet.push_back(maxVertex);
-        cutWeight.push_back(maxWeight);
-    }
-
-    s = foundSet[foundSet.size() - 2];
-    t = foundSet[foundSet.size() - 1];
-
-    return cutWeight[cutWeight.size() - 1];
-}
->>>>>>> 1e6c434e8296f8c0630213e723765839ec74a41f
