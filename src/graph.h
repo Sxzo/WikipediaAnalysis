@@ -44,21 +44,22 @@ class Graph {
         
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
-<<<<<<< HEAD
         Animation visualizeBFS();
         PNG* drawBase();
-=======
         PNG* visualizeBFS();
-        int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
-        vector<pair<string, string>> stoerWagner(Node* startNode);
-
->>>>>>> 1e6c434e8296f8c0630213e723765839ec74a41f
         //Helper functions for visualizeBFS
         void drawEdge(Node* node1, Node* node2); //PNG* image
         void drawNode(Node* node, PNG* image);
         Animation Animate(unsigned frameInterval, PNG* image, ColorPicker& color);
         void populateCoords(Node* node);
+
+        //stoer wagner
+        int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
+        vector<pair<string, string>> stoerWagner(Node* startNode);
+
+      
         // vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
+
         //functions added so tests will compile
         int getNodeListSize();
         Node* getNode(string article);

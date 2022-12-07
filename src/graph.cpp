@@ -397,45 +397,46 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 // }
 
 int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-    vector<Node*> foundSet;
-    foundSet.push_back(startNode);
-    vector<int> cutWeight;
+    vector<Node*> superNode;
+    superNode.push_back(startNode);
+    int cutWeight;
    
-    vector<Node*> component = BFS(startNode);
-    set<Node*> candidates(component.begin(), component.end());
+    vector<Node*> component = BFS(startNode); // gets all of the nodes that are in the same connected component as the starting node
+    set<Node*> otherNodes(component.begin(), component.end());
 
     /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector. Removes the largest node for the set of possible nodes and
-    adds it to the vector of found nodes. The last two nodes found will be the ones with the minimum cut
+    the nodes already in the vector (represents the nodes inside it merged together).
+    Takes the node with the largest weight between it and all of the nodes that are already
+    in the merged node. The last two nodes found will be the ones with the cut
     */
     while (!candidates.empty()) { 
         Node* maxVertex;
         int maxWeight = -1;
-        for (Node* node : candidates) {
-            int weight = 0;
-            for (Node* foundNode : foundSet) {
+        for (Node* node : otherNodes) {
+            int weight = 0; // initializes the edge weight between this node and the super node
+            for (Node* foundNode : superNode) {
                 if (areAdjacent(node, foundNode)) {
                     for (auto i : node->adjList) {
                         if (i.second->data == foundNode->data) {
-                            weight += i.first;
+                            weight += i.first; // adds the weight of each edge going to this node from the super node
                         }
                     }
                 }
             }
-            if (weight > maxWeight) {
+            if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
                 maxVertex = node;
                 maxWeight = weight;
             }
         }
-        candidates.erase(maxVertex);
-        foundSet.push_back(maxVertex);
-        cutWeight.push_back(maxWeight);
+        otherNodes.erase(maxVertex); // removes the node from the set of nodes to check and adds it into the super node
+        superNode.push_back(maxVertex);
+        cutWeight = maxWeight;
     }
 
-    s = foundSet[foundSet.size() - 2];
+    s = foundSet[foundSet.size() - 2]; 
     t = foundSet[foundSet.size() - 1];
 
-    return cutWeight[cutWeight.size() - 1];
+    return cutWeight;
 }
 
 
