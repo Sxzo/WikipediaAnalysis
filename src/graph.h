@@ -44,15 +44,12 @@ class Graph {
         
         //Graph Algorithms:
         vector<Graph::Node*> BFS(Node* start);
-<<<<<<< HEAD
         Animation visualizeBFS();
         PNG* drawBase();
-=======
-        PNG* visualizeBFS();
         int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
         vector<pair<string, string>> stoerWagner(Node* startNode);
 
->>>>>>> 1e6c434e8296f8c0630213e723765839ec74a41f
+
         //Helper functions for visualizeBFS
         void drawEdge(Node* node1, Node* node2); //PNG* image
         void drawNode(Node* node, PNG* image);
@@ -70,7 +67,7 @@ class Graph {
 
     private:
         std::vector<Point> traversal;
-        int size = 1000; // Just testing for visualizeBFS
+        int size = 7500; // Just testing for visualizeBFS
         void readFromFile();
         string decodeHTTP(string title);
         vector<Node*> nodeList_;

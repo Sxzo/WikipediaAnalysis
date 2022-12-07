@@ -276,14 +276,15 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
 
 Animation Graph::visualizeBFS() {
     PNG* image = new PNG(size,size);
-    std::vector<Node*> bfs = BFS(nodeList_[0]); //size:4056
+    Node* node = getNode("Global city");
+    std::vector<Node*> bfs = BFS(node); //size:4056
     populateCoords(bfs[0]);
-    for (size_t i = 0; i < 100; i++) {
+    for (size_t i = 0; i < bfs.size()/2; i++) {
         populateCoords(bfs[i + 1]);
         drawEdge(bfs[i], bfs[i+1]);
     }
     RainbowColorPicker picker(10);
-    Animation animation = Animate(400, image, picker);
+    Animation animation = Animate(150000, image, picker);
     return animation;
 }
 
@@ -319,7 +320,7 @@ void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
 }
 
 void Graph::populateCoords(Node* node) {
-    int radius = node -> degree;
+    int radius = (node -> degree)/2;
     int center_x = rand() % (size - 2*radius) + radius;
     int center_y = rand() % (size - 2*radius) + radius;
     node -> coord = make_pair(center_x,center_y);
@@ -396,7 +397,6 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 
 // }
 
-<<<<<<< HEAD
 
 //Extra code:
 
@@ -441,7 +441,6 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 //     }
 //     return image;
 // }
-=======
 int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
     vector<Node*> foundSet;
     foundSet.push_back(startNode);
@@ -483,4 +482,3 @@ int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
 
     return cutWeight[cutWeight.size() - 1];
 }
->>>>>>> 1e6c434e8296f8c0630213e723765839ec74a41f
