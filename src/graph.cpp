@@ -372,36 +372,36 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image) {
 
 
 
-// vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
-// {
+ /*vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
+ {
     
-//     // create a priority queue for storing the minimum index distance
-//    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
-//    // indexed array for calculating distance.
-//    vector<Graph::Node*> dist(1000000,INT_MAX);
-//    dist[start]=0;
-//    pq.push(make_pair(0,start));
-//    // iterate through the priority queue
-//    while(!pq.empty()){
-//        // this d is the distance which will be taken from priority queue.
-//        int d=pq.top().first;
-//        Graph::Node* p=pq.top().second;
-//        pq.pop();
-//        // visit all adjacent node to p
-//        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
-//             Graph::Node* adjacent_node = adjacent_edge.second;
-//             // check if the distance is minimum or not. 
-//             // if not then update the new distance. 
-//             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
-//             {
-//                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
-//                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
-//             }
-//         }
-//    }
-//    return dist;
+    //create a priority queue for storing the minimum index distance
+    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
+    // indexed array for calculating distance.
+    vector<Graph::Node*> dist(1000000,INT_MAX);
+    dist[start]=0;
+    pq.push(make_pair(0,start));
+    // iterate through the priority queue
+    while(!pq.empty()){
+        // this d is the distance which will be taken from priority queue.
+        int d=pq.top().first;
+        Graph::Node* p=pq.top().second;
+        pq.pop();
+        // visit all adjacent node to p
+        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
+             Graph::Node* adjacent_node = adjacent_edge.second;
+             // check if the distance is minimum or not. 
+             // if not then update the new distance. 
+             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
+             {
+                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
+                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
+             }
+         }
+    }
+    return dist;
 
-// }
+ } */
 
 int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
     vector<Node*> superNode;
@@ -443,8 +443,8 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
     s = superNode[superNode.size() - 2]; 
     t = superNode[superNode.size() - 1];
 
-//     return cutWeight;
-// }
+    return cutWeight;
+}
 
 vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns vector of edges in mincut
     Graph g = Graph(*this); // copy constructing graph to use algorithm so others can be used afterwards
@@ -572,47 +572,6 @@ PNG* Graph::drawBase() {
     return image;
 }
 
-int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-    vector<Node*> foundSet;
-    foundSet.push_back(startNode);
-    vector<int> cutWeight;
-   
-    vector<Node*> component = BFS(startNode);
-    set<Node*> candidates(component.begin(), component.end());
-
-    /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector. Removes the largest node for the set of possible nodes and
-    adds it to the vector of found nodes. The last two nodes found will be the ones with the minimum cut
-    */
-    while (!candidates.empty()) { 
-        Node* maxVertex;
-        int maxWeight = -1;
-        for (Node* node : candidates) {
-            int weight = 0;
-            for (Node* foundNode : foundSet) {
-                if (areAdjacent(node, foundNode)) {
-                    for (auto i : node->adjList) {
-                        if (i.second->data == foundNode->data) {
-                            weight += i.first;
-                        }
-                    }
-                }
-            }
-            if (weight > maxWeight) {
-                maxVertex = node;
-                maxWeight = weight;
-            }
-        }
-        candidates.erase(maxVertex);
-        foundSet.push_back(maxVertex);
-        cutWeight.push_back(maxWeight);
-    }
-
-    s = foundSet[foundSet.size() - 2];
-    t = foundSet[foundSet.size() - 1];
-
-    return cutWeight[cutWeight.size() - 1];
-}
 
 
 // Animation Graph::visualizeBFS(PNG* picture) {
