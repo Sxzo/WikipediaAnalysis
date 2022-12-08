@@ -46,10 +46,16 @@ class Graph {
         vector<Graph::Node*> BFS(Node* start);
         Animation visualizeBFS();
         PNG* drawBase();
+        Animation visualizeBFS(PNG* picture);
+
+
+
         //Helper functions for visualizeBFS
         void drawEdge(Node* node1, Node* node2); //PNG* image
         void drawNode(Node* node, PNG* image);
-        Animation Animate(unsigned frameInterval, PNG* image, ColorPicker& color);
+
+        Animation Animate(unsigned frameInterval, PNG* image);
+
         void populateCoords(Node* node);
 
         //stoer wagner
@@ -69,9 +75,13 @@ class Graph {
         Graph(const Graph& other);
         Graph& operator=(const Graph& other);
         
+        vector<pair<Graph::Node*, int>> connectedComponents();
+
+
     private:
-        std::vector<Point> traversal;
-        int size = 1000; // Just testing for visualizeBFS
+    //if int2 = 1 then node, if int2 = 0 then edge, int3 = node -> degree, int4 = node -> coord
+        vector<tuple<Point,int,int, pair<int,int>>> traversal; 
+        int size = 750; // Just testing for visualizeBFS
         void readFromFile();
         string decodeHTTP(string title);
         vector<Node*> nodeList_;

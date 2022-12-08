@@ -271,7 +271,20 @@ TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 }
 
 // Test cases for Dijkstra
+TEST_CASE("TEST DIJKRATAS","[DIJKRATAS]"){
+	set<Graph::Node*> graph;
 
+	Graph::Node* start = g.getNode("Athens");
+	Graph::Node* end=g.getNode("United States");
+	vector<Graph::Node*> distance=g.dijkratasAlgorithm(start,end);
+	for(auto x:graph)
+	{
+		Graph::Node* n=g.getNode(x);
+		REQUIRE(distance.size()>0);
+		cout<<"The distance from "<<start.data<<" to "<<x<<" node is "<<distance[n]<<endl;
+
+	}
+}
 // Stoer-Wagner tests
 TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));

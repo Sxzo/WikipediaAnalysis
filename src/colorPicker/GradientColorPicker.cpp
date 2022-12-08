@@ -31,8 +31,8 @@ GradientColorPicker::GradientColorPicker(
  * @return The color selected for (x, y).
  */
 HSLAPixel GradientColorPicker::getColor(unsigned x, unsigned y) {
-  double dx = x - center.x;
-  double dy = y - center.y;
+  int dx = (x - center.x);
+  int dy = (y - center.y);
   double d = sqrt((dx * dx) + (dy * dy));
   double pct = d / radius;
 
