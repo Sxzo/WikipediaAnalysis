@@ -18,13 +18,24 @@ int main() {
 
     // PNG png;  
     // png.readFromFile("/workspaces/cs225/Final-Project/build/BFS.png");
+
+    // vector<pair<Graph::Node*, int>> output  = g.connectedComponents();
+    // for (size_t i = 0; i < output.size(); i++) {
+    //     cout << "Name: " << output[i].first -> data << " || " << "Size: " << output[i].second << endl;
+    // }
+    // std::cout << node -> data << std::endl;
+    // std::cout << std::endl;
+    // vector<Graph::Node*> bfs = g.BFS(node);
+    // std::cout << "Size: " + to_string(bfs.size()) << std::endl; 
+
     Animation animation = g.visualizeBFS();
+
     animation.write("BFS.gif");
 
 
-    for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
-        cout << edge << endl;
-    }
+    // for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
+    //     cout << edge << endl;
+    // }
     //PNG* image = g.visualizeBFS();
     //image->writeToFile("BFS" + string(".png"));
     // string function;

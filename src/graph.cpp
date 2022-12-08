@@ -1,7 +1,6 @@
 #include "graph.h"
 
 
-using namespace std;
 
 Graph::Graph() {
     readFromFile();
@@ -276,23 +275,39 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
 
 Animation Graph::visualizeBFS() {
     PNG* image = new PNG(size,size);
-    Node* node = getNode("Global city");
+    Node* node = getNode("Zulu");
     std::vector<Node*> bfs = BFS(node); //size:4056
-    populateCoords(bfs[0]);
-    for (size_t i = 0; i < bfs.size()/2; i++) {
-        populateCoords(bfs[i + 1]);
+
+    //draws all the nodes on the base image
+    for (size_t i = 0; i < 51; i++) {
+        drawNode(bfs[i],image);
+    }
+    
+    //adds the first node to the traversal:
+    int r = node -> degree/4;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(node->coord.first + x, node->coord.second + y), 1, node -> degree, node -> coord)); 
+        }
+    }
+
+    //adds all the edges to the traversal
+    for (size_t i = 0; i < 50; i++) {
         drawEdge(bfs[i], bfs[i+1]);
     }
-    RainbowColorPicker picker(10);
-    Animation animation = Animate(150000, image, picker);
+
+    //animate the image:
+    Animation animation = Animate(500, image);
     return animation;
 }
+
 
 void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
     //Just to make sure we're not drawing an edge between two nodes that haven't been drawn yet:
     if (node1 -> coord.first == 0 || node2 -> coord.first == 0) {
         return;
     }
+
     int x1 = node1 -> coord.first;
     int y1 = node1 -> coord.second;
     int x2 = node2 -> coord.first;
@@ -311,43 +326,36 @@ void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
 
     int i = 1;
     while (i  <= steps) {
-        //image->getPixel(floor(X), floor(Y)) = HSLAPixel(0,1,0.5,1);
-        traversal.push_back(Point(floor(X), floor(Y)));
+        traversal.push_back(make_tuple(Point(floor(X), floor(Y)),0,0, make_pair(0,0)));
         X += Xincrement;
         Y += Yincrement;
         i++;
     }
-}
 
-void Graph::populateCoords(Node* node) {
-    int radius = (node -> degree)/2;
-    int center_x = rand() % (size - 2*radius) + radius;
-    int center_y = rand() % (size - 2*radius) + radius;
-    node -> coord = make_pair(center_x,center_y);
-    for (int i = 0; i <= radius; i++) { // i = x
-        int y = sqrt(pow(radius,2) - pow(i,2));
-        // image -> getPixel(center_x + i, center_y + y).l = 0;
-        traversal.push_back(Point(center_x + i, center_y + y));
-        // image -> getPixel(center_x + i, center_y - y).l = 0;
-        traversal.push_back(Point(center_x + i, center_y - y));
-        // image -> getPixel(center_x - i, center_y + y).l = 0;
-        traversal.push_back(Point(center_x - i, center_y + y));
-        // image -> getPixel(center_x - i, center_y - y).l = 0;
-        traversal.push_back(Point(center_x - i, center_y - y));
+    int r = node2->degree/4;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(x2 + x, y2 + y),1, r, node2 -> coord)); 
+        }
     }
+    
 }
 
 
-
-Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color) {
+Animation Graph::Animate(unsigned frameInterval, PNG* image) {
     Animation animation;
     animation.addFrame(*image);
-
     unsigned int frame_counter = 0;
 
-    for (const Point & point : traversal) {
-        HSLAPixel& pixel = image->getPixel(point.x,point.y); 
-        pixel = color.getColor(point.x,point.y);  // fill pixel
+    for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
+        HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
+        if (get<1>(tuple) == 0) { // if we're coloring in an edge
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        } else { // if we're coloring in a node
+            GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        }
         frame_counter++;
         if (frameInterval == frame_counter) {
             animation.addFrame(*image);
@@ -358,9 +366,7 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
         animation.addFrame(*image);
     }
     return animation;
-    
 }
-
 
 
 
@@ -397,72 +403,70 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 
 // }
 
-int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-    vector<Node*> superNode;
-    superNode.push_back(startNode);
-    int cutWeight;
+// int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
+//     vector<Node*> superNode;
+//     superNode.push_back(startNode);
+//     int cutWeight;
    
-    vector<Node*> component = BFS(startNode); // gets all of the nodes that are in the same connected component as the starting node
-    set<Node*> otherNodes(component.begin(), component.end());
+//     vector<Node*> component = BFS(startNode); // gets all of the nodes that are in the same connected component as the starting node
+//     set<Node*> otherNodes(component.begin(), component.end());
 
-    /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector (represents the nodes inside it merged together).
-    Takes the node with the largest weight between it and all of the nodes that are already
-    in the merged node. The last two nodes found will be the ones with the cut
-    */
-    while (!candidates.empty()) { 
-        Node* maxVertex;
-        int maxWeight = -1;
-        for (Node* node : otherNodes) {
-            int weight = 0; // initializes the edge weight between this node and the super node
-            for (Node* foundNode : superNode) {
-                if (areAdjacent(node, foundNode)) {
-                    for (auto i : node->adjList) {
-                        if (i.second->data == foundNode->data) {
-                            weight += i.first; // adds the weight of each edge going to this node from the super node
-                        }
-                    }
-                }
-            }
-            if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
-                maxVertex = node;
-                maxWeight = weight;
-            }
-        }
-        otherNodes.erase(maxVertex); // removes the node from the set of nodes to check and adds it into the super node
-        superNode.push_back(maxVertex);
-        cutWeight = maxWeight;
-    }
+//     /*loops through every node and adds the one that has the hightest total weight to all of 
+//     the nodes already in the vector (represents the nodes inside it merged together).
+//     Takes the node with the largest weight between it and all of the nodes that are already
+//     in the merged node. The last two nodes found will be the ones with the cut
+//     */
+//     while (!candidates.empty()) { 
+//         Node* maxVertex;
+//         int maxWeight = -1;
+//         for (Node* node : otherNodes) {
+//             int weight = 0; // initializes the edge weight between this node and the super node
+//             for (Node* foundNode : superNode) {
+//                 if (areAdjacent(node, foundNode)) {
+//                     for (auto i : node->adjList) {
+//                         if (i.second->data == foundNode->data) {
+//                             weight += i.first; // adds the weight of each edge going to this node from the super node
+//                         }
+//                     }
+//                 }
+//             }
+//             if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
+//                 maxVertex = node;
+//                 maxWeight = weight;
+//             }
+//         }
+//         otherNodes.erase(maxVertex); // removes the node from the set of nodes to check and adds it into the super node
+//         superNode.push_back(maxVertex);
+//         cutWeight = maxWeight;
+//     }
 
-    s = foundSet[foundSet.size() - 2]; 
-    t = foundSet[foundSet.size() - 1];
+//     s = foundSet[foundSet.size() - 2]; 
+//     t = foundSet[foundSet.size() - 1];
 
-    return cutWeight;
-}
+//     return cutWeight;
+// }
 
 
 //Extra code:
 
-// void Graph::drawNode(Node* node, PNG* image) {
-//     int radius = node -> degree;
-//     //x^2 + y^2 = r^2
-//     int center_x = rand() % (size - 2*radius) + radius;
-//     int center_y = rand() % (size - 2*radius) + radius;
-//     node -> coord = make_pair(center_x,center_y);
-//     //this code draws the circle
-//     for (int i = 0; i <= radius; i++) { // i = x
-//         int y = sqrt(pow(radius,2) - pow(i,2));
-//         image -> getPixel(center_x + i, center_y + y).l = 0;
-//         // traversal.push_back(Point(center_x + i, center_y + y));
-//         image -> getPixel(center_x + i, center_y - y).l = 0;
-//         // traversal.push_back(Point(center_x + i, center_y - y));
-//         image -> getPixel(center_x - i, center_y + y).l = 0;
-//         // traversal.push_back(Point(center_x - i, center_y + y));
-//         image -> getPixel(center_x - i, center_y - y).l = 0;
-//         // traversal.push_back(Point(center_x - i, center_y - y));
-//     }
+void Graph::drawNode(Node* node, PNG* image) {
+    int radius = node -> degree/4;
+    //x^2 + y^2 = r^2
     
-// }
+    int center_x = rand() % (size - 2*radius) + radius;
+    int center_y = rand() % (size - 2*radius) + radius;
+
+    node -> coord = make_pair(center_x,center_y);
+    //this code draws the circle
+    for (int i = 0; i <= radius; i++) { // i = x
+        int y = sqrt(pow(radius,2) - pow(i,2));
+        image -> getPixel(center_x + i, center_y + y).l = 0;
+        image -> getPixel(center_x + i, center_y - y).l = 0;
+        image -> getPixel(center_x - i, center_y + y).l = 0;
+        image -> getPixel(center_x - i, center_y - y).l = 0;
+    }
+    
+}
 
 // Node* node = bfs[i];
         // for (size_t k = 0; k < node -> adjList.size(); k++) {
@@ -474,16 +478,17 @@ int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
         //     } 
         // }
 
-// PNG* Graph::drawBase() {
-//     int num_nodes = nodeList_.size(); //Approx 4,500 nodes
-//     PNG* image = new PNG(size,size);
+PNG* Graph::drawBase() {
+    int num_nodes = nodeList_.size(); //Approx 4,500 nodes
+    PNG* image = new PNG(size,size);
 
-//     for (int i = 0; i < num_nodes; i++) {
-//         Node* node = nodeList_[i];
-//         drawNode(node, image);
-//     }
-//     return image;
-// }
+    for (int i = 0; i < num_nodes; i++) {
+        Node* node = nodeList_[i];
+        drawNode(node, image);
+    }
+    return image;
+}
+
 int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
     vector<Node*> foundSet;
     foundSet.push_back(startNode);
@@ -524,4 +529,99 @@ int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
     t = foundSet[foundSet.size() - 1];
 
     return cutWeight[cutWeight.size() - 1];
+}
+
+
+// Animation Graph::visualizeBFS(PNG* picture) {
+//     PNG* image = picture;
+//     Node* node = getNode("Global city");
+//     std::vector<Node*> bfs = BFS(node); //size:4056
+//     // for (size_t i = 0; i < bfs.size(); i++) {
+//     //     drawNode(bfs[i], );
+//     // }
+    
+//     // for (int y =- r; y <= r; y++) {
+//     //     for (int x = -r; x<= r; x++) {
+//     //         if (x * x + y * y <= r * r) traversal.push_back(Point(node->coord.first + x, node->coord.second + y)); 
+//     //     }
+//     // }
+
+//     // for (size_t i = 0; i < 25; i++) {
+//     //     drawEdge(bfs[i], bfs[i+1]);
+//     // }
+//     RainbowColorPicker picker(10);
+//     Animation animation = Animate(400, image, picker);
+//     return animation;
+// }
+
+
+// void Graph::populateCoords(Node* node) {
+//     int radius = (node -> degree)/4;
+//     int center_x = rand() % (size - 2*radius) + radius;
+//     int center_y = rand() % (size - 2*radius) + radius;
+//     node -> coord = make_pair(center_x,center_y);
+//     for (int i = 0; i <= radius; i++) { // i = x
+//         int y = sqrt(pow(radius,2) - pow(i,2));
+//         // image -> getPixel(center_x + i, center_y + y).l = 0;
+//         traversal.push_back(Point(center_x + i, center_y + y));
+//         // image -> getPixel(center_x + i, center_y - y).l = 0;
+//         traversal.push_back(Point(center_x + i, center_y - y));
+//         // image -> getPixel(center_x - i, center_y + y).l = 0;
+//         traversal.push_back(Point(center_x - i, center_y + y));
+//         // image -> getPixel(center_x - i, center_y - y).l = 0;
+//         traversal.push_back(Point(center_x - i, center_y - y));
+//     }
+// }
+
+// Graph::Node* Graph::connectedComponents() {
+//     map<Node*, bool> visited_list;
+
+//     for (size_t i = 0;i < nodeList_.size(); i++) {
+//         visited_list.insert(make_pair(nodeList_[i], false)); 
+//     }
+
+//     Node* n = getNode("Global city"); 
+//     vector<Node*> bfs = BFS(n);
+
+//     for (size_t i = 0; i < bfs.size(); i++) {
+//         visited_list[bfs[i]] = true;
+//     }
+
+//     for (auto pair : visited_list) {
+//         if (pair.second == false) {
+//             if (BFS(pair.first).size() > 2) return pair.first;
+//         }
+//     }
+
+//     return NULL;
+
+// }
+
+vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
+    map<Node*, bool> visited_list;
+
+    for (size_t i = 0;i < nodeList_.size(); i++) {
+        visited_list.insert({nodeList_[i], false}); 
+    }
+
+    Node* n = getNode("Global city"); 
+    vector<Node*> bfs = BFS(n);
+
+    for (size_t i = 0; i < bfs.size(); i++) {
+        visited_list[bfs[i]] = true;
+    }
+
+
+    std::vector<pair<Node*, int>> output; 
+    for (auto pair : visited_list) {
+        if (pair.second == false) {
+            int size = BFS(pair.first).size();
+            if (size > 3) {
+                output.push_back(make_pair(pair.first, size));
+            }
+        }
+    }
+
+    return output;
+
 }
