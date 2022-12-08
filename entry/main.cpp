@@ -12,19 +12,22 @@ int main() {
 
     
     Graph g;
+    for (auto entry : g.stoerWagner(g.getNode("Directdebit"))) { //Directdebit
+        cout << entry.first << " " << entry.second << endl;
+    }
     // PNG* image = g.drawBase();
     
     // image->writeToFile("BFS" + string(".png"));
 
     // PNG png;  
     // png.readFromFile("/workspaces/cs225/Final-Project/build/BFS.png");
-    Animation animation = g.visualizeBFS();
-    animation.write("BFS.gif");
+    //Animation animation = g.visualizeBFS();
+    //animation.write("BFS.gif");
 
 
-    for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
-        cout << edge << endl;
-    }
+    //for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
+    //    cout << edge << endl;
+    //}
     //PNG* image = g.visualizeBFS();
     //image->writeToFile("BFS" + string(".png"));
     // string function;

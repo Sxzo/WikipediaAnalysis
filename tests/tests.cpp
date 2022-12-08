@@ -107,18 +107,12 @@ TEST_CASE("Test Related: Oil Crisis", "[related]") {
 	expected.insert(g.getNode("Vietnam War"));
 
     vector<string> actual = g.incidentEdges(g.getNode("1973 oil crisis"));
-	for (string s : actual) {
-		cout << s << endl;
-	}
     set<Graph::Node*> actualSet;
     
     for (size_t i = 0; i < actual.size(); i++) {
        actualSet.insert(g.getNode(actual[i]));
     }
     for (Graph::Node* node : expected) {
-		if (actualSet.find(node) == actualSet.end()) {
-			cout << node->data << endl;
-		}
         REQUIRE(actualSet.find(node) != actualSet.end()); 
     }
     REQUIRE(expected.size() == actualSet.size());
@@ -279,3 +273,11 @@ TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 // Test cases for Dijkstra
 
 // Stoer-Wagner tests
+TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
+	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
+	REQUIRE(cutEdge.size() == 2);
+	REQUIRE(cutEdge[0].first == "Directdebit");
+	REQUIRE(cutEdge[0].second == "Friend Directdebit");
+	REQUIRE(cutEdge[1].first == "Sponsorship Directdebit");
+	REQUIRE(cutEdge[1].second == "Friend Directdebit");
+}

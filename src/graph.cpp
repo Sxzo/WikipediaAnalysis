@@ -396,30 +396,26 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image, ColorPicker& color)
 
 // }
 
-int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
+int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
     vector<Node*> superNode;
-    superNode.push_back(startNode);
+    superNode.push_back(otherNodes[0]);
     int cutWeight;
-   
-    vector<Node*> component = BFS(startNode); // gets all of the nodes that are in the same connected component as the starting node
-    set<Node*> otherNodes(component.begin(), component.end());
 
     /*loops through every node and adds the one that has the hightest total weight to all of 
     the nodes already in the vector (represents the nodes inside it merged together).
     Takes the node with the largest weight between it and all of the nodes that are already
     in the merged node. The last two nodes found will be the ones with the cut
     */
-    while (!candidates.empty()) { 
+    while (!otherNodes.empty()) { 
         Node* maxVertex;
         int maxWeight = -1;
         for (Node* node : otherNodes) {
             int weight = 0; // initializes the edge weight between this node and the super node
             for (Node* foundNode : superNode) {
-                if (areAdjacent(node, foundNode)) {
-                    for (auto i : node->adjList) {
-                        if (i.second->data == foundNode->data) {
-                            weight += i.first; // adds the weight of each edge going to this node from the super node
-                        }
+                for (auto i : node->adjList) {
+                    if (i.second->data == foundNode->data) {
+                        weight += i.first; // adds the weight of each edge going to this node from the super node
+                        break;
                     }
                 }
             }
@@ -428,17 +424,104 @@ int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
                 maxWeight = weight;
             }
         }
-        otherNodes.erase(maxVertex); // removes the node from the set of nodes to check and adds it into the super node
+        for (unsigned i = 0; i < otherNodes.size(); i++) {
+            if (otherNodes[i]->data == maxVertex->data) {
+                otherNodes.erase(otherNodes.begin() + i); // removes the node from the set of nodes to check and adds it into the super node
+            }
+        }
         superNode.push_back(maxVertex);
         cutWeight = maxWeight;
     }
 
-    s = foundSet[foundSet.size() - 2]; 
-    t = foundSet[foundSet.size() - 1];
+    s = superNode[superNode.size() - 2]; 
+    t = superNode[superNode.size() - 1];
 
     return cutWeight;
 }
 
+vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns vector of edges in mincut
+    Graph g = Graph(*this); // copy constructing graph to use algorithm so others can be used afterwards
+    set<Node*> tempPartition;
+    set<Node*> partition; // set of nodes in the partition;
+    vector<Node*> nodes = g.BFS(startNode);
+    int minWeight = INT_MAX;
+    while (nodes.size() > 1) {
+        Node* s = nullptr;
+        Node* t = nullptr;
+        int cutWeight = g.stoerWagnerHelper(nodes, s, t);
+        if (cutWeight < minWeight) {
+            minWeight = cutWeight;
+            partition = tempPartition;
+            partition.insert(t);
+        }
+        tempPartition.insert(t);
+        Node* mergedNode = g.mergeNodes(s, t);
+        nodes.push_back(mergedNode);
+        int erased = 0;
+        for (unsigned i = 0; i < nodes.size(); i++) {
+            if (nodes[i]->data == s->data || nodes[i]->data == t->data) {
+                nodes.erase(nodes.begin() + i);
+                erased++;
+                i--;
+            }
+        }
+    }
+
+    for (Node* node : nodes) { //memory cleanup
+        if (node->data.substr(0, 6) == "Merged") {
+            delete node;
+        }
+    }
+    vector<pair<string, string>> cutEdges;
+    for (Node* node : partition) {
+        for (auto entry : node->adjList) {
+            if (partition.find(entry.second) == partition.end()) {
+                cutEdges.push_back(pair(node->data, entry.second->data));
+            }
+        }
+    }
+    return cutEdges;
+}
+
+Graph::Node* Graph::mergeNodes(Node* node1, Node* node2) {
+    Node* toReturn = new Node("Merged" + node1->data + node2->data);
+    for (unsigned i = 0; i < node1->adjList.size(); i++) { // adds edges from node 1 to first node
+        if (node1->adjList[i].second->data == node2->data) {
+            continue; // skips node2 so that there isn't an edge between the merged node and one of the nodes in it
+        }
+        toReturn->adjList.push_back(node1->adjList[i]);
+    }
+
+    for (unsigned i = 0; i < node2->adjList.size(); i++) {
+        if (node2->adjList[i].second->data == node1->data) {
+            continue; // skips node1
+        }
+        bool added = false;
+        for (unsigned j = 0; j < toReturn->adjList.size(); j++) {
+            if (toReturn->adjList[j].second->data == node2->adjList[i].second->data) { //adds weight to edge if present from node1
+                toReturn->adjList[j].first += node2->adjList[j].first;
+                added = true;
+                break;
+            }
+        }
+        if (!added) {
+            toReturn->adjList.push_back(node2->adjList[i]);
+        }
+    }
+
+    for (unsigned i = 0; i < toReturn->adjList.size(); i++) {
+        Node* toModify = getNode(toReturn->adjList[i].second->data);
+        for (auto entry : toModify->adjList) { // changes any edges in other node to be the new merged node
+            if (entry.second->data == node1->data || entry.second->data == node2->data) {
+                entry.second = toReturn;
+                entry.first = toReturn->adjList[i].first;
+                break;
+            }
+            // may end up with two edges with equal weight pointing to the new merged node but for the purpose of this algorithm that is fine
+        }
+    }
+    return toReturn;
+}
 
 //Extra code:
 

@@ -46,7 +46,6 @@ class Graph {
         vector<Graph::Node*> BFS(Node* start);
         Animation visualizeBFS();
         PNG* drawBase();
-        PNG* visualizeBFS();
         //Helper functions for visualizeBFS
         void drawEdge(Node* node1, Node* node2); //PNG* image
         void drawNode(Node* node, PNG* image);
@@ -54,8 +53,9 @@ class Graph {
         void populateCoords(Node* node);
 
         //stoer wagner
-        int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
+        int stoerWagnerHelper(vector<Node*> otherNodes, Node*& s, Node*& t);
         vector<pair<string, string>> stoerWagner(Node* startNode);
+        Graph::Node* mergeNodes(Node* node1, Node* node2);
 
       
         // vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
@@ -68,7 +68,7 @@ class Graph {
         ~Graph();
         Graph(const Graph& other);
         Graph& operator=(const Graph& other);
-
+        
     private:
         std::vector<Point> traversal;
         int size = 1000; // Just testing for visualizeBFS
