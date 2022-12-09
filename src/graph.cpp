@@ -276,15 +276,16 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
 Animation Graph::visualizeBFS() {
     PNG* image = new PNG(size,size);
     Node* node = getNode("Zulu");
+    
     std::vector<Node*> bfs = BFS(node); //size:4056
 
     //draws all the nodes on the base image
-    for (size_t i = 0; i < 51; i++) {
+    for (size_t i = 0; i < iter_limit; i++) {
         drawNode(bfs[i],image);
     }
     
     //adds the first node to the traversal:
-    int r = node -> degree/4;
+    int r = node -> degree/6;
     for (int y =- r; y <= r; y++) {
         for (int x = -r; x<= r; x++) {
             if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(node->coord.first + x, node->coord.second + y), 1, node -> degree, node -> coord)); 
@@ -292,12 +293,56 @@ Animation Graph::visualizeBFS() {
     }
 
     //adds all the edges to the traversal
-    for (size_t i = 0; i < 50; i++) {
+    for (size_t i = 0; i < iter_limit; i++) {
         drawEdge(bfs[i], bfs[i+1]);
     }
 
     //animate the image:
-    Animation animation = Animate(500, image);
+    Animation animation = Animate(frameRate, image);
+    return animation;
+}
+
+Animation Graph::visualizeDijkstras() {
+    PNG* image = new PNG(size, size); 
+    Node* start = nodeList_[0]; 
+    Node* end = nodeList_[100];
+
+    std::vector<Node*> dijkstra = dijkstrasVector(start,end); //size:4056
+    //draws all the nodes on the base image
+    for (size_t i = 0; i < 100; i++) {
+        drawNode(nodeList_[i],image);
+    }
+    
+    //adds the first node to the traversal:
+    int r = start -> degree/6;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(start->coord.first + x, start->coord.second + y), 1, start -> degree, start -> coord)); 
+        }
+    }
+
+    //draws all adjacent edges
+    for (size_t i = 0; i < 100; i++) {
+        Node* node = nodeList_[i];
+        for (pair<int, Node*> adjacent : node -> adjList) {
+            if (node -> drawn.count(adjacent.second) == 0) {
+                drawEdge(node, adjacent.second);
+                node -> drawn.insert(adjacent.second);
+                adjacent.second -> drawn.insert(node);
+            }
+        }
+    }
+
+    //draw the base image with all coloring:
+    drawDijkstra(image);
+    //Clear our current traversal vector
+    traversal.clear();
+
+    for (size_t i = 0; i < dijkstra.size() - 1; i++) {
+        drawEdge(dijkstra[i], dijkstra[i+1]);
+    }
+
+    Animation animation = Animate(frameRate, image);
     return animation;
 }
 
@@ -332,7 +377,7 @@ void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
         i++;
     }
 
-    int r = node2->degree/4;
+    int r = node2->degree/6;
     for (int y =- r; y <= r; y++) {
         for (int x = -r; x<= r; x++) {
             if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(x2 + x, y2 + y),1, r, node2 -> coord)); 
@@ -368,93 +413,290 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image) {
     return animation;
 }
 
+void Graph::drawDijkstra(PNG* image) {
+    for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
+        HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
+        if (get<1>(tuple) == 0) { // if we're coloring in an edge
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        } else { // if we're coloring in a node
+            GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        }
+    }
+}
 
 
+int Graph::dijkstrasAlgorithm(Node* start,Node* end) {
+    // weight, data
+    priority_queue<pair<int,string>> pq;
+    // data:distance from start
+    unordered_map<string, int> dist;
+    string start_string = start->data;
+    dist[start_string]=0;
+    pq.push(make_pair(0,start_string));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        Graph::Node* node = getNode(prev_data);
+        // for all adjecent edges, update weight
+        for (pair<int, Graph::Node*> ae : node -> adjList) {
+            int weight = ae.first;
+            Graph::Node* adj_node = ae.second;
+            string curr_data = adj_node->data;
+            // if data not in dist map means curr val = INF 
+            // so new val will always be lower than INF
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
+    string end_s = end->data;
+    // did not reach the end node, graph has more than one conected components
+    if (dist.find(end_s) == dist.end()) return INT_MAX;
+    return dist[end_s];
+}
+
+int Graph::dijkstras(Node* start,Node* end) {
+    // weight, data
+    priority_queue<pair<int,string>> pq;
+    // data:distance from start
+    unordered_map<string, int> dist;
+    dist[start -> data]=0;
+    pq.push(make_pair(0,start -> data));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        
+        for (pair<int, Node*> ae : getNode(prev_data) -> adjList) {
+            int weight = ae.first;
+            string curr_data = ae.second -> data;
+
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
+    if (dist.find(end -> data) == dist.end()) return INT_MAX;
+    return dist[end -> data];
+}
 
 
-// vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
-// {
-    
-//     // create a priority queue for storing the minimum index distance
-//    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
-//    // indexed array for calculating distance.
-//    vector<Graph::Node*> dist(1000000,INT_MAX);
-//    dist[start]=0;
-//    pq.push(make_pair(0,start));
-//    // iterate through the priority queue
-//    while(!pq.empty()){
-//        // this d is the distance which will be taken from priority queue.
-//        int d=pq.top().first;
-//        Graph::Node* p=pq.top().second;
-//        pq.pop();
-//        // visit all adjacent node to p
-//        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
-//             Graph::Node* adjacent_node = adjacent_edge.second;
-//             // check if the distance is minimum or not. 
-//             // if not then update the new distance. 
-//             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
-//             {
-//                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
-//                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
-//             }
-//         }
-//    }
-//    return dist;
+//Dijkstras' Algorithm but it returns the path taken for shortest path
+vector<Graph::Node*> Graph::dijkstrasVector(Node* start, Node* end) {
+    // weight, data
+    priority_queue<pair<int,string>> pq;
+    // data:distance from start
+    unordered_map<string, int> dist;
+    vector<Node*> previous;
+    unordered_map<Node*, Node*> prev;
+    prev[start] = NULL;
+    string start_string = start->data;
+    dist[start_string]=0;
+    pq.push(make_pair(0,start_string));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        Graph::Node* node = getNode(prev_data);
+        // for all adjecent edges, update weight
+        for (pair<int, Graph::Node*> ae : node -> adjList) {
+            int weight = ae.first;
+            Graph::Node* adj_node = ae.second;
+            string curr_data = adj_node->data;
+            // if data not in dist map means curr val = INF 
+            // so new val will always be lower than INF
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                prev[getNode(curr_data)] = getNode(prev_data);
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
 
-// }
+    //Trace backwards through the map to find shortest path
+    Node* looper = end;
+    while (prev[looper] != NULL) {
+        previous.insert(previous.begin(), looper);
+        looper = prev[looper]; 
+    }
+    previous.insert(previous.begin(), looper);
+    return previous;
+}
 
-// int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-//     vector<Node*> superNode;
-//     superNode.push_back(startNode);
-//     int cutWeight;
-   
-//     vector<Node*> component = BFS(startNode); // gets all of the nodes that are in the same connected component as the starting node
-//     set<Node*> otherNodes(component.begin(), component.end());
+int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
+    vector<Node*> superNode;
+    superNode.push_back(otherNodes[0]);
+    otherNodes.erase(otherNodes.begin());
+    int cutWeight;
+    vector<pair<int, Node*>> superAdj;
+    superAdj = superNode[0]->adjList;
+    /*loops through every node and adds the one that has the hightest total weight to all of 
+    the nodes already in the vector (represents the nodes inside it merged together).
+    Takes the node with the largest weight between it and all of the nodes that are already
+    in the merged node. The last two nodes found will be the ones with the cut
+    */
+    while (!otherNodes.empty()) { 
+        cout << otherNodes.size() << endl;
+        Node* maxVertex;
+        int maxWeight = -1;
+        for (Node* node : otherNodes) {
+            int weight = 0; // initializes the edge weight between this node and the super node
+            /*for (Node* foundNode : superNode) {
+                for (auto i : node->adjList) {
+                    if (i.second->data == foundNode->data) {
+                        weight += i.first; // adds the weight of each edge going to this node from the super node
+                        break;
+                    }
+                }
+            } */
+            for (unsigned i = 0; i < superAdj.size(); i++) {
+                if (superAdj[i].second->data == node->data) {
+                    weight = superAdj[i].first;
+                }
+            }
+            if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
+                maxVertex = node;
+                maxWeight = weight;
+            }
+        }
+        for (unsigned i = 0; i < otherNodes.size(); i++) {
+            if (otherNodes[i]->data == maxVertex->data) {
+                otherNodes.erase(otherNodes.begin() + i); // removes the node from the set of nodes to check and adds it into the super node
+                break;
+            }
+        }
+        superNode.push_back(maxVertex);
+        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
+            bool added = false;
+            for (unsigned j = 0; j < superAdj.size(); j++) {
+                if (maxVertex->adjList[i].second == superAdj[j].second) {
+                    superAdj[j].first += maxVertex->adjList[i].first;
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                superAdj.push_back(maxVertex->adjList[i]);
+            }
+        }
+        cutWeight = maxWeight;
+    }
 
-//     /*loops through every node and adds the one that has the hightest total weight to all of 
-//     the nodes already in the vector (represents the nodes inside it merged together).
-//     Takes the node with the largest weight between it and all of the nodes that are already
-//     in the merged node. The last two nodes found will be the ones with the cut
-//     */
-//     while (!candidates.empty()) { 
-//         Node* maxVertex;
-//         int maxWeight = -1;
-//         for (Node* node : otherNodes) {
-//             int weight = 0; // initializes the edge weight between this node and the super node
-//             for (Node* foundNode : superNode) {
-//                 if (areAdjacent(node, foundNode)) {
-//                     for (auto i : node->adjList) {
-//                         if (i.second->data == foundNode->data) {
-//                             weight += i.first; // adds the weight of each edge going to this node from the super node
-//                         }
-//                     }
-//                 }
-//             }
-//             if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
-//                 maxVertex = node;
-//                 maxWeight = weight;
-//             }
-//         }
-//         otherNodes.erase(maxVertex); // removes the node from the set of nodes to check and adds it into the super node
-//         superNode.push_back(maxVertex);
-//         cutWeight = maxWeight;
-//     }
+    s = superNode[superNode.size() - 2]; 
+    t = superNode[superNode.size() - 1];
 
-//     s = foundSet[foundSet.size() - 2]; 
-//     t = foundSet[foundSet.size() - 1];
+    return cutWeight;
+}
 
-//     return cutWeight;
-// }
+vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns vector of edges in mincut
+    Graph g = Graph(*this); // copy constructing graph to use algorithm so others can be used afterwards
+    set<Node*> tempPartition;
+    set<Node*> partition; // set of nodes in the partition;
+    vector<Node*> nodes = g.BFS(startNode);
+    int minWeight = INT_MAX;
+    while (nodes.size() > 1) {
+        Node* s = nullptr;
+        Node* t = nullptr;
+        int cutWeight = g.stoerWagnerHelper(nodes, s, t);
+        if (cutWeight < minWeight) {
+            minWeight = cutWeight;
+            partition = tempPartition;
+            partition.insert(t);
+        }
+        tempPartition.insert(t);
+        Node* mergedNode = g.mergeNodes(s, t);
+        nodes.push_back(mergedNode);
+        for (unsigned i = 0; i < nodes.size(); i++) {
+            if (nodes[i]->data == s->data || nodes[i]->data == t->data) {
+                nodes.erase(nodes.begin() + i);
+                i--;
+            }
+        }
+    }
 
+    for (Node* node : nodes) { //memory cleanup
+        if (node->data.substr(0, 6) == "Merged") {
+            delete node;
+        }
+    }
+    vector<pair<string, string>> cutEdges;
+    for (Node* node : partition) {
+        if (node->data.substr(0,6) == "Merged") {
+            continue;
+        }
+        for (auto entry : node->adjList) {
+            if (entry.second->data.substr(0,6) == "Merged") {
+                continue;
+            }
+            if (partition.find(entry.second) == partition.end()) {
+                cutEdges.push_back(pair(node->data, entry.second->data));
+            }
+        }
+    }
+    return cutEdges;
+}
 
-//Extra code:
+Graph::Node* Graph::mergeNodes(Node* node1, Node* node2) {
+    Node* toReturn = new Node("Merged" + node1->data + node2->data);
+    for (unsigned i = 0; i < node1->adjList.size(); i++) { // adds edges from node 1 to first node
+        if (node1->adjList[i].second->data == node2->data) {
+            continue; // skips node2 so that there isn't an edge between the merged node and one of the nodes in it
+        }
+        toReturn->adjList.push_back(node1->adjList[i]);
+    }
+
+    for (unsigned i = 0; i < node2->adjList.size(); i++) {
+        if (node2->adjList[i].second->data == node1->data) {
+            continue; // skips node1
+        }
+        bool added = false;
+        for (unsigned j = 0; j < toReturn->adjList.size(); j++) {
+            if (toReturn->adjList[j].second->data == node2->adjList[i].second->data) { //adds weight to edge if present from node1
+                toReturn->adjList[j].first += node2->adjList[j].first;
+                added = true;
+                break;
+            }
+        }
+        if (!added) {
+            toReturn->adjList.push_back(node2->adjList[i]);
+        }
+    }
+
+    for (unsigned i = 0; i < toReturn->adjList.size(); i++) {
+        Node* toModify = getNode(toReturn->adjList[i].second->data);
+        for (auto entry : toModify->adjList) { // changes any edges in other node to be the new merged node
+            if (entry.second->data == node1->data || entry.second->data == node2->data) {
+                entry.second = toReturn;
+                entry.first = toReturn->adjList[i].first;
+                break;
+            }
+            // may end up with two edges with equal weight pointing to the new merged node but for the purpose of this algorithm that is fine
+        }
+    }
+    return toReturn;
+}
 
 void Graph::drawNode(Node* node, PNG* image) {
-    int radius = node -> degree/4;
-    //x^2 + y^2 = r^2
-    
-    int center_x = rand() % (size - 2*radius) + radius;
-    int center_y = rand() % (size - 2*radius) + radius;
+    int radius = node -> degree/6;   
+    int center_x = (rand() % (size - 2*radius)) + radius;
+    int center_y = (rand() % (size - 2*radius)) + radius;
+
+    int x = 0; 
+    while (collision(center_x, center_y, radius)) {
+        // cout << "Dealing with collision... " << "#" << x << endl;
+        x++;
+        if (x > 10000)  {
+            cout << "UNABLE TO RESOLVE COLLISION!!!!" << endl;
+            break;
+        }
+        center_x = rand() % (size - 2 * radius) + radius;
+        center_y = rand() % (size - 2 * radius) + radius;
+        
+    }
+
+    coord_list.push_back(make_tuple(center_x, center_y, radius));
 
     node -> coord = make_pair(center_x,center_y);
     //this code draws the circle
@@ -466,6 +708,21 @@ void Graph::drawNode(Node* node, PNG* image) {
         image -> getPixel(center_x - i, center_y - y).l = 0;
     }
     
+}
+
+bool Graph::collision(int x, int y, int r) {
+    if (coord_list.size() == 0) return false; 
+
+    for (size_t i = 0; i < coord_list.size(); i++) {
+        int x2 = get<0>(coord_list[i]); 
+        int y2 = get<1>(coord_list[i]); 
+        int r2 = get<2>(coord_list[i]); 
+        if (((x - x2) * (x - x2) + (y - y2) * (y - y2)) < ((r + r2) * (r + r2))) {
+            return true; 
+        }
+    }
+
+    return false; 
 }
 
 // Node* node = bfs[i];
@@ -488,114 +745,6 @@ PNG* Graph::drawBase() {
     }
     return image;
 }
-
-int Graph::stoerWagnerHelper(Graph::Node* startNode, Node*& s, Node*&  t) {
-    vector<Node*> foundSet;
-    foundSet.push_back(startNode);
-    vector<int> cutWeight;
-   
-    vector<Node*> component = BFS(startNode);
-    set<Node*> candidates(component.begin(), component.end());
-
-    /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector. Removes the largest node for the set of possible nodes and
-    adds it to the vector of found nodes. The last two nodes found will be the ones with the minimum cut
-    */
-    while (!candidates.empty()) { 
-        Node* maxVertex;
-        int maxWeight = -1;
-        for (Node* node : candidates) {
-            int weight = 0;
-            for (Node* foundNode : foundSet) {
-                if (areAdjacent(node, foundNode)) {
-                    for (auto i : node->adjList) {
-                        if (i.second->data == foundNode->data) {
-                            weight += i.first;
-                        }
-                    }
-                }
-            }
-            if (weight > maxWeight) {
-                maxVertex = node;
-                maxWeight = weight;
-            }
-        }
-        candidates.erase(maxVertex);
-        foundSet.push_back(maxVertex);
-        cutWeight.push_back(maxWeight);
-    }
-
-    s = foundSet[foundSet.size() - 2];
-    t = foundSet[foundSet.size() - 1];
-
-    return cutWeight[cutWeight.size() - 1];
-}
-
-
-// Animation Graph::visualizeBFS(PNG* picture) {
-//     PNG* image = picture;
-//     Node* node = getNode("Global city");
-//     std::vector<Node*> bfs = BFS(node); //size:4056
-//     // for (size_t i = 0; i < bfs.size(); i++) {
-//     //     drawNode(bfs[i], );
-//     // }
-    
-//     // for (int y =- r; y <= r; y++) {
-//     //     for (int x = -r; x<= r; x++) {
-//     //         if (x * x + y * y <= r * r) traversal.push_back(Point(node->coord.first + x, node->coord.second + y)); 
-//     //     }
-//     // }
-
-//     // for (size_t i = 0; i < 25; i++) {
-//     //     drawEdge(bfs[i], bfs[i+1]);
-//     // }
-//     RainbowColorPicker picker(10);
-//     Animation animation = Animate(400, image, picker);
-//     return animation;
-// }
-
-
-// void Graph::populateCoords(Node* node) {
-//     int radius = (node -> degree)/4;
-//     int center_x = rand() % (size - 2*radius) + radius;
-//     int center_y = rand() % (size - 2*radius) + radius;
-//     node -> coord = make_pair(center_x,center_y);
-//     for (int i = 0; i <= radius; i++) { // i = x
-//         int y = sqrt(pow(radius,2) - pow(i,2));
-//         // image -> getPixel(center_x + i, center_y + y).l = 0;
-//         traversal.push_back(Point(center_x + i, center_y + y));
-//         // image -> getPixel(center_x + i, center_y - y).l = 0;
-//         traversal.push_back(Point(center_x + i, center_y - y));
-//         // image -> getPixel(center_x - i, center_y + y).l = 0;
-//         traversal.push_back(Point(center_x - i, center_y + y));
-//         // image -> getPixel(center_x - i, center_y - y).l = 0;
-//         traversal.push_back(Point(center_x - i, center_y - y));
-//     }
-// }
-
-// Graph::Node* Graph::connectedComponents() {
-//     map<Node*, bool> visited_list;
-
-//     for (size_t i = 0;i < nodeList_.size(); i++) {
-//         visited_list.insert(make_pair(nodeList_[i], false)); 
-//     }
-
-//     Node* n = getNode("Global city"); 
-//     vector<Node*> bfs = BFS(n);
-
-//     for (size_t i = 0; i < bfs.size(); i++) {
-//         visited_list[bfs[i]] = true;
-//     }
-
-//     for (auto pair : visited_list) {
-//         if (pair.second == false) {
-//             if (BFS(pair.first).size() > 2) return pair.first;
-//         }
-//     }
-
-//     return NULL;
-
-// }
 
 vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
     map<Node*, bool> visited_list;
@@ -624,4 +773,26 @@ vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
 
     return output;
 
+}
+
+// Given that every node is a square, how many can we fit? Upper bound calcuation 
+int Graph::calculateVisualizationNodeCount() {
+    Node* node = getNode("Global city");
+
+    vector<Node*> bfs = BFS(node);
+
+    int area = size * size; 
+    int counter = 0;
+    int sum = 0;
+    for (size_t i = 0; i < bfs.size(); i++) {
+        int w = bfs[i] -> degree / 6 + 10; 
+        sum += w * w;
+        if (sum < area) {
+            counter++;
+        } else {
+            return counter; 
+        }
+    }
+
+    return counter; 
 }

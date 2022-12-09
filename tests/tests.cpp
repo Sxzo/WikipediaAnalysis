@@ -279,3 +279,11 @@ TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 // Test cases for Dijkstra
 
 // Stoer-Wagner tests
+TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
+	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
+	REQUIRE(cutEdge.size() == 2);
+	REQUIRE(cutEdge[0].first == "Friend Directdebit");
+	REQUIRE(cutEdge[0].second == "Directdebit");
+	REQUIRE(cutEdge[1].first == "Friend Directdebit");
+	REQUIRE(cutEdge[1].second == "Sponsorship Directdebit");
+}

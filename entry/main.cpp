@@ -13,8 +13,25 @@ int main() {
     
     Graph g;
     // PNG* image = g.drawBase();
-    
-    // image->writeToFile("BFS" + string(".png"));
+
+
+    Graph::Node* start = g.getNode("Zulu");
+    Graph::Node* end = g.getNode("Weapon");
+    int to_return = g.dijkstras(start,end);
+    std::cout << "RETURN VALUE: " + to_string(to_return) << std::endl;
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+
+    // vector<Graph::Node*> d = g.dijkstrasVector(start,end);
+
+
+    // std::cout << std::endl;
+    // for (size_t i = 0; i < d.size(); i++) {
+    //     std::cout << d[i] -> data << std::endl;
+    // }
+    // std::cout << std::endl;
 
     // PNG png;  
     // png.readFromFile("/workspaces/cs225/Final-Project/build/BFS.png");
@@ -28,9 +45,10 @@ int main() {
     // vector<Graph::Node*> bfs = g.BFS(node);
     // std::cout << "Size: " + to_string(bfs.size()) << std::endl; 
 
-    Animation animation = g.visualizeBFS();
-
-    animation.write("BFS.gif");
+    // Animation animation = g.visualizeBFS("Zulu");
+    // PNG image = animation.getFrame(animation.frameCount() - 1);
+    // image.writeToFile("BFS" + string(".png"));
+    // animation.write("BFS.gif");
 
 
     // for (auto edge : g.incidentEdges(g.getNode("Global city"))) {

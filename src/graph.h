@@ -31,39 +31,117 @@ class Graph {
             pair<int,int> coord; //coordinate of the center for BFS visualization
             //to avoid duplicate edges:
             set<Node*> drawn; // set of all the adjacent nodes where an edge has already been drawn
-
         };
        
+       //Graph Functions:
+
+        /**
+        * Generates a graph implemented with an Adjacency List with data from a given Wikipedia Link Dataset.
+        */
         Graph(); 
+
+        /**
+        * Removes a vertex(node) from Graph.
+        *
+        * @param v Node to be removed.
+        */
         void removeVertex(Node* v);
+
+        /**
+        * Returns a vector containing all edges adjacent to a given node.
+        *
+        * @param v Node to find adjacent edges of.
+        */
         vector<string> incidentEdges(Node* v); //returns the list of edges adjacent to node v
+
+        /**
+        * Returns a bool representing whether or not two nodes are adjacent.
+        *
+        * @param v1 Node one to compare adjacency.
+        * @param v2 Node two to compare adjacency
+        */
         bool areAdjacent(Node* v1, Node* v2); 
+
+        /**
+        * Inserts an edge into the graph.
+        *
+        * @param v1 Node representing startpoint of edge.
+        * @param v2 Node representing endpoint of edge. 
+        */
         void insertEdge(Node* v1, Node* v2);
+
+        /**
+        * Inserts an edge into the graph with a given weight.
+        *
+        * @param v1 Node representing startpoint of edge.
+        * @param v2 Node representing endpoint of edge. 
+        * @param weight Integer to denote weight of edge. 
+        */
         void insertEdge(Node* v1, Node* v2, int weight);
+
+        /**
+        * Returns the degree of a node.
+        *
+        * @param v Node to return degree of. 
+        */
         int getNodeDegree(Node* v);
         
+
         //Graph Algorithms:
-        vector<Graph::Node*> BFS(Node* start);
+
+        /**
+        * Returns a vector of nodes containing each node from a Breadth-First-Search traversal starting on a given node. 
+        *
+        * @param start Node to begin Breadth-First-Search on. 
+        */
+        vector<Node*> BFS(Node* start);
+
+        /**
+        * Returns the lowest sum of edge weights to get from a startpoint to an endpoint node.
+        *
+        * @param start Node startpoint .
+        * @param end Node endpoint of path. 
+        */
+        int dijkstrasAlgorithm(Node* start,Node* end);
+
+        /**
+        * Returns a vector containing all nodes traversed in the shortest path between two given nodes.
+        *
+        * @param start Node startpoint .
+        * @param end Node endpoint of path. 
+        */
+        vector<Node*> dijkstrasVector(Node* start,Node* end);
+
+        int stoerWagnerHelper(vector<Node*> otherNodes, Node*& s, Node*& t);
+        vector<pair<string, string>> stoerWagner(Node* startNode);
+        Node* mergeNodes(Node* node1, Node* node2);
+
+        int dijkstras(Node* start,Node* end);
+
+        //Visualizations:
+        /**
+        * Returns an animation of Dijkstras algoirithm.
+        */
+        Animation visualizeDijkstras();
+
+        /**
+        * Returns an animation of the Breadth-First-Search traversal.
+        *
+        * <NOTE> This is NOT the full visualization of BFS. Memory limitations have capped it at the first ~100 nodes. 
+        */
         Animation visualizeBFS();
+        
+
+        void drawDijkstra(PNG* image);
         PNG* drawBase();
         Animation visualizeBFS(PNG* picture);
-
-
-
-        //Helper functions for visualizeBFS
-        void drawEdge(Node* node1, Node* node2); //PNG* image
-        void drawNode(Node* node, PNG* image);
-
+        void drawEdge(Node* node1, Node* node2); 
+        void drawNode(Node* node, PNG* image); 
         Animation Animate(unsigned frameInterval, PNG* image);
-
-        void populateCoords(Node* node);
-
-        //stoer wagner
-        int stoerWagnerHelper(Node* startNode, Node*& s, Node*& t);
-        vector<pair<string, string>> stoerWagner(Node* startNode);
-
-      
-        // vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
+        void populateCoords(Node* node); // Populates node coordinates
+        vector<pair<Node*, int>> connectedComponents();
+        bool collision(int x, int y, int r); // Detects if circle will collide with one previously drawn
+        int calculateVisualizationNodeCount(); // Helper method to calculate upper bound of nodes capable of fitting
 
         //functions added so tests will compile
         int getNodeListSize();
@@ -73,22 +151,25 @@ class Graph {
         ~Graph();
         Graph(const Graph& other);
         Graph& operator=(const Graph& other);
-        vector<pair<Graph::Node*, int>> connectedComponents();
-
-
+        
     private:
-    //if int2 = 1 then node, if int2 = 0 then edge, int3 = node -> degree, int4 = node -> coord
-        vector<tuple<Point,int,int, pair<int,int>>> traversal; 
-        int size = 750; // Just testing for visualizeBFS
+        // Visualization: 
+        int size = 500;
+        unsigned frameRate = 1000;
+        unsigned iter_limit = 100; // Truncates BFS traversal in visualization to save space
+        vector<tuple<Point,int,int, pair<int,int>>> traversal; //int2 = 1 = node || = 0 = edge, int3 = node -> degree, int4 = node -> coord
+        vector<tuple<int, int, int>> coord_list; // (int1, int 2) = coords || int3 = radius
+
+        // Constructor-only helpers:
         void readFromFile();
         string decodeHTTP(string title);
-        vector<Node*> nodeList_;
-        unordered_map<string, string> converted;
+        unordered_map<string, string> converted; //map used for memoization of http decoding
 
+        // Graph:
+        vector<Node*> nodeList_;
+        
         //helpers for rule of three
         void clear();
         void copy(const Graph& other);
-
-        
 };
 
