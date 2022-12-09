@@ -47,6 +47,7 @@ class Graph {
         Animation visualizeBFS();
         PNG* drawBase();
         Animation visualizeBFS(PNG* picture);
+        int dijkstrasAlgorithm(Graph::Node* start,Graph::Node* end);
 
 
 
