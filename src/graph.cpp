@@ -369,40 +369,6 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image) {
 }
 
 
-
-
-
- /*vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
- {
-    
-    //create a priority queue for storing the minimum index distance
-    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
-    // indexed array for calculating distance.
-    vector<Graph::Node*> dist(1000000,INT_MAX);
-    dist[start]=0;
-    pq.push(make_pair(0,start));
-    // iterate through the priority queue
-    while(!pq.empty()){
-        // this d is the distance which will be taken from priority queue.
-        int d=pq.top().first;
-        Graph::Node* p=pq.top().second;
-        pq.pop();
-        // visit all adjacent node to p
-        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
-             Graph::Node* adjacent_node = adjacent_edge.second;
-             // check if the distance is minimum or not. 
-             // if not then update the new distance. 
-             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
-             {
-                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
-                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
-             }
-         }
-    }
-    return dist;
-
- } */
-
 int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
     vector<Node*> superNode;
     superNode.push_back(otherNodes[0]);
