@@ -431,7 +431,6 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
     superNode.push_back(otherNodes[0]);
     int cutWeight;
 
-<<<<<<< HEAD
 int Graph::dijkstrasAlgorithm(Node* start,Node* end) {
     // weight, data
     priority_queue<pair<int,string>> pq;
@@ -676,7 +675,6 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
             }
         }
     }
-    return cutEdges;
 =======
     return cutWeight;
 }

@@ -178,7 +178,6 @@ class Graph {
 =======
         vector<pair<Graph::Node*, int>> connectedComponents();
 
-
 >>>>>>> c7c6bd7551709b558957f99f712d7a62473f9eb2
     private:
         // Visualization: 

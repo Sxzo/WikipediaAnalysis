@@ -12,9 +12,6 @@ int main() {
 
     
     Graph g;
-    for (auto entry : g.stoerWagner(g.getNode("Directdebit"))) { //Directdebit
-        cout << entry.first << " " << entry.second << endl;
-    }
     // PNG* image = g.drawBase();
 
 
