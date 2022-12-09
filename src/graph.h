@@ -47,6 +47,7 @@ class Graph {
         Animation visualizeBFS();
         PNG* drawBase();
         Animation visualizeBFS(PNG* picture);
+        int dijkstras(string start,string end, unordered_map<string, vector<pair<int, string>>> adj);
         int dijkstrasAlgorithm(Graph::Node* start,Graph::Node* end);
 
 
