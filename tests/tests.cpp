@@ -271,20 +271,30 @@ TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 }
 
 // Test cases for Dijkstra
-/*TEST_CASE("TEST DIJKRATAS","[DIJKRATAS]"){
-	set<Graph::Node*> graph;
-
-	Graph::Node* start = g.getNode("Athens");
-	Graph::Node* end=g.getNode("United States");
-	vector<Graph::Node*> distance=g.dijkratasAlgorithm(start,end);
-	for(auto x:graph)
-	{
-		Graph::Node* n=g.getNode(x);
-		REQUIRE(distance.size()>0);
-		cout<<"The distance from "<<start.data<<" to "<<x<<" node is "<<distance[n]<<endl;
-
-	}
-} */
+TEST_CASE("TEST DIJKSTRAS","[DIJKSTRAS]"){
+	
+    unordered_map<string, vector<pair<int, string>>> adj;
+    vector<string> nodes{"a","b","c","d","e","f"};
+    adj["a"].push_back(make_pair(200, "b"));
+    adj["a"].push_back(make_pair(3, "c"));
+    adj["a"].push_back(make_pair(1, "d"));
+    adj["b"].push_back(make_pair(200, "a"));
+    adj["b"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(3, "a"));
+    adj["d"].push_back(make_pair(3, "f"));
+    adj["d"].push_back(make_pair(1, "a"));
+    adj["e"].push_back(make_pair(5, "b"));
+    adj["e"].push_back(make_pair(5, "c"));
+    adj["e"].push_back(make_pair(1, "f"));
+    
+    REQUIRE(g.dijkstras("a", "e", adj)==8);
+    REQUIRE(g.dijkstras("a", "f", adj)==4);
+    REQUIRE(g.dijkstras("a", "b", adj)==13);
+    REQUIRE(g.dijkstras("a", "z", adj)== INT_MAX);
+    
+    
+} 
 // Stoer-Wagner tests
 TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
