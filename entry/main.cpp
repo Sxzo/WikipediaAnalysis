@@ -12,6 +12,9 @@ int main() {
 
     
     Graph g;
+    for (auto entry : g.stoerWagner(g.getNode("Directdebit"))) { //Directdebit
+        cout << entry.first << " " << entry.second << endl;
+    }
     // PNG* image = g.drawBase();
 
 
@@ -33,8 +36,12 @@ int main() {
     // }
     // std::cout << std::endl;
 
+
+
+
     // PNG png;  
     // png.readFromFile("/workspaces/cs225/Final-Project/build/BFS.png");
+<<<<<<< HEAD
 
     // vector<pair<Graph::Node*, int>> output  = g.connectedComponents();
     // for (size_t i = 0; i < output.size(); i++) {
@@ -49,11 +56,15 @@ int main() {
     // PNG image = animation.getFrame(animation.frameCount() - 1);
     // image.writeToFile("BFS" + string(".png"));
     // animation.write("BFS.gif");
+=======
+    //Animation animation = g.visualizeBFS();
+    //animation.write("BFS.gif");
+>>>>>>> c7c6bd7551709b558957f99f712d7a62473f9eb2
 
 
-    // for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
-    //     cout << edge << endl;
-    // }
+    //for (auto edge : g.incidentEdges(g.getNode("Global city"))) {
+    //    cout << edge << endl;
+    //}
     //PNG* image = g.visualizeBFS();
     //image->writeToFile("BFS" + string(".png"));
     // string function;

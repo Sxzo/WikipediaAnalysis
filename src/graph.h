@@ -135,6 +135,7 @@ class Graph {
         void drawDijkstra(PNG* image);
         PNG* drawBase();
         Animation visualizeBFS(PNG* picture);
+<<<<<<< HEAD
         void drawEdge(Node* node1, Node* node2); 
         void drawNode(Node* node, PNG* image); 
         Animation Animate(unsigned frameInterval, PNG* image);
@@ -142,6 +143,27 @@ class Graph {
         vector<pair<Node*, int>> connectedComponents();
         bool collision(int x, int y, int r); // Detects if circle will collide with one previously drawn
         int calculateVisualizationNodeCount(); // Helper method to calculate upper bound of nodes capable of fitting
+=======
+        int dijkstras(string start,string end, unordered_map<string, vector<pair<int, string>>> adj);
+        int dijkstrasAlgorithm(Graph::Node* start,Graph::Node* end);
+
+
+
+        //Helper functions for visualizeBFS
+        void drawEdge(Node* node1, Node* node2); //PNG* image
+        void drawNode(Node* node, PNG* image);
+
+        Animation Animate(unsigned frameInterval, PNG* image);
+
+        void populateCoords(Node* node);
+
+        //stoer wagner
+        int stoerWagnerHelper(vector<Node*> otherNodes, Node*& s, Node*& t);
+        vector<pair<string, string>> stoerWagner(Node* startNode);
+        Graph::Node* mergeNodes(Node* node1, Node* node2);
+
+      
+>>>>>>> c7c6bd7551709b558957f99f712d7a62473f9eb2
 
         //functions added so tests will compile
         int getNodeListSize();
@@ -152,6 +174,12 @@ class Graph {
         Graph(const Graph& other);
         Graph& operator=(const Graph& other);
         
+<<<<<<< HEAD
+=======
+        vector<pair<Graph::Node*, int>> connectedComponents();
+
+
+>>>>>>> c7c6bd7551709b558957f99f712d7a62473f9eb2
     private:
         // Visualization: 
         int size = 500;
