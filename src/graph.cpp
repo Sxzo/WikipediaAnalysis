@@ -667,3 +667,33 @@ vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
     return output;
 
 }
+int Graph::dijkstrasAlgorithm(Node* start,Node* end) {
+    // weight, data
+    priority_queue<pair<int,string>> pq;
+    // data:distance from start
+    unordered_map<string, int> dist;
+    string start_string = start->data;
+    dist[start_string]=0;
+    pq.push(make_pair(0,start_string));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        Graph::Node* node = getNode(prev_data);
+        // for all adjecent edges, update weight
+        for (pair<int, Graph::Node*> ae : node -> adjList) {
+            int weight = ae.first;
+            Graph::Node* adj_node = ae.second;
+            string curr_data = adj_node->data;
+            // if data not in dist map means curr val = INF 
+            // so new val will always be lower than INF
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
+    string end_s = end->data;
+    // did not reach the end node, graph has more than one conected components
+    if (dist.find(end_s) == dist.end()) return INT_MAX;
+    return dist[end_s];
+}
