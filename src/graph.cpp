@@ -631,8 +631,34 @@ vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
     }
 
     return output;
+ 
 
 }
+int Graph::dijkstras(string start,string end, unordered_map<string, vector<pair<int, string>>> adj) {
+    // weight, data
+    priority_queue<pair<int,string>> pq;
+    // data:distance from start
+    unordered_map<string, int> dist;
+    dist[start]=0;
+    pq.push(make_pair(0,start));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        
+        for (pair<int, string> ae : adj[prev_data]) {
+            int weight = ae.first;
+            string curr_data = ae.second;
+
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
+    if (dist.find(end) == dist.end()) return INT_MAX;
+    return dist[end];
+}
+
 int Graph::dijkstrasAlgorithm(Node* start,Node* end) {
     // weight, data
     priority_queue<pair<int,string>> pq;
