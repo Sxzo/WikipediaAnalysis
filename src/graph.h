@@ -65,7 +65,6 @@ class Graph {
         Graph::Node* mergeNodes(Node* node1, Node* node2);
 
       
-        vector<Graph::Node*> dijkratasAlgorithm(Node* start,Node* end);
 
         //functions added so tests will compile
         int getNodeListSize();
