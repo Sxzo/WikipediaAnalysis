@@ -295,6 +295,24 @@ TEST_CASE("TEST DIJKSTRAS","[DIJKSTRAS]"){
     
     
 } 
+TEST_CASE("TEST DIJKSTRAS 2","[DIJKSTRAS]"){
+	unordered_map<string, vector<pair<int, string>>> adj;
+    vector<string> nodes{"a","b","c","d","e","f"};
+    adj["a"].push_back(make_pair(2, "b"));
+    adj["a"].push_back(make_pair(3, "c"));
+    adj["a"].push_back(make_pair(1, "d"));
+    adj["b"].push_back(make_pair(2, "a"));
+    adj["b"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(3, "a"));
+    adj["d"].push_back(make_pair(3, "f"));
+    adj["d"].push_back(make_pair(1, "a"));
+    adj["e"].push_back(make_pair(5, "b"));
+    adj["e"].push_back(make_pair(5, "c"));
+    adj["e"].push_back(make_pair(1, "f"));
+    REQUIRE(g.dijkstras("a", "e", adj)== 7);
+    REQUIRE(g.dijkstras("a", "f", adj)== 4);
+}
 // Stoer-Wagner tests
 TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
