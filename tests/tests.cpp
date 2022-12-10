@@ -3,11 +3,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <set>
 
-
-
-// Graph g = Graph("articles.tsv", "links.tsv"); Might work???
 Graph g;
-
 
 //Helper functions for tests:
 void match_vector(vector<Graph::Node*> & out, vector<Graph::Node*> & ans){
@@ -21,7 +17,6 @@ void match_vector(vector<Graph::Node*> & out, vector<Graph::Node*> & ans){
     }
   }
 }
-
 
 //Test cases for graph constructor:
 TEST_CASE("Graph is not empty", "[empty]") {
@@ -233,15 +228,6 @@ TEST_CASE("Test Related: 1997 Pacific hurricane season", "[related]") {
 
 // Test cases for BFS
 
-
-//Irrelevant test because the graph can have multiple components
-// TEST_CASE("Test BFS: Size", "[BFS]") {
-// 	Graph::Node* start = g.getNode("Zulu");
-// 	vector<Graph::Node*> actual = g.BFS(start);
-// 	int size = actual.size();
-// 	REQUIRE(g.getNodeListSize() == size);
-// }
-
 TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 	Graph::Node* start = g.getNode("Zulu");
 	vector<Graph::Node*> actual = g.BFS(start);
@@ -270,21 +256,121 @@ TEST_CASE("Test BFS: Duplicates", "[BFS]") {
 	}
 }
 
+TEST_CASE("BFS SIZE", "[BFS]") {
+	Graph::Node* start = g.getNode("Global city");
+	vector<Graph::Node*> bfs = g.BFS(start); 
+	REQUIRE(bfs.size() == 4588);
+}
+
+TEST_CASE("BFS SIZE 2", "[BFS]") {
+	Graph::Node* start = g.getNode("Directdebit");
+	vector<Graph::Node*> bfs = g.BFS(start); 
+	REQUIRE(bfs.size() == 3);
+}
+
 // Test cases for Dijkstra
-/*TEST_CASE("TEST DIJKRATAS","[DIJKRATAS]"){
-	set<Graph::Node*> graph;
+TEST_CASE("TEST DIJKSTRAS 1","[DIJKSTRAS]"){
+	
+    unordered_map<string, vector<pair<int, string>>> adj;
+    vector<string> nodes{"a","b","c","d","e","f"};
+    adj["a"].push_back(make_pair(200, "b"));
+    adj["a"].push_back(make_pair(3, "c"));
+    adj["a"].push_back(make_pair(1, "d"));
+    adj["b"].push_back(make_pair(200, "a"));
+    adj["b"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(5, "e"));
+    adj["c"].push_back(make_pair(3, "a"));
+    adj["d"].push_back(make_pair(3, "f"));
+    adj["d"].push_back(make_pair(1, "a"));
+    adj["e"].push_back(make_pair(5, "b"));
+    adj["e"].push_back(make_pair(5, "c"));
+    adj["e"].push_back(make_pair(1, "f"));
+    
+    REQUIRE(g.dijkstrasStr("a", "e", adj)==8);
+    REQUIRE(g.dijkstrasStr("a", "f", adj)==4);
+    REQUIRE(g.dijkstrasStr("a", "b", adj)==13);
+    REQUIRE(g.dijkstrasStr("a", "z", adj)== INT_MAX);
+    
+    
+} 
 
-	Graph::Node* start = g.getNode("Athens");
-	Graph::Node* end=g.getNode("United States");
-	vector<Graph::Node*> distance=g.dijkratasAlgorithm(start,end);
-	for(auto x:graph)
-	{
-		Graph::Node* n=g.getNode(x);
-		REQUIRE(distance.size()>0);
-		cout<<"The distance from "<<start.data<<" to "<<x<<" node is "<<distance[n]<<endl;
+TEST_CASE("TEST DIJKSTRAS 2","[DIJKSTRAS]"){
+    Graph::Node* start = g.getNode("Drinking water");
+    Graph::Node* end=g.getNode("Ebony");
+    int distance = g.dijkstras(start,end);
+    REQUIRE(distance > 0);
+    REQUIRE(distance == 144);
+}
 
+TEST_CASE("TEST DIJKSTRAS 3","[DIJKSTRAS]"){
+    Graph::Node* start = g.getNode("Global City");
+    Graph::Node* end= g.getNode("Polish-Muscovite War (1605-1618)");
+    int distance = g.dijkstras(start,end);
+    REQUIRE(distance == INT_MAX);
+}
+
+TEST_CASE("TEST DIJKSTRAS 4","[DIJKSTRAS]"){
+    Graph::Node* start = g.getNode("Global city");
+    Graph::Node* end=g.getNode("Viking");
+    int distance = g.dijkstras(start,end);
+    REQUIRE(distance > 0);
+    REQUIRE(distance == 260);
+}
+
+TEST_CASE("TEST DIJKSTRAS PATH 1", "[DIJKSTRAS_PATH]") {
+	Graph::Node* start = g.getNode("Global city");
+	Graph::Node* end = g.getNode("Viking"); 
+
+	vector<Graph::Node*> to_return = g.dijkstrasVector(start,end);
+    int distance = g.dijkstras(start, end); 
+
+	int sum = 0;
+    
+	for (size_t i = 0; i < to_return.size() - 1; i++) {
+		sum += to_return[i]->degree + to_return[i + 1]->degree; 
 	}
-} */
+
+	REQUIRE(to_return[0]->data == start->data);
+	REQUIRE(to_return[to_return.size()- 1]->data == end->data);
+	REQUIRE(sum == distance); 
+}
+
+TEST_CASE("TEST DIJKSTRAS PATH 2", "[DIJKSTRAS_PATH]") {
+	Graph::Node* start = g.getNode("Global city");
+	Graph::Node* end = g.getNode("Gas"); 
+
+	vector<Graph::Node*> to_return = g.dijkstrasVector(start,end);
+    int distance = g.dijkstras(start, end); 
+
+	int sum = 0;
+    
+	for (size_t i = 0; i < to_return.size() - 1; i++) {
+		sum += to_return[i]->degree + to_return[i + 1]->degree; 
+	}
+
+	REQUIRE(to_return[0]->data == start->data);
+	REQUIRE(to_return[to_return.size()- 1]->data == end->data);
+	REQUIRE(sum == distance); 
+}
+
+TEST_CASE("TEST DIJKSTRAS PATH 3", "[DIJKSTRAS_PATH]") {
+	Graph::Node* start = g.getNode("Global city");
+	Graph::Node* end = g.getNode("Phase (matter)"); 
+
+	vector<Graph::Node*> to_return = g.dijkstrasVector(start,end);
+    int distance = g.dijkstras(start, end); 
+
+	int sum = 0;
+    
+	for (size_t i = 0; i < to_return.size() - 1; i++) {
+		sum += to_return[i]->degree + to_return[i + 1]->degree; 
+	}
+
+	REQUIRE(to_return[0]->data == start->data);
+	REQUIRE(to_return[to_return.size()- 1]->data == end->data);
+	REQUIRE(sum == distance); 
+}
+
 // Stoer-Wagner tests
 TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));

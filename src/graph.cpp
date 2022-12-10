@@ -1,9 +1,72 @@
 #include "graph.h"
 
-
+//--------------------------------Graph Interaction / Construction Functions---------------------------------------
 
 Graph::Graph() {
     readFromFile();
+}
+
+void Graph::readFromFile() {
+    ifstream ifs("../data/articles.tsv");
+    for (string line; getline(ifs, line); line = "") { //populate nodeList_ with each article
+        if (line.substr(0, 1) == "#") { // skip heading information
+            continue;
+        }
+        if (converted.find(line) != converted.end()) {
+            nodeList_.push_back(new Node(converted[line]));
+        } else {
+            string toAdd = decodeHTTP(line);
+            converted[line] = toAdd;
+            nodeList_.push_back(new Node(toAdd));
+        }
+        
+    }
+    ifstream ifs2("../data/links.tsv");
+    int idx = -1;
+    string first = ""; //variables to avoid looping through nodeList
+    for (string line; getline(ifs2, line); line = "") { // create an unweighted, directed edge between every article that has a link
+        if (line.substr(0, 1) == "#") { // skip heading information
+            continue;
+        }
+        string article;
+        string link;
+        //split tsv line into the article and the link
+        if (converted.find(line.substr(0, line.find("\t"))) != converted.end()) {
+            article = converted[line.substr(0, line.find("\t"))];
+        } else {
+            article = decodeHTTP(line.substr(0, line.find("\t")));
+            converted[line.substr(0, line.find("\t"))] = article;
+        }
+        if (converted.find(line.substr(line.find("\t") + 1, line.length())) != converted.end()) {
+            link = converted[line.substr(line.find("\t") + 1, line.length())];
+        } else {
+            link = decodeHTTP(line.substr(line.find("\t") + 1, line.length()));
+            converted[line.substr(0, line.find("\t"))] = link;
+        }
+        
+        while (first != article) { //checks to see if the article has changed yet
+            idx++;
+            first = nodeList_[idx]->data;
+        }
+        Node* v2 = nullptr;
+        for (unsigned i = 0; i < nodeList_.size(); i++) {
+            if (link == nodeList_[i]->data) {
+                v2 = nodeList_[i];
+                break;
+            }
+        }
+        insertEdge(nodeList_[idx], v2);
+        nodeList_[idx]->degree++;
+    }
+    for (unsigned i = 0; i < nodeList_.size(); i++) { //give each edge the proper weight
+        Node node = *nodeList_[i];
+        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
+            nodeList_[i]->adjList[j].first += node.degree;
+            nodeList_[i]->adjList[j].first += getNodeDegree(nodeList_[i]->adjList[j].second);
+            Node* otherNode = getNode(nodeList_[i]->adjList[j].second->data);
+            insertEdge(otherNode, nodeList_[i], nodeList_[i]->adjList[j].first);
+        }
+    }
 }
 
 string Graph::decodeHTTP(string title) {
@@ -84,119 +147,6 @@ string Graph::decodeHTTP(string title) {
     return toReturn;
 }
 
-void Graph::readFromFile() {
-    ifstream ifs("/workspaces/cs225/Final-Project/data/articles.tsv");
-    for (string line; getline(ifs, line); line = "") { //populate nodeList_ with each article
-        if (line.substr(0, 1) == "#") { // skip heading information
-            continue;
-        }
-        if (converted.find(line) != converted.end()) {
-            nodeList_.push_back(new Node(converted[line]));
-        } else {
-            string toAdd = decodeHTTP(line);
-            converted[line] = toAdd;
-            nodeList_.push_back(new Node(toAdd));
-        }
-        
-    }
-    ifstream ifs2("/workspaces/cs225/Final-Project/data/links.tsv");
-    int idx = -1;
-    string first = ""; //variables to avoid looping through nodeList
-    for (string line; getline(ifs2, line); line = "") { // create an unweighted, directed edge between every article that has a link
-        if (line.substr(0, 1) == "#") { // skip heading information
-            continue;
-        }
-        string article;
-        string link;
-        //split tsv line into the article and the link
-        if (converted.find(line.substr(0, line.find("\t"))) != converted.end()) {
-            article = converted[line.substr(0, line.find("\t"))];
-        } else {
-            article = decodeHTTP(line.substr(0, line.find("\t")));
-            converted[line.substr(0, line.find("\t"))] = article;
-        }
-        if (converted.find(line.substr(line.find("\t") + 1, line.length())) != converted.end()) {
-            link = converted[line.substr(line.find("\t") + 1, line.length())];
-        } else {
-            link = decodeHTTP(line.substr(line.find("\t") + 1, line.length()));
-            converted[line.substr(0, line.find("\t"))] = link;
-        }
-        
-        while (first != article) { //checks to see if the article has changed yet
-            idx++;
-            first = nodeList_[idx]->data;
-        }
-        Node* v2 = nullptr;
-        for (unsigned i = 0; i < nodeList_.size(); i++) {
-            if (link == nodeList_[i]->data) {
-                v2 = nodeList_[i];
-                break;
-            }
-        }
-        insertEdge(nodeList_[idx], v2);
-        nodeList_[idx]->degree++;
-    }
-    for (unsigned i = 0; i < nodeList_.size(); i++) { //give each edge the proper weight
-        Node node = *nodeList_[i];
-        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
-            nodeList_[i]->adjList[j].first += node.degree;
-            nodeList_[i]->adjList[j].first += getNodeDegree(nodeList_[i]->adjList[j].second);
-            Node* otherNode = getNode(nodeList_[i]->adjList[j].second->data);
-            insertEdge(otherNode, nodeList_[i], nodeList_[i]->adjList[j].first);
-        }
-    }
-}
-
-void Graph::insertEdge(Node* v1, Node* v2) {
-    v1->adjList.push_back(pair(0, v2));
-}
-
-void Graph::insertEdge(Node* v1, Node* v2, int weight) {
-    if (areAdjacent(v1, v2)) {
-        return;
-    }
-    v1->adjList.push_back(pair(weight, v2));
-}
-
-bool Graph::areAdjacent(Node* v1, Node* v2) {
-    for (unsigned i = 0; i < v1->adjList.size(); i++) {
-        if ((v1->adjList[i].second->data) == v2->data) {
-            return true;
-        }
-    }
-    return false;
-}
-
-vector<string> Graph::incidentEdges(Node* v) {
-    vector<string> toReturn;
-    for (unsigned i = 0; i < v->adjList.size(); i++) {
-        toReturn.push_back(v->adjList[i].second->data);
-    }
-    return toReturn;
-}
-
-int Graph::getNodeDegree(Node* v) {
-    for (unsigned i = 0; i < nodeList_.size(); i++) {
-        if (nodeList_[i] == v) {
-            return v->degree;
-        }
-    }
-    return 999999999;
-}
-
-int Graph::getNodeListSize() {
-    return nodeList_.size();
-}
-
-Graph::Node* Graph::getNode(string article) {
-    for (unsigned i = 0; i < nodeList_.size(); i++) {
-        if (nodeList_[i]->data == article) {
-            return nodeList_[i];
-        }
-    }
-    return nullptr;
-}
-
 void Graph::removeVertex(Node* v) {
     for (unsigned i = 0; i < nodeList_.size(); i++) {
         if (nodeList_[i]->data == v->data) {
@@ -214,6 +164,53 @@ void Graph::removeVertex(Node* v) {
     delete v;
 }
 
+vector<string> Graph::incidentEdges(Node* v) {
+    vector<string> toReturn;
+    for (unsigned i = 0; i < v->adjList.size(); i++) {
+        toReturn.push_back(v->adjList[i].second->data);
+    }
+    return toReturn;
+}
+
+bool Graph::areAdjacent(Node* v1, Node* v2) {
+    for (unsigned i = 0; i < v1->adjList.size(); i++) {
+        if ((v1->adjList[i].second->data) == v2->data) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Graph::insertEdge(Node* v1, Node* v2) {
+    v1->adjList.push_back(pair(0, v2));
+}
+
+void Graph::insertEdge(Node* v1, Node* v2, int weight) {
+    if (areAdjacent(v1, v2)) {
+        return;
+    }
+    v1->adjList.push_back(pair(weight, v2));
+}
+
+int Graph::getNodeDegree(Node* v) {
+    if (v == NULL) return -1; 
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i] == v) {
+            return v->degree;
+        }
+    }
+    return 999999999;
+}
+
+Graph::Node* Graph::getNode(string article) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i]->data == article) {
+            return nodeList_[i];
+        }
+    }
+    return nullptr;
+}
+
 Graph::~Graph() {
     clear();
 }
@@ -228,30 +225,13 @@ Graph& Graph::operator=(const Graph& other) {
     return *this;
 }
 
-void Graph::clear() {
-    for (unsigned i = 0; i < nodeList_.size(); i++) {
-        delete nodeList_[i];
-    }
-    
-}
-
-
-
-void Graph::copy(const Graph& other) {
-    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
-        nodeList_.push_back(new Node(other.nodeList_[i]->data));
-    }
-    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
-        for (unsigned j = 0; j < other.nodeList_[i]->adjList.size(); j++) {
-            insertEdge(nodeList_[i], getNode(other.nodeList_[i]->adjList[j].second->data), other.nodeList_[i]->adjList[j].first);
-        }
-    }
-}
+//--------------------------------------------Graph Algorithms--------------------------------------------
 
 vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     queue<Graph::Node*> queue;
     vector<Graph::Node*> output;
     set<Graph::Node*> visited;
+    if (start == NULL) return output;
     Graph::Node* current;
     queue.push(start);
     visited.insert(start);
@@ -273,198 +253,103 @@ vector<Graph::Node*> Graph::BFS(Graph::Node* start) {
     return output;
 }
 
-Animation Graph::visualizeBFS() {
-    PNG* image = new PNG(size,size);
-    Node* node = getNode("Zulu");
-    std::vector<Node*> bfs = BFS(node); //size:4056
-
-    //draws all the nodes on the base image
-    for (size_t i = 0; i < 51; i++) {
-        drawNode(bfs[i],image);
-    }
-    
-    //adds the first node to the traversal:
-    int r = node -> degree/4;
-    for (int y =- r; y <= r; y++) {
-        for (int x = -r; x<= r; x++) {
-            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(node->coord.first + x, node->coord.second + y), 1, node -> degree, node -> coord)); 
-        }
-    }
-
-    //adds all the edges to the traversal
-    for (size_t i = 0; i < 50; i++) {
-        drawEdge(bfs[i], bfs[i+1]);
-    }
-
-    //animate the image:
-    Animation animation = Animate(500, image);
-    return animation;
+bool compare(pair<int, string> lhs, pair<int, string> rhs) { // Used to change decltype of priority queue in dijkstras
+    return lhs.first > rhs.first;
 }
 
-
-void Graph::drawEdge(Node* node1, Node* node2) { //PNG* image
-    //Just to make sure we're not drawing an edge between two nodes that haven't been drawn yet:
-    if (node1 -> coord.first == 0 || node2 -> coord.first == 0) {
-        return;
-    }
-
-    int x1 = node1 -> coord.first;
-    int y1 = node1 -> coord.second;
-    int x2 = node2 -> coord.first;
-    int y2 = node2 -> coord.second;
-
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-
-    double steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
-
-    double Xincrement = dx / steps;
-    double Yincrement = dy / steps;
-
-    double X = x1;
-    double Y = y1;
-
-    int i = 1;
-    while (i  <= steps) {
-        traversal.push_back(make_tuple(Point(floor(X), floor(Y)),0,0, make_pair(0,0)));
-        X += Xincrement;
-        Y += Yincrement;
-        i++;
-    }
-
-    int r = node2->degree/4;
-    for (int y =- r; y <= r; y++) {
-        for (int x = -r; x<= r; x++) {
-            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(x2 + x, y2 + y),1, r, node2 -> coord)); 
+int Graph::dijkstras(Node* start,Node* end) { 
+    
+    if (end == NULL || start == NULL) return INT_MAX;
+    if (start->data == end->data) return 0;
+    
+    // Priority queue is initialized with specific decltype based on compare
+    // This is done in order to make the priority queue properly usable with a std::pair for dijsktras
+    priority_queue<pair<int,string>, vector<pair<int, string>>, std::function<bool(pair<int, string>, pair<int, string>)>> pq(compare);
+    
+    unordered_map<string, int> dist;
+    dist[start -> data]=0;
+    for (Node* n : nodeList_) {
+        if (n != start) {
+            dist[n->data] = INT_MAX;
         }
     }
-    
-}
+    pq.push(make_pair(0,start -> data));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
 
-
-Animation Graph::Animate(unsigned frameInterval, PNG* image) {
-    Animation animation;
-    animation.addFrame(*image);
-    unsigned int frame_counter = 0;
-
-    for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
-        HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
-        if (get<1>(tuple) == 0) { // if we're coloring in an edge
-            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
-            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
-        } else { // if we're coloring in a node
-            GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
-            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        if (prev_data == end->data) {
+            break;
         }
-        frame_counter++;
-        if (frameInterval == frame_counter) {
-            animation.addFrame(*image);
-            frame_counter = 0;
-        } 
-    }
-    if (*image != animation.getFrame(animation.frameCount() - 1)) {
-        animation.addFrame(*image);
-    }
-    return animation;
-}
 
-
-
-
-
- /*vector<Graph::Node*> Graph::dijkratasAlgorithm(Graph::Node* start,Graph::Node* end)
- {
-    
-    //create a priority queue for storing the minimum index distance
-    priority_queue<pair<int,Graph::Node*>,vector<pair<int,Graph::Node*> >,greater<pair<int,Graph::Node*> > > pq;
-    // indexed array for calculating distance.
-    vector<Graph::Node*> dist(1000000,INT_MAX);
-    dist[start]=0;
-    pq.push(make_pair(0,start));
-    // iterate through the priority queue
-    while(!pq.empty()){
-        // this d is the distance which will be taken from priority queue.
-        int d=pq.top().first;
-        Graph::Node* p=pq.top().second;
         pq.pop();
-        // visit all adjacent node to p
-        for (pair<int, Graph::Node*> adjacent_edge : p -> adjList) {
-             Graph::Node* adjacent_node = adjacent_edge.second;
-             // check if the distance is minimum or not. 
-             // if not then update the new distance. 
-             if(dist[adjacent_node] > dist[p] + adjacent_edge.first)
-             {
-                 dist[adjacent_node]=dist[p]+adjacent_edge.first;
-                 pq.push(make_pair(dist[adjacent_node]),adjacent_node);
-             }
-         }
+        
+        for (pair<int, Node*> ae : getNode(prev_data) -> adjList) {
+            int weight = ae.first;
+            string curr_data = ae.second -> data;
+
+            if (dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
     }
-    return dist;
+    if (dist.find(end -> data) == dist.end()) return INT_MAX;
+    return dist[end -> data];
+}
 
- } */
+vector<Graph::Node*> Graph::dijkstrasVector(Node* start, Node* end) {
+    priority_queue<pair<int,string>, vector<pair<int, string>>, std::function<bool(pair<int, string>, pair<int, string>)>> pq(compare);
+    unordered_map<string, int> dist;
+    dist[start -> data]=0;
 
-int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
-    vector<Node*> superNode;
-    superNode.push_back(otherNodes[0]);
-    otherNodes.erase(otherNodes.begin());
-    int cutWeight;
-    vector<pair<int, Node*>> superAdj;
-    superAdj = superNode[0]->adjList;
-    /*loops through every node and adds the one that has the hightest total weight to all of 
-    the nodes already in the vector (represents the nodes inside it merged together).
-    Takes the node with the largest weight between it and all of the nodes that are already
-    in the merged node. The last two nodes found will be the ones with the cut
-    */
-    while (!otherNodes.empty()) { 
-        Node* maxVertex;
-        int maxWeight = -1;
-        for (Node* node : otherNodes) {
-            int weight = 0; // initializes the edge weight between this node and the super node
-            /*for (Node* foundNode : superNode) {
-                for (auto i : node->adjList) {
-                    if (i.second->data == foundNode->data) {
-                        weight += i.first; // adds the weight of each edge going to this node from the super node
-                        break;
-                    }
-                }
-            } */
-            for (unsigned i = 0; i < superAdj.size(); i++) {
-                if (superAdj[i].second->data == node->data) {
-                    weight = superAdj[i].first;
-                }
-            }
-            if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
-                maxVertex = node;
-                maxWeight = weight;
-            }
+    // Initializes all nodes to max distance
+    for (Node* n : nodeList_) {
+        if (n != start) {
+            dist[n->data] = INT_MAX;
         }
-        for (unsigned i = 0; i < otherNodes.size(); i++) {
-            if (otherNodes[i]->data == maxVertex->data) {
-                otherNodes.erase(otherNodes.begin() + i); // removes the node from the set of nodes to check and adds it into the super node
-                break;
-            }
-        }
-        superNode.push_back(maxVertex);
-        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
-            bool added = false;
-            for (unsigned j = 0; j < superAdj.size(); j++) {
-                if (maxVertex->adjList[i].second == superAdj[j].second) {
-                    superAdj[j].first += maxVertex->adjList[i].first;
-                    added = true;
-                    break;
-                }
-            }
-            if (!added) {
-                superAdj.push_back(maxVertex->adjList[i]);
-            }
-        }
-        cutWeight = maxWeight;
     }
 
-    s = superNode[superNode.size() - 2]; 
-    t = superNode[superNode.size() - 1];
+    pq.push(make_pair(0,start -> data));
 
-    return cutWeight;
+    unordered_map<string, pair<pair<int, Node*>, Node*>> previous; 
+    vector<Node*> path; 
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+
+        if (prev_data == end->data) {
+            break;
+        }
+
+        pq.pop();
+        
+        for (pair<int, Node*> ae : getNode(prev_data) -> adjList) {
+            int weight = ae.first;
+            string curr_data = ae.second -> data;
+
+            if (dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+                previous[curr_data] = make_pair(ae, getNode(prev_data));
+            }        
+        }
+    }
+    if (dist.find(end -> data) == dist.end()) return path;
+    
+    path.push_back(start);
+    vector<pair<int, Node*>> edge_path; 
+    string curr = end->data; 
+    while (previous.count(curr) != 0) {
+        edge_path.push_back(previous[curr].first);
+        curr = previous[curr].second->data;
+    } 
+
+    std::reverse(edge_path.begin(), edge_path.end());
+    
+    for (auto edge : edge_path) {
+        path.push_back(edge.second);
+    }
+
+    return path;
 }
 
 vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns vector of edges in mincut
@@ -474,7 +359,6 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
     vector<Node*> nodes = g.BFS(startNode);
     int minWeight = INT_MAX;
     while (nodes.size() > 1) {
-        cout << nodes.size() << endl;
         Node* s = nullptr;
         Node* t = nullptr;
         int cutWeight = g.stoerWagnerHelper(nodes, s, t);
@@ -514,6 +398,62 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
         }
     }
     return cutEdges;
+}
+
+int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { 
+    vector<Node*> superNode;
+    superNode.push_back(otherNodes[0]);
+    otherNodes.erase(otherNodes.begin());
+    int cutWeight;
+    vector<pair<int, Node*>> superAdj;
+    superAdj = superNode[0]->adjList;
+    /*loops through every node and adds the one that has the hightest total weight to all of 
+    the nodes already in the vector (represents the nodes inside it merged together).
+    Takes the node with the largest weight between it and all of the nodes that are already
+    in the merged node. The last two nodes found will be the ones with the cut
+    */
+    while (!otherNodes.empty()) { 
+        Node* maxVertex;
+        int maxWeight = -1;
+        for (Node* node : otherNodes) {
+            int weight = 0; // initializes the edge weight between this node and the super node
+            for (unsigned i = 0; i < superAdj.size(); i++) {
+                if (superAdj[i].second->data == node->data) {
+                    weight = superAdj[i].first;
+                }
+            }
+            if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
+                maxVertex = node;
+                maxWeight = weight;
+            }
+        }
+        for (unsigned i = 0; i < otherNodes.size(); i++) {
+            if (otherNodes[i]->data == maxVertex->data) {
+                otherNodes.erase(otherNodes.begin() + i); // removes the node from the set of nodes to check and adds it into the super node
+                break;
+            }
+        }
+        superNode.push_back(maxVertex);
+        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
+            bool added = false;
+            for (unsigned j = 0; j < superAdj.size(); j++) {
+                if (maxVertex->adjList[i].second == superAdj[j].second) {
+                    superAdj[j].first += maxVertex->adjList[i].first;
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                superAdj.push_back(maxVertex->adjList[i]);
+            }
+        }
+        cutWeight = maxWeight;
+    }
+
+    s = superNode[superNode.size() - 2]; 
+    t = superNode[superNode.size() - 1];
+
+    return cutWeight;
 }
 
 Graph::Node* Graph::mergeNodes(Node* node1, Node* node2) {
@@ -556,36 +496,94 @@ Graph::Node* Graph::mergeNodes(Node* node1, Node* node2) {
     return toReturn;
 }
 
-//Extra code:
+//--------------------------------------------Visualizations--------------------------------------------
 
-void Graph::drawNode(Node* node, PNG* image) {
-    int radius = node -> degree/4;
-    //x^2 + y^2 = r^2
+Animation Graph::visualizeBFS() {
+    PNG* image = new PNG(size,size);
+    Node* node = getNode("Zulu");
     
-    int center_x = rand() % (size - 2*radius) + radius;
-    int center_y = rand() % (size - 2*radius) + radius;
+    std::vector<Node*> bfs = BFS(node); //size:4056
 
-    node -> coord = make_pair(center_x,center_y);
-    //this code draws the circle
-    for (int i = 0; i <= radius; i++) { // i = x
-        int y = sqrt(pow(radius,2) - pow(i,2));
-        image -> getPixel(center_x + i, center_y + y).l = 0;
-        image -> getPixel(center_x + i, center_y - y).l = 0;
-        image -> getPixel(center_x - i, center_y + y).l = 0;
-        image -> getPixel(center_x - i, center_y - y).l = 0;
+    //draws all the nodes on the base image
+    for (size_t i = 0; i < iter_limit; i++) {
+        drawNode(bfs[i],image);
     }
     
+    //adds the first node to the traversal:
+    int r = node -> degree/6;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(node->coord.first + x, node->coord.second + y), 1, node -> degree, node -> coord)); 
+        }
+    }
+
+    //adds all the edges to the traversal
+    for (size_t i = 0; i < iter_limit; i++) {
+        drawEdge(bfs[i], bfs[i+1]);
+    }
+
+    //animate the image:
+    Animation animation = Animate(frameRate, image);
+    return animation;
 }
 
-// Node* node = bfs[i];
-        // for (size_t k = 0; k < node -> adjList.size(); k++) {
-        //     Node* adjacent = node -> adjList[k].second;
-        //     if (node -> drawn.count(adjacent) == 0) {
-        //         drawEdge(node, node -> adjList[k].second, image);
-        //         node -> drawn.insert(adjacent);
-        //         adjacent -> drawn.insert(node);
-        //     } 
-        // }
+Animation Graph::visualizeDijkstras() {
+    PNG* image = new PNG(size, size); 
+    Node* start = nodeList_[0]; 
+    Node* end = nodeList_[100];
+
+    std::vector<Node*> dijkstra = dijkstrasVector(start,end); //size:4056
+    //draws all the nodes on the base image
+    for (size_t i = 0; i < 100; i++) {
+        drawNode(nodeList_[i],image);
+    }
+    
+    //adds the first node to the traversal:
+    int r = start -> degree/6;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(start->coord.first + x, start->coord.second + y), 1, start -> degree, start -> coord)); 
+        }
+    }
+
+    //draws all adjacent edges
+    for (size_t i = 0; i < 100; i++) {
+        Node* node = nodeList_[i];
+        for (pair<int, Node*> adjacent : node -> adjList) {
+            if (node -> drawn.count(adjacent.second) == 0) {
+                drawEdge(node, adjacent.second);
+                node -> drawn.insert(adjacent.second);
+                adjacent.second -> drawn.insert(node);
+            }
+        }
+    }
+
+    //draw the base image with all coloring:
+    drawDijkstra(image);
+    //Clear our current traversal vector
+    traversal.clear();
+
+    for (size_t i = 0; i < dijkstra.size() - 1; i++) {
+        drawEdge(dijkstra[i], dijkstra[i+1]);
+    }
+
+    Animation animation = Animate(frameRate, image);
+    return animation;
+}
+
+void Graph::drawDijkstra(PNG* image) {
+    // Iterates through traversal and colors in PNG based on object type
+    for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
+        HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
+        if (get<1>(tuple) == 0) { // if we're coloring in an edge
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        } else { // if we're coloring in a node
+            GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        }
+    }
+}
 
 PNG* Graph::drawBase() {
     int num_nodes = nodeList_.size(); //Approx 4,500 nodes
@@ -598,72 +596,142 @@ PNG* Graph::drawBase() {
     return image;
 }
 
+void Graph::drawEdge(Node* node1, Node* node2) { 
+    //Just to make sure we're not drawing an edge between two nodes that haven't been drawn yet:
+    if (node1 -> coord.first == 0 || node2 -> coord.first == 0) {
+        return;
+    }
 
+    int x1 = node1 -> coord.first;
+    int y1 = node1 -> coord.second;
+    int x2 = node2 -> coord.first;
+    int y2 = node2 -> coord.second;
 
-// Animation Graph::visualizeBFS(PNG* picture) {
-//     PNG* image = picture;
-//     Node* node = getNode("Global city");
-//     std::vector<Node*> bfs = BFS(node); //size:4056
-//     // for (size_t i = 0; i < bfs.size(); i++) {
-//     //     drawNode(bfs[i], );
-//     // }
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    double steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy); 
+
+    double Xincrement = dx / steps; 
+    double Yincrement = dy / steps;
+
+    double X = x1;
+    double Y = y1;
+
+    int i = 1;
+    while (i  <= steps) {
+        traversal.push_back(make_tuple(Point(floor(X), floor(Y)),0,0, make_pair(0,0)));
+        X += Xincrement;
+        Y += Yincrement;
+        i++;
+    }
+
+    // Circle Filling Algorithm: 
+    int r = node2->degree/6;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(x2 + x, y2 + y),1, r, node2 -> coord)); 
+        }
+    }
+}
+
+void Graph::drawNode(Node* node, PNG* image) {
+    int radius = node -> degree/6;   
+    int center_x = (rand() % (size - 2*radius)) + radius;
+    int center_y = (rand() % (size - 2*radius)) + radius;
+
+    int x = 0; 
+    while (collision(center_x, center_y, radius)) { // Generates a coordinate up to 10,000 times until a collision is resolved
+        x++;
+        if (x > 10000)  {
+            break;
+        }
+        center_x = rand() % (size - 2 * radius) + radius;
+        center_y = rand() % (size - 2 * radius) + radius;
+        
+    }
+
+    coord_list.push_back(make_tuple(center_x, center_y, radius)); // Adds new coordinate to collision coordinate list
+
+    node -> coord = make_pair(center_x,center_y);
     
-//     // for (int y =- r; y <= r; y++) {
-//     //     for (int x = -r; x<= r; x++) {
-//     //         if (x * x + y * y <= r * r) traversal.push_back(Point(node->coord.first + x, node->coord.second + y)); 
-//     //     }
-//     // }
+    //this code draws the circle
+    for (int i = 0; i <= radius; i++) { // i = x
+        int y = sqrt(pow(radius,2) - pow(i,2));
+        image -> getPixel(center_x + i, center_y + y).l = 0;
+        image -> getPixel(center_x + i, center_y - y).l = 0;
+        image -> getPixel(center_x - i, center_y + y).l = 0;
+        image -> getPixel(center_x - i, center_y - y).l = 0;
+    }
+}
 
-//     // for (size_t i = 0; i < 25; i++) {
-//     //     drawEdge(bfs[i], bfs[i+1]);
-//     // }
-//     RainbowColorPicker picker(10);
-//     Animation animation = Animate(400, image, picker);
-//     return animation;
-// }
+Animation Graph::Animate(unsigned frameInterval, PNG* image) {
+    Animation animation;
+    animation.addFrame(*image);
+    unsigned int frame_counter = 0;
 
+    for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
+        HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
+        if (get<1>(tuple) == 0) { // if we're coloring in an edge
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        } else { // if we're coloring in a node
+            GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
+            pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
+        }
+        frame_counter++;
+        if (frameInterval == frame_counter) {
+            animation.addFrame(*image);
+            frame_counter = 0;
+        } 
+    }
+    if (*image != animation.getFrame(animation.frameCount() - 1)) {
+        animation.addFrame(*image);
+    }
+    return animation;
+}
 
-// void Graph::populateCoords(Node* node) {
-//     int radius = (node -> degree)/4;
-//     int center_x = rand() % (size - 2*radius) + radius;
-//     int center_y = rand() % (size - 2*radius) + radius;
-//     node -> coord = make_pair(center_x,center_y);
-//     for (int i = 0; i <= radius; i++) { // i = x
-//         int y = sqrt(pow(radius,2) - pow(i,2));
-//         // image -> getPixel(center_x + i, center_y + y).l = 0;
-//         traversal.push_back(Point(center_x + i, center_y + y));
-//         // image -> getPixel(center_x + i, center_y - y).l = 0;
-//         traversal.push_back(Point(center_x + i, center_y - y));
-//         // image -> getPixel(center_x - i, center_y + y).l = 0;
-//         traversal.push_back(Point(center_x - i, center_y + y));
-//         // image -> getPixel(center_x - i, center_y - y).l = 0;
-//         traversal.push_back(Point(center_x - i, center_y - y));
-//     }
-// }
+bool Graph::collision(int x, int y, int r) {
+    if (coord_list.size() == 0) return false; 
 
-// Graph::Node* Graph::connectedComponents() {
-//     map<Node*, bool> visited_list;
+    for (size_t i = 0; i < coord_list.size(); i++) {
+        int x2 = get<0>(coord_list[i]); 
+        int y2 = get<1>(coord_list[i]); 
+        int r2 = get<2>(coord_list[i]); 
+        if (((x - x2) * (x - x2) + (y - y2) * (y - y2)) < ((r + r2) * (r + r2))) {
+            return true; 
+        }
+    }
 
-//     for (size_t i = 0;i < nodeList_.size(); i++) {
-//         visited_list.insert(make_pair(nodeList_[i], false)); 
-//     }
+    return false; 
+}
 
-//     Node* n = getNode("Global city"); 
-//     vector<Node*> bfs = BFS(n);
+//--------------------------------------------Testing Functions--------------------------------------------
 
-//     for (size_t i = 0; i < bfs.size(); i++) {
-//         visited_list[bfs[i]] = true;
-//     }
+int Graph::getNodeListSize() {
+    return nodeList_.size();
+}
 
-//     for (auto pair : visited_list) {
-//         if (pair.second == false) {
-//             if (BFS(pair.first).size() > 2) return pair.first;
-//         }
-//     }
+int Graph::calculateVisualizationNodeCount() {
+    Node* node = getNode("Global city");
 
-//     return NULL;
+    vector<Node*> bfs = BFS(node);
 
-// }
+    int area = size * size; 
+    int counter = 0;
+    int sum = 0;
+    for (size_t i = 0; i < bfs.size(); i++) {
+        int w = bfs[i] -> degree / 6 + 10; 
+        sum += w * w;
+        if (sum < area) {
+            counter++;
+        } else {
+            return counter; 
+        }
+    }
+
+    return counter; 
+}
 
 vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
     map<Node*, bool> visited_list;
@@ -689,7 +757,46 @@ vector<pair<Graph::Node*, int>> Graph::connectedComponents() {
             }
         }
     }
-
     return output;
+}
 
+int Graph::dijkstrasStr(string start,string end, unordered_map<string, vector<pair<int, string>>> adj) {
+    priority_queue<pair<int,string>> pq;
+    unordered_map<string, int> dist;
+    dist[start]=0;
+    pq.push(make_pair(0,start));
+    while(!pq.empty()) {
+        string prev_data = pq.top().second;
+        pq.pop();
+        
+        for (pair<int, string> ae : adj[prev_data]) {
+            int weight = ae.first;
+            string curr_data = ae.second;
+
+            if (dist.find(curr_data) == dist.end() || dist[curr_data]>dist[prev_data]+weight) {
+                dist[curr_data] = dist[prev_data]+weight;
+                pq.push(make_pair(dist[curr_data], curr_data));
+            }        
+        }
+    }
+    if (dist.find(end) == dist.end()) return INT_MAX;
+    return dist[end];
+}
+
+void Graph::clear() { // Destructor helper
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        delete nodeList_[i];
+    }
+    
+}
+
+void Graph::copy(const Graph& other) { // Copy constructor helper
+    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
+        nodeList_.push_back(new Node(other.nodeList_[i]->data));
+    }
+    for (unsigned i = 0; i < other.nodeList_.size(); i++) {
+        for (unsigned j = 0; j < other.nodeList_[i]->adjList.size(); j++) {
+            insertEdge(nodeList_[i], getNode(other.nodeList_[i]->adjList[j].second->data), other.nodeList_[i]->adjList[j].first);
+        }
+    }
 }
