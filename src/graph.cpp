@@ -6,6 +6,18 @@ Graph::Graph() {
     readFromFile();
 }
 
+Graph::Graph(bool b) {
+    for (int i = 0; i < 20; i++) {
+        nodeList_.push_back(new Node(to_string(i)));
+    }
+    for (int i = 0; i < 19; i++) {
+        for (int j = 2; j < 20; j++) {
+            insertEdge(nodeList_[i], nodeList_[j], 10);
+        }
+    }
+    insertEdge(nodeList_[19], nodeList_[0], 1);
+}
+
 void Graph::readFromFile() {
     ifstream ifs("../data/articles.tsv");
     for (string line; getline(ifs, line); line = "") { //populate nodeList_ with each article

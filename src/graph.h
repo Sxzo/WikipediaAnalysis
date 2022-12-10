@@ -42,6 +42,8 @@ class Graph {
         */
         Graph(); 
 
+        Graph(bool b);
+
         /**
         * Removes a vertex(node) from Graph.
         *
