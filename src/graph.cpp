@@ -406,8 +406,10 @@ Animation Graph::Animate(unsigned frameInterval, PNG* image) {
 int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t) { //finds the minimum cut to make two seperate connected components
     vector<Node*> superNode;
     superNode.push_back(otherNodes[0]);
+    otherNodes.erase(otherNodes.begin());
     int cutWeight;
-
+    vector<pair<int, Node*>> superAdj;
+    superAdj = superNode[0]->adjList;
     /*loops through every node and adds the one that has the hightest total weight to all of 
     the nodes already in the vector (represents the nodes inside it merged together).
     Takes the node with the largest weight between it and all of the nodes that are already
@@ -418,12 +420,17 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
         int maxWeight = -1;
         for (Node* node : otherNodes) {
             int weight = 0; // initializes the edge weight between this node and the super node
-            for (Node* foundNode : superNode) {
+            /*for (Node* foundNode : superNode) {
                 for (auto i : node->adjList) {
                     if (i.second->data == foundNode->data) {
                         weight += i.first; // adds the weight of each edge going to this node from the super node
                         break;
                     }
+                }
+            } */
+            for (unsigned i = 0; i < superAdj.size(); i++) {
+                if (superAdj[i].second->data == node->data) {
+                    weight = superAdj[i].first;
                 }
             }
             if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
@@ -434,9 +441,23 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
         for (unsigned i = 0; i < otherNodes.size(); i++) {
             if (otherNodes[i]->data == maxVertex->data) {
                 otherNodes.erase(otherNodes.begin() + i); // removes the node from the set of nodes to check and adds it into the super node
+                break;
             }
         }
         superNode.push_back(maxVertex);
+        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
+            bool added = false;
+            for (unsigned j = 0; j < superAdj.size(); j++) {
+                if (maxVertex->adjList[i].second == superAdj[j].second) {
+                    superAdj[j].first += maxVertex->adjList[i].first;
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                superAdj.push_back(maxVertex->adjList[i]);
+            }
+        }
         cutWeight = maxWeight;
     }
 
@@ -453,6 +474,7 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
     vector<Node*> nodes = g.BFS(startNode);
     int minWeight = INT_MAX;
     while (nodes.size() > 1) {
+        cout << nodes.size() << endl;
         Node* s = nullptr;
         Node* t = nullptr;
         int cutWeight = g.stoerWagnerHelper(nodes, s, t);
@@ -464,11 +486,9 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
         tempPartition.insert(t);
         Node* mergedNode = g.mergeNodes(s, t);
         nodes.push_back(mergedNode);
-        int erased = 0;
         for (unsigned i = 0; i < nodes.size(); i++) {
             if (nodes[i]->data == s->data || nodes[i]->data == t->data) {
                 nodes.erase(nodes.begin() + i);
-                erased++;
                 i--;
             }
         }
@@ -481,7 +501,13 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
     }
     vector<pair<string, string>> cutEdges;
     for (Node* node : partition) {
+        if (node->data.substr(0,6) == "Merged") {
+            continue;
+        }
         for (auto entry : node->adjList) {
+            if (entry.second->data.substr(0,6) == "Merged") {
+                continue;
+            }
             if (partition.find(entry.second) == partition.end()) {
                 cutEdges.push_back(pair(node->data, entry.second->data));
             }
