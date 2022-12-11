@@ -380,3 +380,9 @@ TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
 	REQUIRE(cutEdge[1].first == "Friend Directdebit");
 	REQUIRE(cutEdge[1].second == "Sponsorship Directdebit");
 }
+
+TEST_CASE("Test Stoer-Wagner on smaller graph", "[Stoer-Wagner]") {
+	Graph gr(true);
+	vector<pair<string, string>> cutEdge = gr.stoerWagner(gr.getNode("6"));
+	REQUIRE(cutEdge.size() == 1);
+}

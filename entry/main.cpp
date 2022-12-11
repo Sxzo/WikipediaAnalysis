@@ -10,7 +10,11 @@ using namespace std;
 
 int main() {
 
-    
+    Graph gr(true);
+    for (auto entry : gr.stoerWagner(gr.getNode("1"))) {
+        cout << entry.first <<  " " << entry.second << endl;
+    }
+
     Graph g;
     // PNG* image = g.drawBase();
     cout << "\n"; 
