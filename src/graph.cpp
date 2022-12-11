@@ -11,10 +11,12 @@ Graph::Graph(bool b) {
         nodeList_.push_back(new Node(to_string(i)));
     }
     for (int i = 0; i < 19; i++) {
-        for (int j = 2; j < 20; j++) {
+        for (int j = 0; j < 19; j++) {
             insertEdge(nodeList_[i], nodeList_[j], 10);
+            insertEdge(nodeList_[j], nodeList_[i], 10);
         }
     }
+    insertEdge(nodeList_[0], nodeList_[19], 1);
     insertEdge(nodeList_[19], nodeList_[0], 1);
 }
 
@@ -370,9 +372,9 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
     set<Node*> partition; // set of nodes in the partition;
     vector<Node*> nodes = g.BFS(startNode);
     int minWeight = INT_MAX;
+    Node* s = nullptr;
+    Node* t = nullptr;
     while (nodes.size() > 1) {
-        Node* s = nullptr;
-        Node* t = nullptr;
         int cutWeight = g.stoerWagnerHelper(nodes, s, t);
         if (cutWeight < minWeight) {
             minWeight = cutWeight;
@@ -431,7 +433,8 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
             int weight = 0; // initializes the edge weight between this node and the super node
             for (unsigned i = 0; i < superAdj.size(); i++) {
                 if (superAdj[i].second->data == node->data) {
-                    weight = superAdj[i].first;
+                    weight += superAdj[i].first;
+                    break;
                 }
             }
             if (weight > maxWeight) { // if this is the largest weight so far, records the weight and which node it's from
@@ -449,7 +452,7 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
         for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
             bool added = false;
             for (unsigned j = 0; j < superAdj.size(); j++) {
-                if (maxVertex->adjList[i].second == superAdj[j].second) {
+                if (maxVertex->adjList[i].second->data == superAdj[j].second->data) {
                     superAdj[j].first += maxVertex->adjList[i].first;
                     added = true;
                     break;
@@ -464,7 +467,6 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
 
     s = superNode[superNode.size() - 2]; 
     t = superNode[superNode.size() - 1];
-
     return cutWeight;
 }
 

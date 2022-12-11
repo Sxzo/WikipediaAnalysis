@@ -10,102 +10,125 @@ using namespace std;
 
 int main() {
 
-    Graph gr(true);
-    for (auto entry : gr.stoerWagner(gr.getNode("1"))) {
-        cout << entry.first <<  " " << entry.second << endl;
-    }
-
     Graph g;
     // PNG* image = g.drawBase();
-    cout << "\n"; 
-    cout << "|-----------------------CRYPTIC WIKI PROJECT-----------------------|" << endl;
-    cout << "\n"; 
-    cout << "                       Choose your function:                        " << endl;
-    cout << "\n"; 
-    cout << "         1. BFS                                  2. Dijkstras       " << endl;
-    cout << "\n"; 
-    cout << "              Enter number and press ENTER to continue...           " << endl; 
-    cout << "\n";
-    int function; 
-    cin >> function;
-    cout << "\n"; 
-    string node; 
-    string end_node;
-    int choice; 
-    int choice2;
-        if (function == 1) {     
-            cout << "|-------------------------------BFS--------------------------------|" << endl;
-            cout << "\n";
-            cout << "                        Enter a starting node:                      " << endl;
-            cout << "\n"; 
-            cout << "    Suggested choices: Viking, Global city, Zulu, Directdebit, Glass" << endl;
-            cout << "\n"; 
-            cout << "                Enter node and press ENTER to continue...           " << endl; 
-            cout << "\n";
-            cin >> node;
-            vector<Graph::Node*> bfs = g.BFS(g.getNode(node));
-            cout << "\n";
-            cout << "                       Choose your function:                        " << endl;
-            cout << "\n"; 
-            cout << " 1. Print                  2. Visualize             3. Size         " << endl;
-            cout << "\n"; 
-            cout << "              Enter number and press ENTER to continue...           " << endl; 
-            cout << "\n";
-            cin >> choice;
-            if (choice == 1) {
-                for (Graph::Node* n : bfs) cout << n -> data << endl;
-            } else if (choice == 2) {
-                Animation animation = g.visualizeBFS();
-                    animation.write("BFS.gif");
-            cout << "              Visualization written to build directory!             " << endl;
-            } else if (choice == 3) {
-            cout << "           Your selected BFS traversal has a size of: " << bfs.size() << endl; 
-            }
-        } else if (function == 2) {
-            cout << "|-----------------------------Dijkstras----------------------------|" << endl;
-            cout << "\n";
-            cout << "                        Enter a starting node:                      " << endl;
-            cout << "\n"; 
-            cout << "           Suggested choices: Viking, Global city, Zulu, Glass         " << endl;
-            cout << "\n"; 
-            cout << "                Enter node and press ENTER to continue...           " << endl; 
-            cout << "\n";
-            cin >> node;
-            cout << "                        Enter an ending node:                      " << endl;
-            cout << "\n"; 
-            cout << "           Suggested choices: Viking, Global city, Zulu, Glass        " << endl;
-            cout << "\n"; 
-            cout << "                Enter node and press ENTER to continue...           " << endl; 
-            cout << "\n";
-            cin >> end_node;
-            cout << "\n";
-            int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
-            vector<Graph::Node*> path = g.dijkstrasVector(g.getNode(node), g.getNode(end_node));
-            cout << "                       Choose your function:                        " << endl;
-            cout << "\n"; 
-            cout << "      1. Print Path                           2. Find minimum links " << endl;
-            cout << "\n"; 
-            cout << "              Enter number and press ENTER to continue...           " << endl; 
-            cout << "\n";
-            cin >> choice2;
-            cout << "\n"; 
-            if (choice2 == 1) {
-                size_t num = 0; 
-                
-                for (Graph::Node* n : path) {
-                    if (num == path.size() - 1) {
-                        cout << n->data << endl;
-                        cout << "\n";
-                        break;
-                    }
-                    cout << n->data << " -> ";
-                    num++;
+    bool run = true;
+    while (run) {
+        cout << "\n"; 
+        cout << "|-----------------------CRYPTIC WIKI PROJECT-----------------------|" << endl;
+        cout << "\n"; 
+        cout << "                       Choose your function:                        " << endl;
+        cout << "\n"; 
+        cout << "         1. BFS            2. Dijkstra's            3. Stoer-Wagner  " << endl;
+        cout << "\n"; 
+        cout << "              Enter number and press ENTER to continue...           " << endl; 
+        cout << "\n";
+        int function; 
+        cin >> function;
+        cout << "\n"; 
+        string node; 
+        string end_node;
+        int choice; 
+        int choice2;
+            if (function == 1) {     
+                cout << "|-------------------------------BFS--------------------------------|" << endl;
+                cout << "\n";
+                cout << "                        Enter a starting node:                      " << endl;
+                cout << "\n"; 
+                cout << "    Suggested choices: Viking, Global city, Zulu, Directdebit, Glass" << endl;
+                cout << "\n"; 
+                cout << "                Enter node and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> node;
+                vector<Graph::Node*> bfs = g.BFS(g.getNode(node));
+                cout << "\n";
+                cout << "                       Choose your function:                        " << endl;
+                cout << "\n"; 
+                cout << " 1. Print                  2. Visualize             3. Size         " << endl;
+                cout << "\n"; 
+                cout << "              Enter number and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> choice;
+                if (choice == 1) {
+                    for (Graph::Node* n : bfs) cout << n -> data << endl;
+                } else if (choice == 2) {
+                    Animation animation = g.visualizeBFS();
+                        animation.write("BFS.gif");
+                cout << "              Visualization written to build directory!             " << endl;
+                } else if (choice == 3) {
+                cout << "           Your selected BFS traversal has a size of: " << bfs.size() << endl; 
                 }
-            } else if (choice2 == 2) {
-        cout << "                         Minimum Links Traversed: " << link_count << endl;
+            } else if (function == 2) {
+                cout << "|-----------------------------Dijkstras----------------------------|" << endl;
+                cout << "\n";
+                cout << "                        Enter a starting node:                      " << endl;
+                cout << "\n"; 
+                cout << "           Suggested choices: Viking, Global city, Zulu, Glass         " << endl;
+                cout << "\n"; 
+                cout << "                Enter node and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> node;
+                cout << "                        Enter an ending node:                      " << endl;
+                cout << "\n"; 
+                cout << "           Suggested choices: Viking, Global city, Zulu, Glass        " << endl;
+                cout << "\n"; 
+                cout << "                Enter node and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> end_node;
+                cout << "\n";
+                int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
+                vector<Graph::Node*> path = g.dijkstrasVector(g.getNode(node), g.getNode(end_node));
+                cout << "                       Choose your function:                        " << endl;
+                cout << "\n"; 
+                cout << "      1. Print Path                           2. Find minimum links " << endl;
+                cout << "\n"; 
+                cout << "              Enter number and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> choice2;
+                cout << "\n"; 
+                if (choice2 == 1) {
+                    size_t num = 0; 
+                    
+                    for (Graph::Node* n : path) {
+                        if (num == path.size() - 1) {
+                            cout << n->data << endl;
+                            cout << "\n";
+                            break;
+                        }
+                        cout << n->data << " -> ";
+                        num++;
+                    }
+                } else if (choice2 == 2) {
+            cout << "               Minimum Links Traversed: " << link_count << endl;
+                }
+            } else if (function == 3) {
+                cout << "|-----------------------------Stoer-Wagner----------------------------|" << endl;
+                cout << "\n";
+                cout << "                        Enter a starting node:                      " << endl;
+                cout << "\n"; 
+                cout << "           Suggested choices: Directdebit, Sponsored Directdebit         " << endl;
+                cout << "            Any other nodes will take a VERY long time to run            " << endl;
+                cout << "\n"; 
+                cout << "                Enter node and press ENTER to continue...           " << endl; 
+                cout << "\n";
+                cin >> node;
+                vector<pair<string, string>> result = g.stoerWagner(g.getNode(node));
+                for (pair<string, string> pair : result) {
+                    cout << pair.first << " " << pair.second << endl;
+                }
             }
+        cout << "\n";
+        cout << "                       Use another function?                        " << endl;
+        cout << "\n"; 
+        cout << "                       1. Yes       2. No                           " << endl;
+        cout << "\n"; 
+        cout << "              Enter number and press ENTER to continue...           " << endl;
+        int keepGoing;
+        cin >> keepGoing;
+        if (keepGoing != 1) {
+            run = false;
         }
-    
+        }
     
     
    

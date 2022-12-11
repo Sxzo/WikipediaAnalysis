@@ -372,17 +372,24 @@ TEST_CASE("TEST DIJKSTRAS PATH 3", "[DIJKSTRAS_PATH]") {
 }
 
 // Stoer-Wagner tests
-TEST_CASE("Test Stoer-Wagner: Directdebit", "[Stoer-Wagner]") {
+TEST_CASE("Test Stoer-Wagner: Directdebit size", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
 	REQUIRE(cutEdge.size() == 2);
+}
+
+TEST_CASE("Test Stoer-Wagner: Directdebit entires", "[Stoer-Wagner]") {
+	vector<pair<string, string>> cutEdge = g.stoerWagner(g.getNode("Directdebit"));
 	REQUIRE(cutEdge[0].first == "Friend Directdebit");
 	REQUIRE(cutEdge[0].second == "Directdebit");
 	REQUIRE(cutEdge[1].first == "Friend Directdebit");
 	REQUIRE(cutEdge[1].second == "Sponsorship Directdebit");
 }
 
+
 TEST_CASE("Test Stoer-Wagner on smaller graph", "[Stoer-Wagner]") {
 	Graph gr(true);
 	vector<pair<string, string>> cutEdge = gr.stoerWagner(gr.getNode("6"));
 	REQUIRE(cutEdge.size() == 1);
+	REQUIRE(cutEdge[0].first == "19");
+	REQUIER(cutEdge[0].second == "0");
 }
