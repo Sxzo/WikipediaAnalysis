@@ -53,6 +53,8 @@ int main() {
             } else if (choice == 2) {
                 Animation animation = g.visualizeBFS();
                     animation.write("BFS.gif");
+                    PNG lastFrame = animation.getFrame(animation.frameCount() - 1);
+                    lastFrame.writeToFile("BFS.png");
             cout << "              Visualization written to build directory!             " << endl;
             } else if (choice == 3) {
             cout << "           Your selected BFS traversal has a size of: " << bfs.size() << endl; 
@@ -75,17 +77,19 @@ int main() {
             cout << "\n";
             cin >> end_node;
             cout << "\n";
-            int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
-            vector<Graph::Node*> path = g.dijkstrasVector(g.getNode(node), g.getNode(end_node));
             cout << "                       Choose your function:                        " << endl;
             cout << "\n"; 
-            cout << "      1. Print Path                           2. Find minimum links " << endl;
+            cout << "      1. Print Path     2. Find minimum links      3. Visualize     " << endl;
             cout << "\n"; 
             cout << "              Enter number and press ENTER to continue...           " << endl; 
             cout << "\n";
             cin >> choice2;
             cout << "\n"; 
+            
+            
+           
             if (choice2 == 1) {
+                vector<Graph::Node*> path = g.dijkstrasVector(g.getNode(node), g.getNode(end_node));
                 size_t num = 0; 
                 
                 for (Graph::Node* n : path) {
@@ -98,7 +102,16 @@ int main() {
                     num++;
                 }
             } else if (choice2 == 2) {
+                int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
         cout << "                         Minimum Links Traversed: " << link_count << endl;
+            }
+            else if (choice2 == 3) {
+                // Animation animation = g.visualizeDijkstras(g.getNode("South America"), g.getNode("South Africa"));
+                Animation animation = g.visualizeDijkstras(g.getNode(node), g.getNode(end_node));
+                    animation.write("Dijkstra.gif");
+                    PNG lastFrame = animation.getFrame(animation.frameCount() - 1);
+                    lastFrame.writeToFile("Dijkstra.png");
+            cout << "              Visualization written to build directory!             " << endl;
             }
         }
     

@@ -35,7 +35,7 @@ class Graph {
             set<Node*> drawn; // set of all the adjacent nodes where an edge has already been drawn
         };
        
-        //-----------------------------------Graph Interaction / Construction Functions---------------------------------------
+        //-----------------------------------Graph Interaction / Construction Functions---------------------------------//
 
         /**
         * Generates a graph implemented with an Adjacency List with data from a given Wikipedia Link Dataset.
@@ -95,12 +95,20 @@ class Graph {
         */
         Node* getNode(string article);
 
+        /**
+        * Returns the index of the Node representing the article in the graph. 
+        *
+        * @param article Name of article to find. 
+        */
+
+        int getIndex(string article);
+
         // Rule of 3:
         ~Graph();
         Graph(const Graph& other);
         Graph& operator=(const Graph& other);
 
-        //--------------------------------------------Graph Algorithms--------------------------------------------
+        //--------------------------------------------Graph Algorithms--------------------------------------------//
 
         /**
         * Returns a vector of nodes containing each node from a Breadth-First-Search traversal starting on a given node. 
@@ -136,7 +144,7 @@ class Graph {
         Node* mergeNodes(Node* node1, Node* node2); // stoerWagner() helper function. 
 
         
-        //--------------------------------------------Visualizations--------------------------------------------
+        //--------------------------------------------Visualizations--------------------------------------------//
         
         /**
         * Returns an animation of the Breadth-First-Search traversal.
@@ -147,11 +155,14 @@ class Graph {
         
         /**
         * Returns an animation of Dijkstras algoirithm.
+        * @param node1 Startpoint of Dijkstra.
+        * @param node2 Endpoint of Dijkstra. 
         */
-        Animation visualizeDijkstras();
+        Animation visualizeDijkstras(Node* start, Node* end);
         
         /**
         * Draws base of nodes on PNG in order to be used in @visualizeDijkstras().
+        * @param image PNG to be drawn on. 
         */
         void drawDijkstra(PNG* image);
 
@@ -173,6 +184,7 @@ class Graph {
 
         /**
         * Draws a node onto a given PNG. 
+        * This drawNode is for visualizeBFS
         *
         * @param node Node to draw.
         * @param image PNG base to draw node on. 
@@ -180,10 +192,20 @@ class Graph {
         void drawNode(Node* node, PNG* image); 
 
         /**
+        * Draws a node onto a given PNG. 
+        * This drawNode is for visualizeDijkstra
+        *
+        * @param node Node to draw.
+        * @param image PNG base to draw node on. 
+        * @param dijkstra Vector of nodes of the shortest weighted path.
+        */
+        void drawNode(Node* node, PNG* image, vector<Node*> dijkstra); 
+
+        /**
         * Animates a number of PNGs by turning them into a GIF. 
         *
         * @param frameInterval Interval rate of animation updating. 
-        * @param image Image to pass into animation. 
+        * @param image Image to pass into animation.
         */
         Animation Animate(unsigned frameInterval, PNG* image);
 
@@ -230,10 +252,11 @@ class Graph {
         */
         int dijkstrasStr(string start,string end, unordered_map<string, vector<pair<int, string>>> adj);
 
+        
     private:
         // -----Visualization------
-        int size = 500;
-        unsigned frameRate = 1000;
+        int size = 750;
+        unsigned frameRate = 200;
         unsigned iter_limit = 100; // Truncates BFS traversal in visualization to save space
         vector<tuple<Point,int,int, pair<int,int>>> traversal; //int2 = 1 = node || = 0 = edge, int3 = node -> degree, int4 = node -> coord
         vector<tuple<int, int, int>> coord_list; // (int1, int 2) = coords || int3 = radius
