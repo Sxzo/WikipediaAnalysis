@@ -225,6 +225,15 @@ Graph::Node* Graph::getNode(string article) {
     return nullptr;
 }
 
+int Graph::getIndex(string article) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) {
+        if (nodeList_[i]->data == article) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 Graph::~Graph() {
     clear();
 }
@@ -541,28 +550,23 @@ Animation Graph::visualizeBFS() {
     return animation;
 }
 
-Animation Graph::visualizeDijkstras() {
+Animation Graph::visualizeDijkstras(Node* start, Node* end) {
     PNG* image = new PNG(size, size); 
-    Node* start = nodeList_[0]; 
-    Node* end = nodeList_[100];
+    std::vector<Node*> dijkstra = dijkstrasVector(start,end);
 
-    std::vector<Node*> dijkstra = dijkstrasVector(start,end); //size:4056
+    // int index1 = getIndex(start -> data);
+    // int index2 = getIndex(end -> data);
+    // int startIndex = index1 > index2 ? index2 : index1;
+    // int endIndex = index1 > index2 ? index1 : index2;
     //draws all the nodes on the base image
-    for (size_t i = 0; i < 100; i++) {
-        drawNode(nodeList_[i],image);
+    for (size_t i = 0; i < nodeList_.size(); i++) {
+        drawNode(nodeList_[i],image, dijkstra);
     }
     
-    //adds the first node to the traversal:
-    int r = start -> degree/6;
-    for (int y =- r; y <= r; y++) {
-        for (int x = -r; x<= r; x++) {
-            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(start->coord.first + x, start->coord.second + y), 1, start -> degree, start -> coord)); 
-        }
-    }
-
-    //draws all adjacent edges
-    for (size_t i = 0; i < 100; i++) {
-        Node* node = nodeList_[i];
+    
+    //draws all adjacent edges of dijkstra
+    for (size_t i = 0; i < dijkstra.size(); i++) {
+        Node* node = dijkstra[i];
         for (pair<int, Node*> adjacent : node -> adjList) {
             if (node -> drawn.count(adjacent.second) == 0) {
                 drawEdge(node, adjacent.second);
@@ -577,20 +581,30 @@ Animation Graph::visualizeDijkstras() {
     //Clear our current traversal vector
     traversal.clear();
 
+    //adds the first node to the traversal:
+    int r = start -> degree/6;
+    for (int y =- r; y <= r; y++) {
+        for (int x = -r; x<= r; x++) {
+            if (x * x + y * y <= r * r) traversal.push_back(make_tuple(Point(start->coord.first + x, start->coord.second + y), 1, start -> degree, start -> coord)); 
+        }
+    }
+
     for (size_t i = 0; i < dijkstra.size() - 1; i++) {
         drawEdge(dijkstra[i], dijkstra[i+1]);
     }
-
+    
     Animation animation = Animate(frameRate, image);
     return animation;
 }
+
+
 
 void Graph::drawDijkstra(PNG* image) {
     // Iterates through traversal and colors in PNG based on object type
     for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
         HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
         if (get<1>(tuple) == 0) { // if we're coloring in an edge
-            SolidColorPicker color = SolidColorPicker(HSLAPixel(100,1,0.5,1));
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(0,1,0.5,1));
             pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
         } else { // if we're coloring in a node
             GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
@@ -613,6 +627,9 @@ PNG* Graph::drawBase() {
 void Graph::drawEdge(Node* node1, Node* node2) { 
     //Just to make sure we're not drawing an edge between two nodes that haven't been drawn yet:
     if (node1 -> coord.first == 0 || node2 -> coord.first == 0) {
+        std::cout << std::endl;
+        std::cout << "Node hasn't been drawn yet" << std::endl;
+        std::cout << std::endl;
         return;
     }
 
@@ -651,6 +668,9 @@ void Graph::drawEdge(Node* node1, Node* node2) {
 
 void Graph::drawNode(Node* node, PNG* image) {
     int radius = node -> degree/6;   
+    if (radius == 0) { // in case node -> degree < 6
+        radius = 1;
+    }
     int center_x = (rand() % (size - 2*radius)) + radius;
     int center_y = (rand() % (size - 2*radius)) + radius;
 
@@ -677,6 +697,45 @@ void Graph::drawNode(Node* node, PNG* image) {
         image -> getPixel(center_x - i, center_y + y).l = 0;
         image -> getPixel(center_x - i, center_y - y).l = 0;
     }
+}
+
+void Graph::drawNode(Node* node, PNG* image, vector<Node*> dijkstra) {
+    int radius = node -> degree/6;   
+    if (radius == 0) { // in case node -> degree < 6
+        radius = 1;
+    }
+    int center_x = (rand() % (size - 2*radius)) + radius;
+    int center_y = (rand() % (size - 2*radius)) + radius;
+
+    int x = 0; 
+    while (collision(center_x, center_y, radius)) { // Generates a coordinate up to 10,000 times until a collision is resolved
+        x++;
+        if (x > 10000)  {
+            break;
+        }
+        center_x = rand() % (size - 2 * radius) + radius;
+        center_y = rand() % (size - 2 * radius) + radius;
+        
+    }
+
+    coord_list.push_back(make_tuple(center_x, center_y, radius)); // Adds new coordinate to collision coordinate list
+
+    node -> coord = make_pair(center_x,center_y);
+    
+    for (size_t i = 0; i < dijkstra.size(); i++) {
+        if (dijkstra[i] -> data == node -> data) {
+            dijkstra[i] -> coord = make_pair(center_x,center_y);
+        }
+    }
+
+    //this code draws the circle
+    // for (int i = 0; i <= radius; i++) { // i = x
+    //     int y = sqrt(pow(radius,2) - pow(i,2));
+    //     image -> getPixel(center_x + i, center_y + y).l = 0;
+    //     image -> getPixel(center_x + i, center_y - y).l = 0;
+    //     image -> getPixel(center_x - i, center_y + y).l = 0;
+    //     image -> getPixel(center_x - i, center_y - y).l = 0;
+    // }
 }
 
 Animation Graph::Animate(unsigned frameInterval, PNG* image) {

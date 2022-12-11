@@ -10,6 +10,8 @@ using namespace std;
 
 int main() {
 
+   
+   
     Graph g;
     // PNG* image = g.drawBase();
     bool run = true;
@@ -59,48 +61,57 @@ int main() {
                 cout << "           Your selected BFS traversal has a size of: " << bfs.size() << endl; 
                 }
             } else if (function == 2) {
-                cout << "|-----------------------------Dijkstras----------------------------|" << endl;
-                cout << "\n";
-                cout << "                        Enter a starting node:                      " << endl;
-                cout << "\n"; 
-                cout << "           Suggested choices: Viking, Global city, Zulu, Glass         " << endl;
-                cout << "\n"; 
-                cout << "                Enter node and press ENTER to continue...           " << endl; 
-                cout << "\n";
-                cin >> node;
-                cout << "                        Enter an ending node:                      " << endl;
-                cout << "\n"; 
-                cout << "           Suggested choices: Viking, Global city, Zulu, Glass        " << endl;
-                cout << "\n"; 
-                cout << "                Enter node and press ENTER to continue...           " << endl; 
-                cout << "\n";
-                cin >> end_node;
-                cout << "\n";
-                int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
+            cout << "|-----------------------------Dijkstras----------------------------|" << endl;
+            cout << "\n";
+            cout << "                        Enter a starting node:                      " << endl;
+            cout << "\n"; 
+            cout << "           Suggested choices: Viking, Global city, Zulu, Glass         " << endl;
+            cout << "\n"; 
+            cout << "                Enter node and press ENTER to continue...           " << endl; 
+            cout << "\n";
+            cin >> node;
+            cout << "                        Enter an ending node:                      " << endl;
+            cout << "\n"; 
+            cout << "           Suggested choices: Viking, Global city, Zulu, Glass        " << endl;
+            cout << "\n"; 
+            cout << "                Enter node and press ENTER to continue...           " << endl; 
+            cout << "\n";
+            cin >> end_node;
+            cout << "\n";
+            cout << "                       Choose your function:                        " << endl;
+            cout << "\n"; 
+            cout << "      1. Print Path     2. Find minimum links      3. Visualize     " << endl;
+            cout << "\n"; 
+            cout << "              Enter number and press ENTER to continue...           " << endl; 
+            cout << "\n";
+            cin >> choice2;
+            cout << "\n"; 
+            
+            if (choice2 == 1) {
                 vector<Graph::Node*> path = g.dijkstrasVector(g.getNode(node), g.getNode(end_node));
-                cout << "                       Choose your function:                        " << endl;
-                cout << "\n"; 
-                cout << "      1. Print Path                           2. Find minimum links " << endl;
-                cout << "\n"; 
-                cout << "              Enter number and press ENTER to continue...           " << endl; 
-                cout << "\n";
-                cin >> choice2;
-                cout << "\n"; 
-                if (choice2 == 1) {
-                    size_t num = 0; 
-                    
-                    for (Graph::Node* n : path) {
-                        if (num == path.size() - 1) {
-                            cout << n->data << endl;
-                            cout << "\n";
-                            break;
-                        }
-                        cout << n->data << " -> ";
-                        num++;
+                size_t num = 0; 
+                
+                for (Graph::Node* n : path) {
+                    if (num == path.size() - 1) {
+                        cout << n->data << endl;
+                        cout << "\n";
+                        break;
                     }
-                } else if (choice2 == 2) {
-            cout << "               Minimum Links Traversed: " << link_count << endl;
+                    cout << n->data << " -> ";
+                    num++;
                 }
+            } else if (choice2 == 2) {
+                int link_count = g.dijkstras(g.getNode(node), g.getNode(end_node));
+        cout << "                   Minimum Links Traversed: " << link_count << endl;
+            }
+            else if (choice2 == 3) {
+                // Animation animation = g.visualizeDijkstras(g.getNode("South America"), g.getNode("South Africa"));
+                Animation animation = g.visualizeDijkstras(g.getNode(node), g.getNode(end_node));
+                    animation.write("Dijkstra.gif");
+                    PNG lastFrame = animation.getFrame(animation.frameCount() - 1);
+                    lastFrame.writeToFile("Dijkstra.png");
+            cout << "              Visualization written to build directory!             " << endl;
+            }
             } else if (function == 3) {
                 cout << "|-----------------------------Stoer-Wagner----------------------------|" << endl;
                 cout << "\n";
