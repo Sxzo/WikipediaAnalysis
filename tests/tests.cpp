@@ -391,5 +391,5 @@ TEST_CASE("Test Stoer-Wagner on smaller graph", "[Stoer-Wagner]") {
 	vector<pair<string, string>> cutEdge = gr.stoerWagner(gr.getNode("6"));
 	REQUIRE(cutEdge.size() == 1);
 	REQUIRE(cutEdge[0].first == "19");
-	REQUIER(cutEdge[0].second == "0");
+	REQUIRE(cutEdge[0].second == "0");
 }
