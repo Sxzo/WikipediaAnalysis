@@ -20,7 +20,7 @@ The first thing that you need to do is `cd build` in the terminal, and type `cma
 
 ### Main
 To run the main function, type `make main` and then `./main`. From there, follow the directions given in the terminal.
-This will enter a sequence to test dijkstras and BFS. (NOTE: These functions will only output correctly with valid inputs). 
+This will enter a sequence to test dijkstras and BFS. (NOTE: These functions will only function correctly with valid inputs). 
 
 ### Tests
 To run our tests, type `make test`, and then `./test`.
