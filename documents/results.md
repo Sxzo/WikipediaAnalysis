@@ -66,14 +66,17 @@ Ultimately, our leading question can be answered in a very succinct manner:
 > Just How Connected Are Wikipedia Articles? 
 **Extremely connected.**
 
-Our most substantive proof of this is found from the usage of BFS in measuring the size of connected components. When it's taken into account that a staggering **99.65%** percent of nodes can be found in one component, it becomes clear that these articles are almost all connected in some form or another. The articles that lie in the remaining 0.35% are ones that either have no links contained within them at all or link to articles that are extremely specific and don't have any branches (i.e `Directdebit`). 
+Our most substantive proof of this is found from the usage of BFS in measuring the size of connected components. When it's taken into account that a staggering **99.65%** percent of nodes can be found in one component, it becomes clear that these articles are almost all connected in some form or another. The articles that lie in the remaining 0.35% are ones that either have no links contained within them at all or link to articles that are extremely specific and don't have any branches (i.e `Directdebit`). Alongside BFS, Dijkstra's path finding algorithm helped us see that these articles were not connected by a overwhelming large distance, despite the size of their components. As described above, we found that we could connect any two articles (within a component) by going through no more than **5 links**. This is especially remarkable when considering just how unrelated some of these articles are in nature. 
 
+***
 
 ## Visualization
 
 ###### "No graphics library? No problem."
 
 Although our leading question was answered by using the three algorithms described above, we wanted to go above and beyond simply pooling together data, and decided to illustrate some of our findings. 
+
+
 
 
 
