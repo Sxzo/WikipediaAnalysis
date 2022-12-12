@@ -79,6 +79,9 @@ Although our leading question was answered by using the three algorithms describ
 Here's what the degree of `South America` looks like:
 
 ![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/South%20America%20Degree.gif "South America Degree")
+
+Note that the radius of each drawn node is based off its degree. 
+
 ![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/South%20America%20Degree.png "South America Degree")
 
 ***
