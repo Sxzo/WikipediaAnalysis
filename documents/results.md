@@ -76,6 +76,39 @@ Our most substantive proof of this is found from the usage of BFS in measuring t
 
 Although our leading question was answered by using the three algorithms described above, we wanted to go above and beyond simply pooling together data, and decided to illustrate some of our findings. 
 
+Here's what the degree of `South America` looks like:
+
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/South%20America%20Degree.gif "South America Degree")
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/South%20America%20Degree.png "South America Degree")
+
+***
+
+Here's an image that'll put the size of `4604 nodes` into perspective:
+
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/Node%20Base.png "Node Base")
+
+***
+
+This is what the traversal of the first `100 nodes` of BFS starting on `Zulu` looks like: 
+
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Zulu.gif "Zulu Animation")
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Zulu.png "Zulu PNG")
+
+And this is what the traversal looks like on the mere `3 nodes` found in the component of `Directdebit`
+
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Directdebit.gif "Directdebit animation")
+
+*** 
+
+Finally, this is what it looks like to take the shortest path from `Viking` to `Glass`:
+
+![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/Dijkstras%20Path%20from%20Viking%20to%20Glass.gif "Dijkstras animation")
+
+***
+
+###### We hope that you enjoyed reading about this project just as much as we enjoyed making it. 
+
+> All credit goes to http://snap.stanford.edu/data/ for our dataset.
 
 
 
