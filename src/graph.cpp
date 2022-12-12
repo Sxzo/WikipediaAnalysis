@@ -10,35 +10,35 @@ Graph::Graph(bool b) {
     for (int i = 0; i < 20; i++) {
         nodeList_.push_back(new Node(to_string(i)));
     }
-    for (int i = 0; i < 19; i++) {
+    for (int i = 0; i < 19; i++) { //create graph with all but 1 node connected
         for (int j = 0; j < 19; j++) {
             insertEdge(nodeList_[i], nodeList_[j], 10);
             insertEdge(nodeList_[j], nodeList_[i], 10);
         }
     }
-    insertEdge(nodeList_[0], nodeList_[19], 1);
+    insertEdge(nodeList_[0], nodeList_[19], 1); //connect last with lighter weight
     insertEdge(nodeList_[19], nodeList_[0], 1);
 }
 
 void Graph::readFromFile() {
-    ifstream ifs("../data/articles.tsv");
+    ifstream ifs("../data/articles.tsv"); //file with node names
     for (string line; getline(ifs, line); line = "") { //populate nodeList_ with each article
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
-        if (converted.find(line) != converted.end()) {
-            nodeList_.push_back(new Node(converted[line]));
+        if (converted.find(line) != converted.end()) { //check if in memoization map
+            nodeList_.push_back(new Node(converted[line])); //add new node
         } else {
             string toAdd = decodeHTTP(line);
-            converted[line] = toAdd;
+            converted[line] = toAdd; //decode http
             nodeList_.push_back(new Node(toAdd));
         }
         
     }
-    ifstream ifs2("../data/links.tsv");
+    ifstream ifs2("../data/links.tsv"); // file with edge names
     int idx = -1;
-    string first = ""; //variables to avoid looping through nodeList
-    for (string line; getline(ifs2, line); line = "") { // create an unweighted, directed edge between every article that has a link
+    string first = ""; //variables to avoid looping through nodeList over and over
+    for (string line; getline(ifs2, line); line = "") { // create an unweighted, undirected edge between every article that has a link
         if (line.substr(0, 1) == "#") { // skip heading information
             continue;
         }
@@ -70,7 +70,7 @@ void Graph::readFromFile() {
             }
         }
         insertEdge(nodeList_[idx], v2);
-        nodeList_[idx]->degree++;
+        nodeList_[idx]->degree++; //increases degree by 1 for each edge added
     }
     for (unsigned i = 0; i < nodeList_.size(); i++) { //give each edge the proper weight
         Node node = *nodeList_[i];
@@ -84,7 +84,7 @@ void Graph::readFromFile() {
 }
 
 string Graph::decodeHTTP(string title) {
-    static unordered_map<string, string> decoded {
+    static unordered_map<string, string> decoded { //map of the different decodings we need
         {"%28", "("},
         {"%29", ")"},
         {"%27", "'"},
@@ -135,7 +135,7 @@ string Graph::decodeHTTP(string title) {
             string threeChar = title.substr(i, 3);
             string sixChar = title.substr(i, 6);
             string nineChar = title.substr(i, 9);
-            for (auto entry : decoded) {
+            for (auto entry : decoded) { //checks if any of the sequences show up and replaces if they do
                 if (threeChar == entry.first) {
                     toReturn += entry.second;
                     i += 3;
@@ -154,7 +154,7 @@ string Graph::decodeHTTP(string title) {
         if (i >= title.length()) {
             break;
         }
-        if (title.at(i) != '\n' && title.at(i) != '\t' && title.at(i) != '\r') {
+        if (title.at(i) != '\n' && title.at(i) != '\t' && title.at(i) != '\r') { //adds next char if its not a line break or tab
             toReturn += title.at(i);
         }
     }
@@ -162,13 +162,13 @@ string Graph::decodeHTTP(string title) {
 }
 
 void Graph::removeVertex(Node* v) {
-    for (unsigned i = 0; i < nodeList_.size(); i++) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) { //loops through to find node to remove
         if (nodeList_[i]->data == v->data) {
             nodeList_.erase(nodeList_.begin() + i);
             i--;
             continue;
         }
-        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) {
+        for (unsigned j = 0; j < nodeList_[i]->adjList.size(); j++) { //erases any edges shared with this node
             if (nodeList_[i]->adjList[j].second->data == v->data) {
                 nodeList_[i]->adjList.erase(nodeList_[i]->adjList.begin() + j);
                 break;
@@ -180,14 +180,14 @@ void Graph::removeVertex(Node* v) {
 
 vector<string> Graph::incidentEdges(Node* v) {
     vector<string> toReturn;
-    for (unsigned i = 0; i < v->adjList.size(); i++) {
+    for (unsigned i = 0; i < v->adjList.size(); i++) { //iterates through adjacency list
         toReturn.push_back(v->adjList[i].second->data);
     }
     return toReturn;
 }
 
 bool Graph::areAdjacent(Node* v1, Node* v2) {
-    for (unsigned i = 0; i < v1->adjList.size(); i++) {
+    for (unsigned i = 0; i < v1->adjList.size(); i++) { //iterates through adjacency list, returns true if other node is found in it, false otherwise
         if ((v1->adjList[i].second->data) == v2->data) {
             return true;
         }
@@ -195,11 +195,14 @@ bool Graph::areAdjacent(Node* v1, Node* v2) {
     return false;
 }
 
-void Graph::insertEdge(Node* v1, Node* v2) {
+void Graph::insertEdge(Node* v1, Node* v2) { //pushes weight 0 edge into list
+    if (areAdjacent(v1, v2)) {
+        return;
+    }
     v1->adjList.push_back(pair(0, v2));
 }
 
-void Graph::insertEdge(Node* v1, Node* v2, int weight) {
+void Graph::insertEdge(Node* v1, Node* v2, int weight) { //pushes edge into list with weight equal to parameter
     if (areAdjacent(v1, v2)) {
         return;
     }
@@ -208,7 +211,7 @@ void Graph::insertEdge(Node* v1, Node* v2, int weight) {
 
 int Graph::getNodeDegree(Node* v) {
     if (v == NULL) return -1; 
-    for (unsigned i = 0; i < nodeList_.size(); i++) {
+    for (unsigned i = 0; i < nodeList_.size(); i++) { //loops through node list and returns degree if found
         if (nodeList_[i] == v) {
             return v->degree;
         }
@@ -216,7 +219,7 @@ int Graph::getNodeDegree(Node* v) {
     return 999999999;
 }
 
-Graph::Node* Graph::getNode(string article) {
+Graph::Node* Graph::getNode(string article) { //returns pointer to the node with data equal to the parameter string
     for (unsigned i = 0; i < nodeList_.size(); i++) {
         if (nodeList_[i]->data == article) {
             return nodeList_[i];
@@ -225,7 +228,7 @@ Graph::Node* Graph::getNode(string article) {
     return nullptr;
 }
 
-int Graph::getIndex(string article) {
+int Graph::getIndex(string article) { //returns the indedx of the list that a certain node is at
     for (unsigned i = 0; i < nodeList_.size(); i++) {
         if (nodeList_[i]->data == article) {
             return i;
@@ -234,15 +237,15 @@ int Graph::getIndex(string article) {
     return -1;
 }
 
-Graph::~Graph() {
+Graph::~Graph() { //destructor
     clear();
 }
 
-Graph::Graph(const Graph& other) {
+Graph::Graph(const Graph& other) { //copy constructor
     copy(other);
 }
 
-Graph& Graph::operator=(const Graph& other) {
+Graph& Graph::operator=(const Graph& other) { //copy assignment
     clear();
     copy(other);
     return *this;
@@ -384,14 +387,14 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
     Node* s = nullptr;
     Node* t = nullptr;
     while (nodes.size() > 1) {
-        int cutWeight = g.stoerWagnerHelper(nodes, s, t);
-        if (cutWeight < minWeight) {
+        int cutWeight = g.stoerWagnerHelper(nodes, s, t); //finds the minimum cut with the current partition of nodes
+        if (cutWeight < minWeight) { //replaces the returned partition with a new one if the cut is lighter
             minWeight = cutWeight;
             partition = tempPartition;
             partition.insert(t);
         }
         tempPartition.insert(t);
-        Node* mergedNode = g.mergeNodes(s, t);
+        Node* mergedNode = g.mergeNodes(s, t); //merges the two nodes that had the lightest weight between them
         nodes.push_back(mergedNode);
         for (unsigned i = 0; i < nodes.size(); i++) {
             if (nodes[i]->data == s->data || nodes[i]->data == t->data) {
@@ -407,7 +410,7 @@ vector<pair<string, string>> Graph::stoerWagner(Node* startNode) { // retruns ve
         }
     }
     vector<pair<string, string>> cutEdges;
-    for (Node* node : partition) {
+    for (Node* node : partition) {//find the edges that need to be cut based on which nodes are in the partition
         if (node->data.substr(0,6) == "Merged") {
             continue;
         }
@@ -458,7 +461,7 @@ int Graph::stoerWagnerHelper(vector<Graph::Node*> otherNodes, Node*& s, Node*& t
             }
         }
         superNode.push_back(maxVertex);
-        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) {
+        for (unsigned i = 0; i < maxVertex->adjList.size(); i++) { //adds the weights between the super node and all the other nodes to the super adjacency list
             bool added = false;
             for (unsigned j = 0; j < superAdj.size(); j++) {
                 if (maxVertex->adjList[i].second->data == superAdj[j].second->data) {
@@ -513,7 +516,6 @@ Graph::Node* Graph::mergeNodes(Node* node1, Node* node2) {
                 entry.first = toReturn->adjList[i].first;
                 break;
             }
-            // may end up with two edges with equal weight pointing to the new merged node but for the purpose of this algorithm that is fine
         }
     }
     return toReturn;
@@ -604,7 +606,7 @@ void Graph::drawDijkstra(PNG* image) {
     for (tuple<Point,int,int, pair<int,int>> tuple : traversal) {
         HSLAPixel& pixel = image->getPixel(get<0>(tuple).x,get<0>(tuple).y); 
         if (get<1>(tuple) == 0) { // if we're coloring in an edge
-            SolidColorPicker color = SolidColorPicker(HSLAPixel(0,1,0.5,1));
+            SolidColorPicker color = SolidColorPicker(HSLAPixel(360,1,.4,1));
             pixel = color.getColor(get<0>(tuple).x,get<0>(tuple).y);  // fill pixel
         } else { // if we're coloring in a node
             GradientColorPicker color = GradientColorPicker(HSLAPixel(0,1,0.5,1), HSLAPixel(50,1,0.5,1), Point(get<3>(tuple).first, get<3>(tuple).second), (get<2>(tuple)));
