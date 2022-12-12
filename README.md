@@ -1,4 +1,7 @@
 # Cryptic CS 225 Final Project
+
+[Results](https://github.com/joetamulaitis/cryptic/blob/main/documents/results.md)
+
 [Final Presentation](https://youtu.be/YB09CyAFXG4)
 
 ## Repository Structure
