@@ -41,11 +41,11 @@ This used the vector function of dijkstras and was remarkable for understanding 
 
 ## Stoer-Wagner
 
-Our primary idea behind utilizing Stoer-Wagner in our analysis was to be able to find to minimum cut edges that could potentially illustrate the most signifigant links in the entire graph. We hoped that this finding would allude to especially important articles that played a massive role in connecting a vast number of articles. 
+Our primary idea behind utilizing Stoer-Wagner in our analysis was to be able to find to minimum cut edges that could potentially illustrate the most signifigant links in the entire graph. We hoped that this finding would allude to especially important articles that played a massive role in connecting a vast number of other articles. 
 
 *Our shortcoming:*
 
-We fell short of achieving our goal in using this algorithm on our dataset due to a simple oversight in the actual runtime of this algorithm. Our implementation of Stoer-Wagner's minimum cut algorithm has a runtime of **O(|V|^3)**, which isn't a daunting runtime on a graph of around 100 nodes persay. However, our graph's primary connected component contains over 4000 nodes, which means that Stoer-Wagner would have taken over **64,000,000,000** *(64 billion!)* iterations to complete. Our virtual machine was simply not cut out for this task, and as a result, we felt short of actually being able to use it in the work of our analysis. 
+We fell short of achieving our goal in using this algorithm on our dataset due to a simple oversight in its actual runtime. Our implementation of Stoer-Wagner's minimum cut algorithm has a runtime of **O(|V|^3)**, which isn't a daunting runtime on a graph of around 100 nodes persay. However, our graph's primary connected component contains over 4000 nodes, which means that Stoer-Wagner would have taken over **64,000,000,000** *(64 billion!)* iterations to complete. Our virtual machine was simply not cut out for this task, and as a result, we felt short of actually being able to use it in the work of our analysis. 
 
 ## Breadth First Search
 
