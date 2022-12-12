@@ -66,7 +66,7 @@ Ultimately, our leading question can be answered in a very succinct manner:
 > Just How Connected Are Wikipedia Articles? 
 **Extremely connected.**
 
-Our most substantive proof of this is found from the usage of BFS in measuring the size of connected components. When it's taken into account that a staggering **99.65%** percent of nodes can be found in one component, it becomes clear that these articles are almost all connected in some form or another. The articles that lie in the remaining 0.35% are ones that either have no links contained within them at all or link to articles that are extremely specific and don't have any branches (i.e `Directdebit`). Alongside BFS, Dijkstra's path finding algorithm helped us see that these articles were not connected by a overwhelming large distance, despite the size of their components. As described above, we found that we could connect any two articles (within a component) by going through no more than **5 links**. This is especially remarkable when considering just how unrelated some of these articles are in nature. 
+Our most substantive proof of this is found from the usage of BFS in measuring the size of connected components. When it's taken into account that a staggering **99.65%** percent of nodes can be found in one component, it becomes clear that these articles are almost all connected in some form or another. The articles that lie in the remaining 0.35% are ones that either have no links contained within them at all or link to articles that are extremely specific and don't have any branches (i.e `Directdebit`). Alongside BFS, Dijkstra's path finding algorithm helped us see that these articles were not connected by an overwhelmingly large distance, despite the size of their components. As described above, we found that we could connect any two articles (within a component) by going through no more than **5 links**. This is especially remarkable when considering just how unrelated some of these articles are in nature. 
 
 ***
 
@@ -94,7 +94,7 @@ This is what the traversal of the first `100 nodes` of BFS starting on `Zulu` lo
 ![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Zulu.gif "Zulu Animation")
 ![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Zulu.png "Zulu PNG")
 
-And this is what the traversal looks like on the mere `3 nodes` found in the component of `Directdebit`
+And this is what the traversal looks like on the mere `3 nodes` found in the component of `Directdebit`:
 
 ![alt text](https://github.com/joetamulaitis/cryptic/blob/main/documents/BFS%20Directdebit.gif "Directdebit animation")
 
