@@ -1,4 +1,4 @@
-# Cryptic CS 225 Final Project
+# Wikipedia Analysis
 
 ### [Results](https://github.com/joetamulaitis/cryptic/blob/main/documents/results.md)
 
